@@ -10,7 +10,7 @@ set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
 
 # Aliases
 
-if string match -r ".*MANJARO-ARM.*" (uname -r)
+if string match -rq ".*MANJARO-ARM.*" (uname -r)
     alias selfhosting "git --git-dir=$HOME/selfhosting --work-tree=$HOME"
 end
 
@@ -56,6 +56,10 @@ if test (uname) = "Darwin"
     if test -n "$RANGER_LEVEL"
         clear
     end
+end
+
+if string match -rq ".*MANJARO-ARM.*" (uname -r)
+    wal -Rnq
 end
 
 # Pretty Stuff
