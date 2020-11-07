@@ -1,0 +1,60 @@
+#!/bin/bash
+
+currentWallpaper="$(osascript -e 'tell application "System Events" to tell first Desktop to get its picture')"
+
+wallpaperChanged() {
+    previousWallpaper=$(cat ~/.cache/last-wallpaper)
+    if [ "$previousWallpaper" == "$currentWallpaper" ]; then
+        echo false
+    else
+        echo $currentWallpaper > ~/.cache/last-wallpaper
+        echo true
+    fi
+}
+
+if [ $(wallpaperChanged) == "true" ]; then
+
+
+    hexToS() {
+        echo $1
+        hexRed=$(echo $1 | cut -c 2-3)
+        hexGreen=$(echo $1 | cut -c 4-5)
+        hexBlue=$(echo $1 | cut -c 6-7)
+        binRed=$((16#$hexRed))
+        binGreen=$((16#$hexGreen))
+        binBlue=$((16#$hexBlue))
+        cmin=$((echo $binRed; echo $binGreen; echo $binBlue) | sort -n | head -1)
+        echo "cmin $cmin"
+        cmax=$((echo $binRed; echo $binGreen; echo $binBlue) | sort -n | tail -1)
+        echo "cmax $cmax"
+        if [ "$cmax" == '0' ]; then
+            echo zerotime
+            echo "0"
+        else
+            echo deltatime
+            delta=$(bc -l<<<"($cmax/255)-($cmin/255)")
+            echo $delta
+            echo $(bc -l<<<"$delta/($cmax/255)")
+        fi
+    }
+
+    toggleNotion() {
+        currentSpace=$(yabai -m query --spaces --space | jq '.index')
+        osascript -e 'tell application "Notion" to activate
+        tell application "System Events" to keystroke "l" using {command down, shift down}'
+        sleep 0.5
+        yabai -m space --focus $currentSpace
+    }
+
+    val=$(defaults read -g AppleInterfaceStyle 2>/dev/null)
+    if [ -z "$val" ]; then
+        wal -i "$currentWallpaper" -nql
+        ~/Library/Python/2.7/bin/pywalfox update
+    else
+        wal -i "$currentWallpaper" -nq
+        ~/Library/Python/2.7/bin/pywalfox update
+    fi
+    keyColor=$(sed -n 3p ~/.cache/wal/colors)
+    echo $keyColor
+    hexToS $keyColor
+fi
