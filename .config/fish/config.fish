@@ -41,11 +41,13 @@ if test (uname) = "Darwin"
     set current_wallpaper (osascript -e 'tell app "finder" to get posix path of (get desktop picture as alias)')
     set previous_wallpaper (cat ~/.config/wal/previous_wallpaper)
 
-    if test $current_wallpaper != $previous_wallpaper
-        # set val (defaults read -g AppleInterfaceStyle 2>/dev/null)
-        set darkmode (osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode')
-        # if test -z "$val"
-        if test "$darkmode" = "false"
+    set dark_mode (defaults read -g AppleInterfaceStyle 2>/dev/null)
+    # set dark_mode (osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode')
+    set previous_mode (cat ~/.config/wal/previous_mode)
+
+    if test "$dark_mode" != "$previous_mode" -o $current_wallpaper != $previous_wallpaper
+        if test -z "$dark_mode"
+        # if test "$dark_mode" = "false"
             wal -c
             wal -i $current_wallpaper -nql
         else
@@ -55,6 +57,10 @@ if test (uname) = "Darwin"
     else
         wal -Rnq
     end
+
+    echo $current_wallpaper > ~/.config/wal/previous_wallpaper
+
+    echo $dark_mode > ~/.config/wal/previous_mode
 
     if test -n "$RANGER_LEVEL"
         clear
@@ -66,8 +72,6 @@ if string match -rq ".*MANJARO-ARM.*" (uname -r)
 end
 
 # Pretty Stuff
-
-echo $current_wallpaper > ~/.config/wal/previous_wallpaper
 
 source ~/.cache/wal/colors.fish
 
