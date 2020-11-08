@@ -75,7 +75,7 @@ end
 
 # Pretty Stuff
 
-if test -z "$SSH_CLIENT"
+if test -n "$SSH_CLIENT"
     clear
 end
 
