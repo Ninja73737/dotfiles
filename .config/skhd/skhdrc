@@ -1,36 +1,36 @@
 #!/usr/bin/env sh
 
-# Window Modification and Navigation 
+# Window Modification and Navigation
 
 shift + alt - h : yabai -m window --focus west
 shift + alt - j : yabai -m window --focus south
 shift + alt - k : yabai -m window --focus north
 shift + alt - l : yabai -m window --focus east
 
-shift + alt - up : yabai -m window --focus north
-shift + alt - right : yabai -m window --focus east
-shift + alt - down : yabai -m window --focus south
-shift + alt - left : yabai -m window --focus west
+# shift + alt - up : yabai -m window --focus north
+# shift + alt - right : yabai -m window --focus east
+# shift + alt - down : yabai -m window --focus south
+# shift + alt - left : yabai -m window --focus west
 
 cmd + alt + shift - h : yabai -m window --swap west
 cmd + alt + shift - j : yabai -m window --swap south
 cmd + alt + shift - k : yabai -m window --swap north
 cmd + alt + shift - l : yabai -m window --swap east
 
-cmd + alt + shift - up : yabai -m window --swap north
-cmd + alt + shift - right : yabai -m window --swap east
-cmd + alt + shift - down : yabai -m window --swap south
-cmd + alt + shift - left : yabai -m window --swap west
+# cmd + alt + shift - up : yabai -m window --swap north
+# cmd + alt + shift - right : yabai -m window --swap east
+# cmd + alt + shift - down : yabai -m window --swap south
+# cmd + alt + shift - left : yabai -m window --swap west
 
 ctrl + alt + shift - h : yabai -m window --warp west
 ctrl + alt + shift - j : yabai -m window --warp south
 ctrl + alt + shift - k : yabai -m window --warp north
 ctrl + alt + shift - l : yabai -m window --warp east
 
-ctrl + alt + shift - up : yabai -m window --warp north
-ctrl + alt + shift - right : yabai -m window --warp east
-ctrl + alt + shift - down : yabai -m window --warp south
-ctrl + alt + shift - left : yabai -m window --warp west
+# ctrl + alt + shift - up : yabai -m window --warp north
+# ctrl + alt + shift - right : yabai -m window --warp east
+# ctrl + alt + shift - down : yabai -m window --warp south
+# ctrl + alt + shift - left : yabai -m window --warp west
 
 # Space Modification and Navigation
 
