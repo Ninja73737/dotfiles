@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# file=$(find .cache/wal/schemes/ -type f -print |
+# python -c 'import os, sys; times = {}
+# for f in sys.stdin.readlines(): f = f[0:-1]; times[f] = os.stat(f).st_mtime
+#     for f in (sorted(times.iterkeys(), key=lambda f:times[f], reverse=True))[:10]: print f')
+
+color=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color1)
+
+cd .scripts
+
+python3 -c "from macos_highlight_and_accent import set_closest_color; set_closest_color($color)"
