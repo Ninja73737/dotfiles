@@ -51,9 +51,13 @@ if test (uname) = "Darwin"
         # if test "$dark_mode" = "false"
             wal -c
             wal -i $current_wallpaper -nql
+            update_spicetify
+            set_macos_highlight_and_accent
         else
             wal -c
             wal -i $current_wallpaper -nq
+            update_spicetify
+            set_macos_highlight_and_accent
         end
     else
         wal -Rnq
