@@ -13,8 +13,9 @@ set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
 if string match -rq ".*MANJARO-ARM.*" (uname -r)
     alias selfhosting "git --git-dir=$HOME/selfhosting --work-tree=$HOME"
 
-    alias dcu "docker-compose up -d"
+    alias dcu "docker-compose --env-file docker-compose.env up -d"
     alias dcd "docker-compose down --remove-orphans"
+    alias dcr "docker-compose --env-file docker-compose.env up -d; docker-compose down --remove-orphans"
 end
 
 alias dotfiles "/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
