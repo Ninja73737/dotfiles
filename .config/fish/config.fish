@@ -62,6 +62,8 @@ if test (uname) = "Darwin"
 
     echo $dark_mode > ~/.config/wal/previous_mode
 
+    # Clear screen if running inside ranger
+
     if test -n "$RANGER_LEVEL"
         clear
     end
@@ -72,6 +74,10 @@ if string match -rq ".*MANJARO-ARM.*" (uname -r)
 end
 
 # Pretty Stuff
+
+if test -z "$SSH_CLIENT"
+    clear
+end
 
 source ~/.cache/wal/colors.fish
 
