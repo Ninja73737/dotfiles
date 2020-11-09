@@ -1,0 +1,56 @@
+#!/bin/bash
+
+next_theme="false"
+next_dir="false"
+
+for argval in "$@"; do
+    if [ $next_theme = "true" ]; then
+        next_theme="false"
+        theme=$argval
+    elif [ $next_dir = "true" ]; then
+        next_dir="false"
+        directory=$(echo "$(cd "$(dirname "$argval")"; pwd)/$(basename "$argval")")
+    elif [ $argval = "-t" ]; then
+        next_theme="true"
+    elif [ $argval = "-d" ]; then
+        next_dir="true"
+    elif [ $argval = "start" ]; then
+        action="start"
+    elif [ $argval = "stop" ]; then
+        action="stop"
+    fi
+done
+
+if [ -z $theme ]; then
+    if [ $(uname) = "Darwin" ]; then
+        dark_mode=$(defaults read -g AppleInterfaceStyle 2>/dev/null)
+        # set dark_mode (osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode')
+        if [ -z "$dark_mode" ]; then
+        # if [ "$dark_mode" = "false" ]; then
+            theme="white"
+        else
+            theme="black"
+        fi
+    else
+        theme="black"
+    fi
+fi
+
+if [ -z $directory ]; then
+    directory="$HOME/Documents/"
+fi
+
+if [ -z $action ]; then
+    if [ "$(docker container inspect -f '{{.State.Running}}' reveal-md 2>/dev/null)" == "true" ]; then
+        action="stop"
+    else
+        action="start"
+    fi
+fi
+
+if [ $action = "stop" ]; then
+    echo "Stopping container..."
+    docker stop reveal-md
+else
+    docker run --rm -d --name reveal-md -p 1948:1948 -v "$directory/":/slides -v $HOME/.config/reveal-md/reveal.json:/slides/reveal.json webpronl/reveal-md:latest --theme $theme /slides
+fi
