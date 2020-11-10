@@ -34,8 +34,11 @@ ctrl + alt + shift - l : yabai -m window --warp east
 
 # Space Modification and Navigation
 
-ctrl - left : yabai -m space --focus prev
-ctrl - right : yabai -m space --focus next
+ctrl - h : yabai -m space --focus prev
+ctrl - l : yabai -m space --focus next
+
+# ctrl - left : yabai -m space --focus prev
+# ctrl - right : yabai -m space --focus next
 
 alt + shift - 1 : yabai -m space --focus 1
 alt + shift - 2 : yabai -m space --focus 2
