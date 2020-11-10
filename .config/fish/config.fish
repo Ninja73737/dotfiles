@@ -1,5 +1,8 @@
 # Path
 
+# Time (mean ± σ):       9.2 ms ±   0.9 ms    [User: 6.0 ms, System: 2.9 ms]
+# Range (min … max):     8.3 ms …  15.7 ms    243 runs
+
 if test (uname) = "Darwin"
     set -g fish_user_paths "/usr/local/opt/arm-gcc-bin@8/bin" $fish_user_paths
     set -g fish_user_paths "/usr/local/opt/avr-gcc@8/bin" $fish_user_paths
@@ -9,6 +12,9 @@ end
 set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
 
 # Aliases
+
+# Time (mean ± σ):      11.1 ms ±   1.2 ms    [User: 7.3 ms, System: 3.4 ms]
+# Range (min … max):    10.1 ms …  18.3 ms    230 runs
 
 if string match -rq ".*MANJARO-ARM.*" (uname -r)
     alias selfhosting "git --git-dir=$HOME/selfhosting --work-tree=$HOME"
@@ -27,6 +33,9 @@ alias lsta "exa -aT --icons --group-directories-first"
 
 # Fish Settings
 
+# Time (mean ± σ):      17.1 ms ±   1.4 ms    [User: 13.8 ms, System: 2.9 ms]
+# Range (min … max):    16.1 ms …  29.0 ms    153 runs
+
 fish_vi_key_bindings
 
 set fish_cursor_default line
@@ -38,8 +47,11 @@ export EDITOR=nvim
 
 # Update wal Colours
 
+# Time (mean ± σ):     185.4 ms ±   8.4 ms    [User: 114.4 ms, System: 58.0 ms]
+# Range (min … max):   178.4 ms … 207.3 ms    16 runs
+
 if test (uname) = "Darwin"
-    set current_wallpaper (osascript -e 'tell app "finder" to get posix path of (get desktop picture as alias)')
+    set current_wallpaper (sqlite3 -readonly ~/Library/Application\ Support/Dock/desktoppicture.db 'SELECT * FROM data ORDER BY rowID DESC LIMIT 1;')
     set previous_wallpaper (cat ~/.config/wal/previous_wallpaper)
 
     set dark_mode (defaults read -g AppleInterfaceStyle 2>/dev/null)
@@ -66,19 +78,28 @@ if test (uname) = "Darwin"
     echo $current_wallpaper > ~/.config/wal/previous_wallpaper
 
     echo $dark_mode > ~/.config/wal/previous_mode
-
-    # Clear screen if running inside ranger
-
-    if test -n "$RANGER_LEVEL"
-        clear
-    end
-end
-
-if string match -rq ".*MANJARO-ARM.*" (uname -r)
+else if string match -rq ".*MANJARO-ARM.*" (uname -r)
     wal -Rnq
 end
 
+# Clear screen if running inside ranger
+
+# Time (mean ± σ):       5.5 ms ±   0.6 ms    [User: 3.5 ms, System: 1.6 ms]
+# Range (min … max):     4.8 ms …  10.3 ms    386 runs
+
+if test -n "$RANGER_LEVEL"
+    clear
+end
+
 # Pretty Stuff
+
+# With neofetch
+# Time (mean ± σ):     168.4 ms ±  15.3 ms    [User: 83.1 ms, System: 88.5 ms]
+# Range (min … max):   152.5 ms … 209.6 ms    18 runs
+
+# With pfetch
+# Time (mean ± σ):      44.1 ms ±   2.1 ms    [User: 25.4 ms, System: 19.3 ms]
+# Range (min … max):    42.3 ms …  54.9 ms    62 runs
 
 if test -n "$SSH_CLIENT"
     clear
@@ -86,6 +107,10 @@ end
 
 source ~/.cache/wal/colors.fish
 
-neofetch
+# neofetch
+
+export PF_INFO="ascii os shell editor pkgs memory palette"
+
+pfetch
 
 starship init fish | source
