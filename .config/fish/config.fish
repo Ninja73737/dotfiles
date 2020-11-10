@@ -68,7 +68,7 @@ if test (uname) = "Darwin"
         end
         update_spicetify
         set_macos_highlight_and_accent
-        neofetch > ~/.config/neofetch
+        # neofetch > ~/.config/neofetch
     else
         wal -Rnq
     end
@@ -97,9 +97,9 @@ end
 
 source ~/.cache/wal/colors.fish
 
-cat ~/.cache/neofetch
+neofetch
 
-# neofetch
+# cat ~/.cache/neofetch
 
 # export PF_INFO="ascii os shell editor pkgs memory palette"
 
