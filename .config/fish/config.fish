@@ -21,7 +21,6 @@ if string match -rq ".*MANJARO-ARM.*" (uname -r)
 
     alias dcu "docker-compose --env-file docker-compose.env up -d"
     alias dcd "docker-compose down --remove-orphans"
-    alias dcr "docker-compose down --remove-orphans; docker-compose --env-file docker-compose.env up -d"
 end
 
 alias dotfiles "/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
