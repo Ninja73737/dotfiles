@@ -59,18 +59,16 @@ if test (uname) = "Darwin"
     set previous_mode (cat ~/.config/wal/previous_mode)
 
     if test "$dark_mode" != "$previous_mode" -o $current_wallpaper != $previous_wallpaper
+        wal -c
         if test -z "$dark_mode"
         # if test "$dark_mode" = "false"
-            wal -c
             wal -i $current_wallpaper -nql
-            update_spicetify
-            set_macos_highlight_and_accent
         else
-            wal -c
             wal -i $current_wallpaper -nq
-            update_spicetify
-            set_macos_highlight_and_accent
         end
+        update_spicetify
+        set_macos_highlight_and_accent
+        neofetch > ~/.config/neofetch
     else
         wal -Rnq
     end
@@ -93,24 +91,18 @@ end
 
 # Pretty Stuff
 
-# With neofetch
-# Time (mean ± σ):     168.4 ms ±  15.3 ms    [User: 83.1 ms, System: 88.5 ms]
-# Range (min … max):   152.5 ms … 209.6 ms    18 runs
-
-# With pfetch
-# Time (mean ± σ):      44.1 ms ±   2.1 ms    [User: 25.4 ms, System: 19.3 ms]
-# Range (min … max):    42.3 ms …  54.9 ms    62 runs
-
 if test -n "$SSH_CLIENT"
     clear
 end
 
 source ~/.cache/wal/colors.fish
 
+cat ~/.cache/neofetch
+
 # neofetch
 
-export PF_INFO="ascii os shell editor pkgs memory palette"
+# export PF_INFO="ascii os shell editor pkgs memory palette"
 
-pfetch
+# pfetch
 
 starship init fish | source
