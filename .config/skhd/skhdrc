@@ -71,3 +71,4 @@ alt + shift - m : osascript -e 'quit app "Mos"'; open -a "Mos.app"
 alt + shift - o : ~/.scripts/switch_output
 # alt + shift - w : ~/.scripts/synced_unsplash_wallpaper
 # alt + shift - d : ~/.scripts/toggle_create_desktop
+alt + shift + c : cliclick c:.
