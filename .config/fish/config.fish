@@ -66,7 +66,7 @@ if test (uname) = "Darwin"
             wal -i $current_wallpaper -nq
         end
         update_spicetify
-        set_macos_highlight_and_accent
+        set_macos_accent
         # neofetch > ~/.config/neofetch
     else
         wal -Rnq
