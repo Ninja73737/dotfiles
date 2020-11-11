@@ -2,6 +2,6 @@
 
 color=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color1)
 
-cd .scripts
+cd .scripts/macos-accent
 
-python3 -c "from macos_highlight_and_accent import set_closest_color; set_closest_color($color)"
+python3 -c "from macos_accent import set_closest_color; set_closest_color($color)"
