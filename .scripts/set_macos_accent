@@ -1,7 +1,25 @@
 #!/bin/bash
 
-color=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color1)
+background=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .special.background)
+foreground=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .special.foreground)
+cursor=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .special.cursor)
+color0=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color0)
+color1=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color1)
+color2=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color2)
+color3=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color3)
+color4=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color4)
+color5=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color5)
+color6=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color6)
+color7=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color7)
+color8=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color8)
+color9=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color9)
+color10=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color10)
+color11=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color11)
+color12=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color12)
+color13=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color13)
+color14=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color14)
+color15=$(cat "$HOME/.cache/wal/schemes/$(ls -Art ~/.cache/wal/schemes/ | head -n1)" | jq .colors.color15)
 
 cd .scripts/macos-accent
 
-python3 -c "from macos_accent import set_closest_color; set_closest_color($color)"
+python3 -c "from macos_accent import set_closest_color; set_closest_color([$background, $foreground, $cursor, $color1, $color2, $color3, $color4, $color5, $color6, $color7, $color8, $color9, $color10, $color11, $color12, $color13, $color14, $color15])"
