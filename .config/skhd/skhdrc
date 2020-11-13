@@ -66,7 +66,7 @@ alt + shift - b : yabai -m space --balance
 alt + shift - y : ~/.scripts/restart_yabai
 alt + shift - s : /System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background
 alt + shift - t : yabai -m window --toggle float
-alt + shift - i : osascript ~/.scripts/Listen\ to\ iPad\ Audio.scpt
+# alt + shift - i : osascript ~/.scripts/Listen\ to\ iPad\ Audio.scpt
 alt + shift - m : osascript -e 'quit app "Mos"'; open -a "Mos.app"
 alt + shift - o : ~/.scripts/switch_output
 # alt + shift - w : ~/.scripts/synced_unsplash_wallpaper
