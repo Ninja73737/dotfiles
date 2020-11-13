@@ -25,10 +25,12 @@ end
 
 alias dotfiles "/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
-alias ls "exa -a --icons --group-directories-first"
-alias lsd "exa -al --icons --group-directories-first"
-alias lst "exa -aT -L 5 --icons --group-directories-first"
-alias lsta "exa -aT --icons --group-directories-first"
+if not string match -rq ".*ish.*" (uname -r)
+    alias ls "exa -a --icons --group-directories-first"
+    alias lsd "exa -al --icons --group-directories-first"
+    alias lst "exa -aT -L 5 --icons --group-directories-first"
+    alias lsta "exa -aT --icons --group-directories-first"
+end
 
 # Fish Settings
 
@@ -94,14 +96,10 @@ if test -n "$SSH_CLIENT"
     clear
 end
 
-source ~/.cache/wal/colors.fish
+if not string match -rq ".*ish.*" (uname -r)
+    source ~/.cache/wal/colors.fish
 
-neofetch
+    neofetch
 
-# cat ~/.cache/neofetch
-
-# export PF_INFO="ascii os shell editor pkgs memory palette"
-
-# pfetch
-
-starship init fish | source
+    starship init fish | source
+end
