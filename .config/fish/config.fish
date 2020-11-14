@@ -24,16 +24,16 @@ end
 
 alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
-if not string match -rq ".*ish.*" (uname -r)
-    alias ls "exa -a --icons --group-directories-first"
-    alias lsd "exa -al --icons --group-directories-first"
-    alias lst "exa -aT -L 5 --icons --group-directories-first"
-    alias lsta "exa -aT --icons --group-directories-first"
-else if -d $HOME/.termux
+if -d $HOME/.termux
     alias ls "exa -a --group-directories-first"
     alias lsd "exa -al group-directories-first"
     alias lst "exa -aT -L 5 group-directories-first"
     alias lsta "exa -aT group-directories-first"
+else if not string match -rq ".*ish.*" (uname -r)
+    alias ls "exa -a --icons --group-directories-first"
+    alias lsd "exa -al --icons --group-directories-first"
+    alias lst "exa -aT -L 5 --icons --group-directories-first"
+    alias lsta "exa -aT --icons --group-directories-first"
 end
 
 # Fish Settings
