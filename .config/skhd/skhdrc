@@ -72,3 +72,7 @@ alt + shift - o : ~/.scripts/switch_output
 # alt + shift - w : ~/.scripts/synced_unsplash_wallpaper
 # alt + shift - d : ~/.scripts/toggle_create_desktop
 alt + shift - c : cliclick c:.
+alt + shift - p : open -a "Brave Browser.app" -n --args --profile-directory="Default"
+alt + shift - g : open -a "Brave Browser.app" -n --args --profile-directory="Profile 1"
+alt + shift - u : open -a "Brave Browser.app" -n --args --profile-directory="Profile 2"
+alt + shift - n : open -a "Brave Browser.app" -n --args --profile-directory="Profile 3"
