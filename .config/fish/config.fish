@@ -24,7 +24,7 @@ end
 
 alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
-if -d $HOME/.termux
+if test -d $HOME/.termux
     alias ls "exa -a --group-directories-first"
     alias lsd "exa -al group-directories-first"
     alias lst "exa -aT -L 5 group-directories-first"
