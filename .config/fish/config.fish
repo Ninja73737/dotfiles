@@ -101,7 +101,9 @@ if test -n "$SSH_CLIENT"
 end
 
 if not string match -rq ".*ish.*" (uname -r)
-    source ~/.cache/wal/colors.fish
+    if not test -d $HOME/.termux
+        source ~/.cache/wal/colors.fish
+    end
 
     neofetch
 
