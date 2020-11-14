@@ -5,8 +5,7 @@
 
 if test (uname) = "Darwin"
     set -g fish_user_paths "/usr/local/opt/arm-gcc-bin@8/bin" $fish_user_paths
-    set -g fish_user_paths "/usr/local/opt/avr-gcc@8/bin" $fish_user_paths
-    set -g fish_user_paths "/usr/local/opt/arm-gcc-bin@8/bin" $fish_user_paths
+    set -g fish_user_paths "/Users/mtoohey/Library/Python/3.8/bin" $fish_user_paths
 end
 
 set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
@@ -23,7 +22,7 @@ if string match -rq ".*MANJARO-ARM.*" (uname -r)
     alias dcd "docker-compose down --remove-orphans"
 end
 
-alias dotfiles "/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 if not string match -rq ".*ish.*" (uname -r)
     alias ls "exa -a --icons --group-directories-first"
