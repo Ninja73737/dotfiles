@@ -18,7 +18,7 @@ if status --is-interactive
     # Range (min … max):    10.1 ms …  18.3 ms    230 runs
 
     if string match -rq ".*MANJARO-ARM.*" (uname -r)
-        alias selfhosting "git --git-dir=$HOME/selfhosting --work-tree=$HOME"
+        alias selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
 
         alias dcu "docker-compose --env-file docker-compose.env up -d"
         alias dcd "docker-compose down --remove-orphans"
