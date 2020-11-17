@@ -74,7 +74,7 @@ if status --is-interactive
                 wal -i $current_wallpaper -nq
             end
             update_spicetify
-            set_macos_accent
+            # set_macos_accent
             # neofetch > ~/.config/neofetch
         else
             wal -Rnq
