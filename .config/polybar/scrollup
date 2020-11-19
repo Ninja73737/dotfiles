@@ -1,6 +1,0 @@
-#!/bin/bash
-
-bspc config pointer_follows_focus false
-bspc desktop -f next.local
-sleep 0.1
-bspc config pointer_follows_focus true

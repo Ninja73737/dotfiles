@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ "$(SwitchAudioSource -t output -c)" == "Built-in Output" ]; then
-    SwitchAudioSource -t output -s "G533 Gaming Headset"
-    SwitchAudioSource -t system -s "G533 Gaming Headset"
-else
-    SwitchAudioSource -t output -s "Built-in Output"
-    SwitchAudioSource -t system -s "Built-in Output"
-fi

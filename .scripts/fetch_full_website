@@ -1,3 +1,0 @@
-#!/bin/bash
-
-wget -e robots=off -r -l 1 -np --page-requisites --convert-links $1

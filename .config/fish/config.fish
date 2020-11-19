@@ -85,6 +85,8 @@ if status --is-interactive
         echo $dark_mode > ~/.config/wal/previous_mode
     else if string match -rq ".*MANJARO-ARM.*" (uname -r)
         wal -Rnq
+    else if string match -rq ".*NixOS.*" (uname -v)
+        wal -i $HOME/Pictures/Wallpapers/Big\ Sur\ Vector/The\ Beach\ Night.png -q
     end
 
     # Clear screen if running inside ranger

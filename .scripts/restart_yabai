@@ -1,3 +1,0 @@
-#!/bin/bash
-
-launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"

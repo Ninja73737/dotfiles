@@ -1,4 +1,0 @@
-#!/bin/bash
-
-data=$(curl -s -L covid19.trackercli.com/basic/canada)
-echo $data | awk -F' ' '{print "✓ " $40/1 "K ? " $47/1 "K (↑ " $23 ") × " $26/1 "K (↑ " $30 ")"}' | sed 's/ (↑ 0)//g'
