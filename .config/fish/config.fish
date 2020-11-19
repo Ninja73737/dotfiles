@@ -16,12 +16,11 @@ if status --is-interactive
 
     # Time (mean ± σ):      11.1 ms ±   1.2 ms    [User: 7.3 ms, System: 3.4 ms]
     # Range (min … max):    10.1 ms …  18.3 ms    230 runs
+    alias dcu "docker-compose --env-file docker-compose.env up -d"
+    alias dcd "docker-compose down --remove-orphans"
 
     if string match -rq ".*MANJARO-ARM.*" (uname -r)
         alias selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
-
-        alias dcu "docker-compose --env-file docker-compose.env up -d"
-        alias dcd "docker-compose down --remove-orphans"
     end
 
     alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
