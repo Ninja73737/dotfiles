@@ -1,0 +1,9 @@
+#!/bin/bash
+
+current_date=$(date '+%s')
+modification_date=$(stat -f '%m' "$1")
+comparison_modification_date="$(($modification_date + 86400))"
+
+if [ $comparison_modification_date -le $current_date ]; then
+    exit 1
+fi

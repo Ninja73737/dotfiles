@@ -1,0 +1,78 @@
+#!/usr/bin/env sh
+
+# Window Modification and Navigation
+
+shift + alt - h : yabai -m window --focus west
+shift + alt - j : yabai -m window --focus south
+shift + alt - k : yabai -m window --focus north
+shift + alt - l : yabai -m window --focus east
+
+# shift + alt - up : yabai -m window --focus north
+# shift + alt - right : yabai -m window --focus east
+# shift + alt - down : yabai -m window --focus south
+# shift + alt - left : yabai -m window --focus west
+
+cmd + alt + shift - h : yabai -m window --swap west
+cmd + alt + shift - j : yabai -m window --swap south
+cmd + alt + shift - k : yabai -m window --swap north
+cmd + alt + shift - l : yabai -m window --swap east
+
+# cmd + alt + shift - up : yabai -m window --swap north
+# cmd + alt + shift - right : yabai -m window --swap east
+# cmd + alt + shift - down : yabai -m window --swap south
+# cmd + alt + shift - left : yabai -m window --swap west
+
+ctrl + alt + shift - h : yabai -m window --warp west
+ctrl + alt + shift - j : yabai -m window --warp south
+ctrl + alt + shift - k : yabai -m window --warp north
+ctrl + alt + shift - l : yabai -m window --warp east
+
+# ctrl + alt + shift - up : yabai -m window --warp north
+# ctrl + alt + shift - right : yabai -m window --warp east
+# ctrl + alt + shift - down : yabai -m window --warp south
+# ctrl + alt + shift - left : yabai -m window --warp west
+
+# Space Modification and Navigation
+
+ctrl - h : yabai -m space --focus prev
+ctrl - l : yabai -m space --focus next
+
+# ctrl - left : yabai -m space --focus prev
+# ctrl - right : yabai -m space --focus next
+
+alt + shift - 1 : yabai -m space --focus 1
+alt + shift - 2 : yabai -m space --focus 2
+alt + shift - 3 : yabai -m space --focus 3
+alt + shift - 4 : yabai -m space --focus 4
+alt + shift - 5 : yabai -m space --focus 5
+alt + shift - 6 : yabai -m space --focus 6
+alt + shift - 7 : yabai -m space --focus 7
+alt + shift - 8 : yabai -m space --focus 8
+alt + shift - 9 : yabai -m space --focus 9
+
+cmd + alt + shift - 1 : yabai -m window --space 1
+cmd + alt + shift - 2 : yabai -m window --space 2
+cmd + alt + shift - 3 : yabai -m window --space 3
+cmd + alt + shift - 4 : yabai -m window --space 4
+cmd + alt + shift - 5 : yabai -m window --space 5
+cmd + alt + shift - 6 : yabai -m window --space 6
+cmd + alt + shift - 7 : yabai -m window --space 7
+cmd + alt + shift - 8 : yabai -m window --space 8
+cmd + alt + shift - 9 : yabai -m window --space 9
+
+# Quick Actions
+
+alt + shift - b : yabai -m space --balance
+alt + shift - y : ~/.scripts/restart_yabai
+alt + shift - s : /System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background
+alt + shift - t : yabai -m window --toggle float
+# alt + shift - i : osascript ~/.scripts/Listen\ to\ iPad\ Audio.scpt
+alt + shift - m : osascript -e 'quit app "Mos"'; open -a "Mos.app"
+alt + shift - o : ~/.scripts/switch_output
+# alt + shift - w : ~/.scripts/synced_unsplash_wallpaper
+# alt + shift - d : ~/.scripts/toggle_create_desktop
+alt + shift - c : cliclick c:.
+alt + shift - p : open -a "Brave Browser.app" -n --args --profile-directory="Default"
+alt + shift - g : open -a "Brave Browser.app" -n --args --profile-directory="Profile 1"
+alt + shift - u : open -a "Brave Browser.app" -n --args --profile-directory="Profile 2"
+alt + shift - n : open -a "Brave Browser.app" -n --args --profile-directory="Profile 3"

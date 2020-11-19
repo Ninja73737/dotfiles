@@ -1,0 +1,16 @@
+export main_fg={foreground.strip}
+export secondary_fg={foreground.strip}
+export main_bg={background.strip}
+export sidebar_and_player_bg={background.strip}
+export cover_overlay_and_shadow=000000
+export indicator_fg_and_button_bg={color1.strip}
+export pressing_fg={color2.strip}
+export slider_bg={color3.strip}
+export sidebar_indicator_and_hover_button_bg={color1.strip}
+export scrollbar_fg_and_selected_row_bg={color1.strip}
+export pressing_button_fg={color2.strip}
+export pressing_button_bg={color4.strip}
+export selected_button={color1.strip}
+export miscellaneous_bg={color4.strip}
+export miscellaneous_hover_bg={color1.strip}
+export preserve_1={foreground.strip}
