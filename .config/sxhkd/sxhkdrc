@@ -3,19 +3,23 @@
 #
 
 # terminal emulator
-super + Return
-	kitty
+alt + Return
+	alacritty
+
+# ranger
+alt + shift + Return
+        alacritty -e fish -C 'ranger'
 
 # program launcher
-super + space
+alt + space
 	rofi -show drun -show-icons
 
 # window switcher
-super + Tab
+alt + Tab
 	rofi -show window
 
 # make sxhkd reload its configuration files:
-super + alt + s
+alt + shift + s
 	pkill -USR1 -x sxhkd
 
 #
@@ -23,21 +27,21 @@ super + alt + s
 #
 
 # looking glass
-super + alt + l
-	looking-glass-client -K 70
+# super + alt + l
+# 	looking-glass-client -K 70
 
 # switch desktop
-super + alt + m
-	/usr/local/bin/switchmonitors
+# super + alt + m
+# 	/usr/local/bin/switchmonitors
 
 # switch audio
-super + alt + o
+alt + shift + o
 	/usr/local/bin/switchoutput
 
 
 # switch phone
-super + alt + p
-	/usr/local/bin/switchphone
+# super + alt + p
+# 	/usr/local/bin/switchphone
 
 #
 # Audio Stuff
@@ -55,11 +59,11 @@ XF86AudioLowerVolume
 #
 
 # quit/restart bspwm
-super + alt + {q,r}
+alt + shift + {q,r}
 	bspc {quit,wm -r}
 
 # close and kill
-super + {_,shift + }w
+alt + {_,shift + }w
 	bspc node -{c,k}
 
 #
@@ -67,15 +71,17 @@ super + {_,shift + }w
 #
 
 # set the window state
-super + {t,p,f}
-	bspc node -t {tiled,pseudo_tiled,floating}
+alt + shift + {t,f}
+	bspc node -t {tiled,floating}
+
+######!!!!!!!!! pseudo_tiled is missing rn!!!
 
 # set the node flags
-super + ctrl + {m,x,y,z}
-	bspc node -g {marked,locked,sticky,private}
+# super + ctrl + {m,x,y,z}
+# 	bspc node -g {marked,locked,sticky,private}
 
 # quick balance
-super + b
+alt + shift + b
 	bspc node @/ --balance
 
 #
@@ -83,20 +89,20 @@ super + b
 #
 
 # focus the node in the given direction
-super + {_,shift + }{Left,Down,Up,Right}
+alt + shift + {_,super + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
 # focus the node for the given path jump
-super + {p,b,comma,period}
-	bspc node -f @{parent,brother,first,second}
+# super + {p,b,comma,period}
+# 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous desktop in the current monitor
-super + {button5,button4}
-	bspc config pointer_follows_focus false && bspc desktop -f {prev,next}.local && sleep 0.1 && bspc config pointer_follows_focus true
+# super + {button5,button4}
+# 	bspc config pointer_follows_focus false && bspc desktop -f {prev,next}.local && sleep 0.1 && bspc config pointer_follows_focus true
 
 # move and follow window to the next/previous desktop in the current monitor
-super + shift + {button5,button4}
-	bspc node -d {prev,next}.local --follow
+# super + shift + {button5,button4}
+# 	bspc node -d {prev,next}.local --follow
 
 # focus the last node/desktop
 #super + {grave,Tab}
@@ -109,7 +115,7 @@ super + shift + {button5,button4}
 #	bspc wm -h on
 
 # focus or send to the given desktop
-super + {_,shift + }{1-9,0}
+alt + shift + {_,super + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
 
 #
@@ -117,8 +123,8 @@ super + {_,shift + }{1-9,0}
 #
 
 # preselect the direction
-super + ctrl + {Left,Down,Up,Right}
-	bspc node -p {west,south,north,east}
+# super + ctrl + {Left,Down,Up,Right}
+# 	bspc node -p {west,south,north,east}
 
 # preselect the ratio
 #super + ctrl + {1-9}
@@ -137,7 +143,7 @@ super + ctrl + {Left,Down,Up,Right}
 #
 
 # expand a window by moving one of its side outward
-super + alt + {Left,Down,Up,Right}
+alt + shift + super + {h,j,k,l}
 	bspc node -z {left -1 0,bottom 0 1,top 0 -1,right 1 0}
 
 # contract a window by moving one of its side inward
@@ -147,3 +153,8 @@ super + alt + {Left,Down,Up,Right}
 # move a floating window
 #super + shift + {Left,Down,Up,Right}
 #	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# Browser
+
+alt + shift + {p,u}
+        brave {--profile-directory="Default",--profile-directory="Profile 2"}

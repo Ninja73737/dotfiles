@@ -1,26 +1,21 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 bspc rule -r "*"
 
 sxhkd &
-/usr/local/bin/autowallpaper &
-killall -q looking-glass-client
 
-primaryState=$(xrandr | grep "HDMI2 connected 2560")
-if [ -n "$primaryState" ]; then
-    bspc monitor HDMI2 -d 1 2 3 4 5
-    bspc monitor HDMI3 -d 6 7 8 9
-    bspc monitor HDMI3 -s HDMI2
-    $HOME/.config/polybar/launchboth.sh &
-else
-    bspc monitor HDMI3 -d 1 2 3 4 5 6 7 8 9
-    $HOME/.config/polybar/launchsecondary.sh
-fi
+xrandr --output DVI-D-0 --auto --pos 0x0 --output HDMI-0 --pos 1600x-660 --primary
+xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" 0.1 0 0 0 0.1 0 0 0 1
+
+bspc monitor HDMI-0 -d 1 2 3 4 5
+bspc monitor DVI-D-0 -d 6 7 8 9
+bspc monitor HDMI-0 -s DVI-D-0
+# $HOME/.config/polybar/launchboth.sh &
 
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   true
-bspc config top_padding             -21
-bspc config border_width            1
+bspc config top_padding             0
+bspc config border_width            0
 bspc config window_gap              16
 bspc config border_radius           9
 bspc config pointer_modifier        mod4
@@ -33,8 +28,3 @@ bspc config gapless_monocle         false
 
 bspc rule -a Gimp state=floating follow=on
 bspc rule -a Zathura state=tiled
-bspc rule -a "looking-glass-client" state=tiled desktop='^1'
-
-if [ -n "$primaryState" ]; then
-    looking-glass-client -K 70 &
-fi

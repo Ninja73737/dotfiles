@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 print_bytes() {
     if [ "$1" -eq 0 ] || [ "$1" -lt 1000 ]; then
