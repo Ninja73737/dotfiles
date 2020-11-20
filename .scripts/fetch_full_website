@@ -1,3 +1,3 @@
 #!/bin/bash
 
-wget -e robots=off -r -l 1 -np --page-requisites --convert-links $1
+wget -e use_proxy=yes -e https_proxy=127.0.0.1:8123 -e robots=off -r -l 1 -np --page-requisites --convert-links $1
