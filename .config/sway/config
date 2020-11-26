@@ -29,6 +29,7 @@ exec swaymsg focus output HDMI-A-2
 xwayland enable
 
 smart_gaps on
+smart_borders on
 
 mouse_warping container
 
@@ -78,8 +79,8 @@ client.urgent           #7c818c #bf616a #ffffff #900000   #bf616a
 client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
-gaps inner 14
-gaps outer 14
+gaps inner 12
+gaps outer 12
 
 ### Output configuration
 #
@@ -117,6 +118,9 @@ input "6940:7013:Corsair_CORSAIR_HARPOON_RGB_WIRELESS_Gaming_Dongle" {
 #
     # Launch a terminal
     bindsym $mod+return exec $term
+
+    # Launch ranger
+    bindsym $mod+Shift+return exec $term fish -C ranger
 
     # Kill focused window
     bindsym $mod+q kill
