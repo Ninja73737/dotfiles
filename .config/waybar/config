@@ -1,0 +1,120 @@
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)		
+    // "height": 30, // Waybar height (to be removed for auto height)
+    // "width": 2560, // Waybar width
+    // Choose the order of the modules
+    "modules-left": ["sway/workspaces", "custom/spotify"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["pulseaudio","custom/weather", "disk", "cpu", "memory", "temperature", "tray","clock","custom/power", "custom/weather"],
+    // Modules configuration
+    "sway/workspaces": {
+      "disable-scroll": false,
+      "all-outputs": true,
+      "format": "{icon}"
+    },
+    "sway/mode": {
+      "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/window": {
+    	"format": "{}"
+    },
+    "custom/spotify": {
+        "format": "{icon}",
+        "format-icons": {
+            "Playing": "E",
+            "Paused": "O"
+        },
+        "max-length": 40,
+        "interval": 1,
+        "exec": "playerctl -p spotify status",
+        "exec-if": "pgrep spotify"
+    },
+    "tray": {
+         "spacing": 10
+    },
+    "idle_inhibitor": {
+         "format": "{icon}",
+         "format-icons": {
+         "activated": "",
+         "deactivated": ""
+      }
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "on-click": "kitty -e gotop",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "{}% "
+    },
+    "clock": {
+        "format-alt": "{:%a, %d. %b %H:%M}"
+    },
+    "temperature": {
+        "thermal-zone": 2,
+        "hwmon-path": "/sys/class/hwmon/hwmon0/temp1_input",
+        "critical-threshold": 80,
+        "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "interval": 60,
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        "interval": 5,
+        "format": "{icon}",
+        "format-alt": "{percent}% {icon}",
+        "format-alt-click": "click-right",
+        "format-icons": ["🌕", "🌔", "🌓", "🌒", "🌑"],
+        "on-scroll-down": "brightnessctl -c backlight set +5%",
+        "on-scroll-up": "brightnessctl -c backlight set 5%-"
+    },
+    "battery": {
+        "states": {
+          // "good": 95,
+          "warning": 30,
+          "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "network": {
+        "interface": "wlan0", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "interval": 60,
+        "on-click-middle": "exec kitty -e nmtui"
+    },
+    "disk": {
+        "interval": 30,
+        "format": "{percentage_free}% ",
+        "path": "/run/media/bryan/"
+    },
+    "custom/power": {
+      	"format": "⏻",
+      	"on-click": "nwgbar -o 0.4",
+    	  "tooltip": false 
+    },
+    "wlr/taskbar": {
+        "format": "{icon}",
+        // "format": "{title:.16}",
+        "icon-theme": "Papirus",
+        "icon-size": 15,
+        "on-click": "activate",
+        "markup": true,
+        "max-length": 7,
+        "on-click-right": "minimize",
+        "on-click-middle": "close"
+    }
+}
