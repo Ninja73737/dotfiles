@@ -11,6 +11,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-sleuth'
 Plug 'sheerun/vim-polyglot'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'tpope/vim-commentary'
 Plug 'machakann/vim-highlightedyank'
 Plug 'norcalli/nvim-colorizer.lua'
@@ -18,9 +19,15 @@ Plug 'dylanaraps/wal.vim'
 
 call plug#end()
 
-" Sets the latex-live-preview viewer to the MacOS default Preview application 
-let g:livepreview_previewer = 'open -a Preview'
+let os = substitute(system('uname'), "\n", "", "")
+if os == "Darwin"
+    let g:livepreview_previewer = 'open -a Preview'
+elseif os == "Linux"
+    let g:livepreview_previewer = 'zathura'
+endif
 let g:livepreview_cursorhold_recompile = 0
+
+let g:mkdp_auto_start = 1
 
 " Enables true color
 " set termguicolors
@@ -32,9 +39,6 @@ endif
 
 " Enables syntax hilighting
 syntax enable
-
-" Disables wrapping
-" set nowrap
 
 " Hides the mode bar since we already have one
 set noshowmode
@@ -48,7 +52,6 @@ set sidescrolloff=1
 
 " Sets scroll offsets
 set scrolloff=3
-set sidescrolloff=5
 
 " Highlight matching pairs of brackets. Use the '%' character to jump between them.
 set matchpairs+=<:>
@@ -70,9 +73,7 @@ set tabstop=8
 set softtabstop=4
 set shiftwidth=4
 
-"set smartindent
 set autoindent
-"set cindent
 
 set nocompatible
 filetype plugin indent on
