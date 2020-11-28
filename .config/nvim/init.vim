@@ -1,9 +1,22 @@
 call plug#begin()
 
-Plug 'shougo/deoplete.nvim'
-Plug 'deoplete-plugins/deoplete-jedi'
-Plug 'kassio/neoterm'
-Plug 'shougo/neco-syntax'
+" Plug 'shougo/deoplete.nvim'
+" Plug 'deoplete-plugins/deoplete-jedi'
+" Plug 'shougo/neco-syntax'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-hilight', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
+Plug 'pappasam/coc-jedi', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+Plug 'fannheyward/coc-markdownlint', {'do': 'yarn install --frozen-lockfile'}
+Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
+Plug 'coc-extensions/coc-svelte', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'fannheyward/coc-xml', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'ryanoasis/vim-devicons'
@@ -18,6 +31,8 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'dylanaraps/wal.vim'
 
 call plug#end()
+
+command! -nargs=0 Format :call CocAction('format')
 
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Darwin"
@@ -209,8 +224,8 @@ let g:lightline.enable = {
     \ }
 
 " deoplete
-let g:deoplete#enable_at_startup = 1
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" let g:deoplete#enable_at_startup = 1
+" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
