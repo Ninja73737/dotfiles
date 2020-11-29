@@ -8,6 +8,7 @@
 # exec /usr/lib/kdeconnectd
 # exec kdeconnect-indicator
 # exec coreMod4
+exec_always rescuetime &
 exec mako
 # exec /usr/lib/polkit-kde-authentication-agent-1
 exec nm-applet --indicator
@@ -27,9 +28,6 @@ output HDMI-A-2 pos 1600 0 res 2560x1080
 exec swaymsg focus output HDMI-A-2
 
 xwayland enable
-
-smart_gaps on
-smart_borders on
 
 mouse_warping container
 
@@ -62,10 +60,10 @@ set $term kitty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #
-set $menu nwggrid -o 1.00 -b 353b49 -c style.css
+set $menu wofi --show drun --conf ~/.config/wofi/config --style ~/.config/wofi/style.css
 
 # Disable titlebar
-default_border pixel 3
+default_border pixel 4
 
 # Font
 font pango:HackNerdFont Regular 14px
@@ -199,7 +197,8 @@ input "6940:7013:Corsair_CORSAIR_HARPOON_RGB_WIRELESS_Gaming_Dongle" {
 	
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+Shift+s scratchpad show
+    bindsym $mod+Tab scratchpad show
+    bindsym $mod+Shift+Tab floating no
 #
 # Status Bar:
 #
@@ -217,9 +216,9 @@ bindsym $mod+Shift+n exec brave --profile-directory="Profile 3"
 
 # Special keys
 # /usr/include/xkbcommon/xkbcommon-keysyms.h
-bindsym XF86AudioRaiseVolume exec pamixer -ui 2 && pamixer --get-volume > $SWAYSOCK.wob
-bindsym XF86AudioLowerVolume exec pamixer -ud 2 && pamixer --get-volume > $SWAYSOCK.wob
-bindsym XF86AudioMute exec pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $SWAYSOCK.wob ) || pamixer --get-volume > $SWAYSOCK.wob
+bindsym XF86AudioRaiseVolume exec pulsemixer --change-volume +1 && pulsemixer --get-volume > $SWAYSOCK.wob
+bindsym XF86AudioLowerVolume exec pulsemixer --change-volume -1 && pulsemixer --get-volume > $SWAYSOCK.wob
+bindsym XF86AudioMute exec pulsemixer --toggle-mute && ( pulsemixer --get-mute && echo 0 > $SWAYSOCK.wob ) || pulsemixer --get-volume > $SWAYSOCK.wob
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
