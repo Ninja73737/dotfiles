@@ -4,7 +4,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'ryanoasis/vim-devicons'
-Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-sleuth'
 Plug 'sheerun/vim-polyglot'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
@@ -13,19 +12,21 @@ Plug 'tpope/vim-commentary'
 Plug 'machakann/vim-highlightedyank'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'dylanaraps/wal.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
-" let g:coc_global_extensions = ['coc-bibtex', 'coc-css', 'coc-db', 'coc-docker', 'coc-eslint', 'coc-git', 'coc-gitignore', 'coc-grammarly', 'coc-homeassistant', 'coc-html', 'coc-java', 'coc-json', 'coc-markdownlint', 'coc-pairs', 'coc-prettier', 'coc-python', 'coc-r-lsp', 'coc-sh', 'coc-spell-checker', 'coc-svelte', 'coc-texlab', 'coc-toml', 'coc-tslint', 'coc-xml', 'coc-yaml']
-" 'coc-vimtex'
-
-" command! -nargs=0 FormatSelected :call CocAction('formatSelected')
 nmap cf :call CocAction('format')<CR>
 nmap cn :call CocAction('diagnosticNext')<CR>
 nmap cp :call CocAction('diagnosticPrevious')<CR>
 
 :map Q <Nop>
 nmap ZQ :quit!<CR>
+
+let g:mkdp_auto_start = 1
+let g:mkdp_markdown_css = '/Users/mtoohey/.config/nvim/markdown-preview.css'
+let g:mkdp_highlight_css = '/Users/mtoohey/.cache/wal/colors.css'
 
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Darwin"
@@ -35,34 +36,21 @@ elseif os == "Linux"
 endif
 let g:livepreview_cursorhold_recompile = 0
 
-let g:mkdp_auto_start = 1
-
-" Enables true color
-" set termguicolors
-
-" Enables colorizer if true color is enabled
-if &termguicolors
-  lua require'colorizer'.setup()
-endif
-
-" Enables syntax highlighting
-syntax enable
-
-" Hides the mode bar since we already have one
-set noshowmode
+" Enables true color and colorizer
+set termguicolors
+lua require'colorizer'.setup()
 
 " Enables relative line numbers
 set number relativenumber
 
 " Enables mouse support
 set mouse=a
-set sidescrolloff=1
 
 " Sets scroll offsets
 set scrolloff=3
 
 " Highlight matching pairs of brackets. Use the '%' character to jump between them.
-set matchpairs+=<:>
+" set matchpairs+=<:>
 
 " Display different types of white spaces.
 set list
@@ -80,31 +68,15 @@ set expandtab
 set tabstop=8
 set softtabstop=4
 set shiftwidth=4
-
 set autoindent
 
-set nocompatible
 filetype plugin indent on
-
-"Case insensitive searching
-set ignorecase
 
 "Will automatically switch to case sensitive if you use any capitals
 set smartcase
 
-" Toggle vertical line
-set colorcolumn=
-fun! ToggleCC()
-  if &cc == ''
-    " set cc=1,4,21
-    set cc=80
-  else
-    set cc=
-  endif
-endfun
-
-let g:goyo_width = '80%'
-" let g:goyo_height = '90%'
+let g:goyo_width = '95%'
+let g:goyo_height = '95%'
 
 function! s:goyo_enter()
   let b:quitting = 0
@@ -128,107 +100,14 @@ autocmd! User GoyoEnter call <SID>goyo_enter()
 autocmd! User GoyoLeave call <SID>goyo_leave()
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
-" autocmd VimEnter * Goyo 
-
-" Lightline
-" Get default from :h lightline
-let g:lightline = {
-    \ 'colorscheme': 'wal',
-    \ }
-
-let g:lightline.active = {
-    \ 'left': [ [ 'mode', 'paste', 'sep1' ],
-    \           [ 'readonly', 'filename', 'modified' ],
-    \           [ ] ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ] ]
-    \ }
-
-let g:lightline.inactive = {
-    \ 'left': [ [ 'mode', 'paste', 'sep1' ],
-    \           [ 'readonly', 'filename', 'modified' ] ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ] ]
-    \ }
-
-let g:lightline.tabline = {
-    \ 'left': [ [ 'tabs' ] ],
-    \ 'right': [ ] }
-
-let g:lightline.tab = {
-    \ 'active': [ 'tabnum', 'filename', 'modified' ],
-    \ 'inactive': [ 'tabnum', 'filename', 'modified' ] }
-
-let g:lightline.component = {
-    \ 'mode': '%{lightline#mode()}',
-    \ 'absolutepath': '%F',
-    \ 'relativepath': '%f',
-    \ 'filename': '%t',
-    \ 'modified': '%M',
-    \ 'bufnum': '%n',
-    \ 'paste': '%{&paste?"PASTE":""}',
-    \ 'readonly': '%R',
-    \ 'charvalue': '%b',
-    \ 'charvaluehex': '%B',
-    \ 'fileencoding': '%{&fenc!=#""?&fenc:&enc}',
-    \ 'fileformat': '%{&ff}',
-    \ 'filetype': '%{&ft!=#""?&ft:"no ft"}',
-    \ 'percent': '%3p%%',
-    \ 'percentwin': '%P',
-    \ 'spell': '%{&spell?&spelllang:""}',
-    \ 'lineinfo': '%3l:%-2v',
-    \ 'line': '%l',
-    \ 'column': '%c',
-    \ 'close': '%999X X ',
-    \ 'winnr': '%{winnr()}',
-    \ 'sep1': ''
-    \}
-
-let g:lightline.mode_map = {
-    \ 'n' : 'N',
-    \ 'i' : 'I',
-    \ 'R' : 'R',
-    \ 'v' : 'V',
-    \ 'V' : 'L',
-    \ "\<C-v>": 'B',
-    \ 'c' : 'C',
-    \ 's' : 'S',
-    \ 'S' : 'S-LINE',
-    \ "\<C-s>": 'S-BLOCK',
-    \ 't': 'T',
-    \ }
-
-
-let g:lightline.separator = {
-    \   'left': '', 'right': ''
-    \}
-let g:lightline.subseparator = {
-    \   'left': '', 'right': '' 
-    \}
-
-let g:lightline.tabline_separator = g:lightline.separator
-let g:lightline.tabline_subseparator = g:lightline.subseparator
-
-let g:lightline.enable = {
-    \ 'statusline': 1,
-    \ 'tabline': 1
-    \ }
 
 " Allow color schemes to do bright colors without forcing bold.
-if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
-  set t_Co=16
-endif
-
-set wildmenu
-
-set encoding=utf8
-scriptencoding utf-8
+" if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
+"   set t_Co=16
+" endif
 
 " Colorscheme
 colorscheme wal
-set fillchars=vert::
 
 " Restore last cursor position and marks on open
 au BufReadPost *
@@ -236,4 +115,22 @@ au BufReadPost *
          \ |   exe "normal! g`\""
          \ | endif
 
-source ~/.config/nvim/statusline.vim
+let g:airline_theme='wal'
+let g:airline_powerline_fonts = 1
+let g:airline_symbols = {}
+let g:airline_skip_empty_sections = 1
+let g:airline_left_sep = ' '
+let g:airline_left_alt_sep = '|'
+let g:airline_right_sep = ' '
+let g:airline_right_alt_sep = '|'
+let g:airline_symbols_branch = ''
+let g:airline_powerline_fonts = 1
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+"extensions
+let g:airline#extensions#coc#enabled = 1
+"extension settings
+let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
+let airline#extensions#coc#warning_symbol = ':'
+let airline#extensions#coc#error_symbol = ':'

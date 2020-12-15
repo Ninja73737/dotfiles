@@ -46,21 +46,21 @@ if status --is-interactive
     # Update wal Colours
 
     if test (uname) = "Darwin"
-        wal --theme base16-nord -nq
+        # wal --theme base16-nord -nq
 
-    #     # set current_wallpaper (sqlite3 -readonly ~/Library/Application\ Support/Dock/desktoppicture.db 'SELECT * FROM data ORDER BY rowID DESC LIMIT 1;')
-    #     set current_wallpaper (osascript -e 'tell app "finder" to get posix path of (get desktop picture as alias)')
+        # set current_wallpaper (sqlite3 -readonly ~/Library/Application\ Support/Dock/desktoppicture.db 'SELECT * FROM data ORDER BY rowID DESC LIMIT 1;')
+        set current_wallpaper (osascript -e 'tell app "finder" to get posix path of (get desktop picture as alias)')
 
-    #     set dark_mode (defaults read -g AppleInterfaceStyle 2>/dev/null)
-    #     # set dark_mode (osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode')
+        set dark_mode (defaults read -g AppleInterfaceStyle 2>/dev/null)
+        # set dark_mode (osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode')
 
-    #     if test -z "$dark_mode"
-    #     # if test "$dark_mode" = "false"
-    #         wal -i $current_wallpaper -nql
-    #     else
-    #         wal -i $current_wallpaper -nq
-    #     end
-    #     update_spicetify
+        if test -z "$dark_mode"
+        # if test "$dark_mode" = "false"
+            wal -i $current_wallpaper -nql
+        else
+            wal -i $current_wallpaper -nq
+        end
+        update_spicetify
 
     else if string match -rq ".*MANJARO-ARM.*" (uname -r)
         wal --theme base16-nord -q

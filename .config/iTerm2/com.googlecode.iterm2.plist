@@ -368,7 +368,7 @@
 		</dict>
 	</dict>
 	<key>Default Bookmark Guid</key>
-	<string>A910DB64-8C42-4DD4-89AE-91AE7A1CD6A3</string>
+	<string>EEB2612A-A040-4608-A413-3FF8CC0CC419</string>
 	<key>DeleteProfile_SilenceUntil</key>
 	<real>607720044.11595404</real>
 	<key>DeleteProfile_selection</key>
@@ -7117,8 +7117,12 @@
 			<integer>0</integer>
 			<key>Cursor Color</key>
 			<dict>
+				<key>Alpha Component</key>
+				<real>1</real>
 				<key>Blue Component</key>
 				<real>0.0</real>
+				<key>Color Space</key>
+				<string>sRGB</string>
 				<key>Green Component</key>
 				<real>0.0</real>
 				<key>Red Component</key>
