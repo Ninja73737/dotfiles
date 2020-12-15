@@ -1,22 +1,6 @@
 call plug#begin()
 
-" Plug 'shougo/deoplete.nvim'
-" Plug 'deoplete-plugins/deoplete-jedi'
-" Plug 'shougo/neco-syntax'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
-Plug 'pappasam/coc-jedi', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-Plug 'fannheyward/coc-markdownlint', {'do': 'yarn install --frozen-lockfile'}
-Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
-Plug 'coc-extensions/coc-svelte', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'fannheyward/coc-xml', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'ryanoasis/vim-devicons'
@@ -32,7 +16,16 @@ Plug 'dylanaraps/wal.vim'
 
 call plug#end()
 
-command! -nargs=0 Format :call CocAction('format')
+" let g:coc_global_extensions = ['coc-bibtex', 'coc-css', 'coc-db', 'coc-docker', 'coc-eslint', 'coc-git', 'coc-gitignore', 'coc-grammarly', 'coc-homeassistant', 'coc-html', 'coc-java', 'coc-json', 'coc-markdownlint', 'coc-pairs', 'coc-prettier', 'coc-python', 'coc-r-lsp', 'coc-sh', 'coc-spell-checker', 'coc-svelte', 'coc-texlab', 'coc-toml', 'coc-tslint', 'coc-xml', 'coc-yaml']
+" 'coc-vimtex'
+
+" command! -nargs=0 FormatSelected :call CocAction('formatSelected')
+nmap cf :call CocAction('format')<CR>
+nmap cn :call CocAction('diagnosticNext')<CR>
+nmap cp :call CocAction('diagnosticPrevious')<CR>
+
+:map Q <Nop>
+nmap ZQ :quit!<CR>
 
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Darwin"
@@ -52,7 +45,7 @@ if &termguicolors
   lua require'colorizer'.setup()
 endif
 
-" Enables syntax hilighting
+" Enables syntax highlighting
 syntax enable
 
 " Hides the mode bar since we already have one
@@ -222,10 +215,6 @@ let g:lightline.enable = {
     \ 'statusline': 1,
     \ 'tabline': 1
     \ }
-
-" deoplete
-" let g:deoplete#enable_at_startup = 1
-" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
