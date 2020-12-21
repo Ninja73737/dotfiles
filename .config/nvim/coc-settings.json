@@ -1,25 +1,27 @@
 {
-  "bibtex.enable": true,
-  "css.enable": true,
-  "coc.source.db.enable": true,
-  "docker.enable": true,
-  "eslint.enable": true,
-  "git.enableGutters": true,
-  "gitignore.enable": true,
-  "coc-grammarly.enabled": true,
-  "homeassistant.enable": true,
-  "html.enable": true,
-  "java.enabled": true,
-  "json.enable": true,
-  "coc.preferences.enableMarkdown": true,
   "markdownlint.config": {
     "MD033": false,
     "MD007": { "indent": 4 },
     "MD026": false
   },
-  "python.linting.enabled": true,
-  "sh.enable": true,
-  "cSpell.enabled": true,
-  "tslint.enable": true,
-  "xml.validation.enabled": true
+  "python.linting.pep8Enabled": true,
+  "python.linting.pep8Args": ["--max-line-length=100"],
+  "cSpell.maxNumberOfProblems": 500,
+  "cSpell.maxDuplicateProblems": 500,
+  "cSpell.minWordLength": 3,
+  "cSpell.language": "en-GB",
+  "cSpell.enabledLanguageIds": [
+    "csharp",
+    "go",
+    "javascript",
+    "javascriptreact",
+    "markdown",
+    "pandoc",
+    "php",
+    "plaintext",
+    "tex",
+    "typescript",
+    "typescriptreact",
+    "yml"
+  ]
 }

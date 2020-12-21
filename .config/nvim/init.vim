@@ -7,26 +7,49 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-sleuth'
 Plug 'sheerun/vim-polyglot'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
 Plug 'tpope/vim-commentary'
 Plug 'machakann/vim-highlightedyank'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'dylanaraps/wal.vim'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
-nmap cf :call CocAction('format')<CR>
-nmap cn :call CocAction('diagnosticNext')<CR>
-nmap cp :call CocAction('diagnosticPrevious')<CR>
+let g:pandoc#modules#disabled = ["folding", "spell"]
+let g:pandoc#syntax#conceal#use = 0
 
-:map Q <Nop>
-nmap ZQ :quit!<CR>
+let g:coc_global_extensions = ["coc-css", "coc-db", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-grammarly", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-vimtex", "coc-xml", "coc-yaml"]
+
+noremap cf :CocFix<CR>
+noremap cF :call CocAction('format')<CR>
+noremap cn :call CocAction('diagnosticNext')<CR>
+noremap cp :call CocAction('diagnosticPrevious')<CR>
+
+noremap ch :noh<CR>
+noremap ct :TableModeToggle<CR>
+
+noremap cs :autocmd TextChanged,TextChangedI <buffer> silent write<CR>
+
+autocmd FileType tex let b:coc_pairs_disabled = ['<']
+autocmd FileType pandoc let g:table_mode_corner='|'
+" let g:table_mode_corner='|'
+
+noremap LL :LLPStartPreview<CR>
+
+noremap Q <Nop>
+noremap ZQ :quit!<CR>
+noremap ZW :write<CR>
 
 let g:mkdp_auto_start = 1
 let g:mkdp_markdown_css = '/Users/mtoohey/.config/nvim/markdown-preview.css'
 let g:mkdp_highlight_css = '/Users/mtoohey/.cache/wal/colors.css'
+let g:mkdp_page_title = '${name}.md'
 
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Darwin"
@@ -37,8 +60,8 @@ endif
 let g:livepreview_cursorhold_recompile = 0
 
 " Enables true color and colorizer
-set termguicolors
-lua require'colorizer'.setup()
+" set termguicolors
+" lua require'colorizer'.setup()
 
 " Enables relative line numbers
 set number relativenumber
@@ -72,7 +95,8 @@ set autoindent
 
 filetype plugin indent on
 
-"Will automatically switch to case sensitive if you use any capitals
+" Will automatically switch to case sensitive if you use any capitals
+set ignorecase
 set smartcase
 
 let g:goyo_width = '95%'
