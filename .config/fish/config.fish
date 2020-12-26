@@ -32,6 +32,14 @@ if status --is-interactive
         alias lsta "exa -aT --icons --group-directories-first"
     end
 
+    function sudo
+        if test "$argv" = !!
+        eval command sudo $history[1]
+    else
+        command sudo $argv
+        end
+end
+
     # Fish Settings
 
     fish_vi_key_bindings
