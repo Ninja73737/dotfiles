@@ -771,7 +771,7 @@
 			<key>Has Hotkey</key>
 			<false/>
 			<key>Horizontal Spacing</key>
-			<integer>1</integer>
+			<real>1</real>
 			<key>Idle Code</key>
 			<integer>0</integer>
 			<key>Jobs to Ignore</key>
@@ -1084,13 +1084,13 @@
 			<key>Name</key>
 			<string>Stock Light</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -1152,7 +1152,7 @@
 			<key>Use Underline Color</key>
 			<false/>
 			<key>Vertical Spacing</key>
-			<integer>1</integer>
+			<real>1</real>
 			<key>Visual Bell</key>
 			<true/>
 			<key>Window Type</key>
@@ -1738,13 +1738,13 @@
 			<key>Name</key>
 			<string>Stock Dark</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -2400,13 +2400,13 @@
 			<key>Name</key>
 			<string>Vanilla Dark</string>
 			<key>Non Ascii Font</key>
-			<string>SFProDisplayNerdFontRegular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>SFProDisplayNerdFontRegular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -3062,13 +3062,13 @@
 			<key>Name</key>
 			<string>Vanilla Light</string>
 			<key>Non Ascii Font</key>
-			<string>HackNerdFontComplete-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>HackNerdFontComplete-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -3796,13 +3796,13 @@
 			<key>Name</key>
 			<string>Milkshake Light</string>
 			<key>Non Ascii Font</key>
-			<string>HackNerdFontComplete-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>HackNerdFontComplete-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -4544,13 +4544,13 @@
 			<key>Name</key>
 			<string>Milkshake Dark</string>
 			<key>Non Ascii Font</key>
-			<string>HackNerdFontComplete-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>HackNerdFontComplete-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -5294,13 +5294,13 @@
 			<key>Name</key>
 			<string>Nord</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -6053,13 +6053,13 @@
 			<key>Name</key>
 			<string>Mac System Light</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -6812,13 +6812,13 @@
 			<key>Name</key>
 			<string>Mac System Dark</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -7493,13 +7493,13 @@
 			<key>Name</key>
 			<string>Pywal</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -8149,13 +8149,13 @@
 			<key>Name</key>
 			<string>Pywal with Ranger on Start</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
@@ -8889,13 +8889,13 @@
 			<key>Name</key>
 			<string>Nord with Ranger on Start</string>
 			<key>Non Ascii Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>LigaturizedHackNerdFont-Regular 12</string>
+			<string>FiraCodeNerdFontComplete-Regular 12</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Option Key Sends</key>
