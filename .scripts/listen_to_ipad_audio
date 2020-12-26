@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $(ps aux | grep sox | wc -l) -gt 1 ]; then
+    killall sox
+else
+    SwitchAudioSource -t input -s "Built-in Line Input"
+
+    nohup bash -c 'sox -d -d --buffer 150 -V1' &
+
+    sleep 1
+
+    SwitchAudioSource -t input -s "G533 Gaming Headset"
+
+    sudo renice -20 -p $(ps aux | grep sox | grep -v grep | awk '{print $2}')
+fi
