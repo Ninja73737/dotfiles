@@ -24,6 +24,8 @@ call plug#end()
 let g:pandoc#modules#disabled = ["folding", "spell"]
 let g:pandoc#syntax#conceal#use = 0
 
+let g:coc_filetype_map = { 'pandoc': 'markdown' }
+
 let g:coc_global_extensions = ["coc-css", "coc-db", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-grammarly", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-vimtex", "coc-xml", "coc-yaml"]
 
 noremap cf :CocFix<CR>
