@@ -2,10 +2,12 @@
   "markdownlint.config": {
     "MD033": false,
     "MD007": { "indent": 4 },
-    "MD026": false
+    "MD026": false,
+    "MD034": false
   },
   "python.linting.pep8Enabled": true,
   "python.linting.pep8Args": ["--max-line-length=100"],
+  "eslint.options": { "configFile": "/Users/mtoohey/.config/eslint/eslintrc" },
   "cSpell.maxNumberOfProblems": 500,
   "cSpell.maxDuplicateProblems": 500,
   "cSpell.minWordLength": 3,
