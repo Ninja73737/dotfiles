@@ -1,6 +1,7 @@
 call plug#begin()
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'ryanoasis/vim-devicons'
@@ -26,7 +27,7 @@ let g:pandoc#syntax#conceal#use = 0
 
 let g:coc_filetype_map = { 'pandoc': 'markdown' }
 
-let g:coc_global_extensions = ["coc-css", "coc-db", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-grammarly", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-vimtex", "coc-xml", "coc-yaml"]
+let g:coc_global_extensions = ["coc-css", "coc-db", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-vimtex", "coc-xml", "coc-yaml"]
 
 noremap cf :CocFix<CR>
 noremap cF :call CocAction('format')<CR>
@@ -132,9 +133,6 @@ autocmd! User GoyoLeave Limelight!
 "   set t_Co=16
 " endif
 
-" Colorscheme
-colorscheme wal
-
 " Restore last cursor position and marks on open
 au BufReadPost *
          \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit' 
@@ -160,3 +158,32 @@ let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
 let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 let airline#extensions#coc#warning_symbol = ':'
 let airline#extensions#coc#error_symbol = ':'
+
+if exists('g:started_by_firenvim')
+    colorscheme nord
+    call timer_start(0, 'Hide_Bar')
+    function! Hide_Bar(timer) abort
+        set laststatus=0
+    endfunction
+    " set guifont=FiraCode:h14
+
+    let g:dont_write = v:false
+    function! My_Write(timer) abort
+	let g:dont_write = v:false
+	write
+    endfunction
+
+    function! Delay_My_Write() abort
+	if g:dont_write
+            return
+	end
+	let g:dont_write = v:true
+	call timer_start(3000, 'My_Write')
+    endfunction
+
+    au TextChanged * ++nested call Delay_My_Write()
+    au TextChangedI * ++nested call Delay_My_Write()
+
+else
+    colorscheme wal
+endif
