@@ -5,7 +5,7 @@ if [ $(ps aux | grep sox | wc -l) -gt 1 ]; then
 else
     SwitchAudioSource -t input -s "Built-in Line Input"
 
-    nohup bash -c 'sox -d -d --buffer 150 -V1' &
+    nohup bash -c 'sox -d -d --buffer 500 -V1' &
 
     sleep 1
 
