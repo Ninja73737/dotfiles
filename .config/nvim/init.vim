@@ -43,6 +43,9 @@ autocmd FileType tex let b:coc_pairs_disabled = ['<']
 autocmd FileType pandoc let g:table_mode_corner='|'
 " let g:table_mode_corner='|'
 
+autocmd Bufenter *.md set colorcolumn=81
+autocmd Bufenter *.py set colorcolumn=101
+
 noremap LL :LLPStartPreview<CR>
 
 noremap Q <Nop>
