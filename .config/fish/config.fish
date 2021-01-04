@@ -20,9 +20,11 @@ if status --is-interactive
 
     if string match -rq ".*MANJARO-ARM.*" (uname -r)
         alias selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
+        alias lazysh "lazygit --git-dir=$HOME/.selfhosting --work-tree=$HOME"
     end
 
     alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+    alias lazydf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
     if test -d $HOME/.termux
         alias ls "exa -a --group-directories-first"
