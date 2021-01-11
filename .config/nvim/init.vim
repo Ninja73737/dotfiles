@@ -16,6 +16,7 @@ Plug 'dylanaraps/wal.vim'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -25,7 +26,7 @@ call plug#end()
 let g:pandoc#modules#disabled = ["folding", "spell"]
 let g:pandoc#syntax#conceal#use = 0
 
-let g:coc_filetype_map = { 'pandoc': 'markdown' }
+let g:coc_filetype_map = { 'pandoc': 'markdown' , 'rmarkdown': 'markdown' }
 
 let g:coc_global_extensions = ["coc-css", "coc-db", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-webpack", "coc-vimtex", "coc-xml", "coc-yaml"]
 
@@ -43,8 +44,14 @@ autocmd FileType tex let b:coc_pairs_disabled = ['<']
 autocmd FileType pandoc let g:table_mode_corner='|'
 " let g:table_mode_corner='|'
 
-autocmd Bufenter *.md set colorcolumn=81
-autocmd Bufenter *.py set colorcolumn=101
+autocmd FileType pandoc set colorcolumn=81
+autocmd FileType rmarkdown set colorcolumn=81
+autocmd FileType python set colorcolumn=101
+
+noremap Rh :silent write <bar> RMarkdown! html<CR>
+noremap RH :silent write <bar> RMarkdown! html<CR>
+noremap Rp :silent write <bar> RMarkdown! pdf<CR>
+noremap RP :silent write <bar> RMarkdown! pdf<CR>
 
 noremap LL :LLPStartPreview<CR>
 
