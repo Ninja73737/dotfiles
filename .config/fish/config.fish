@@ -12,19 +12,21 @@ if status --is-interactive
     # Aliases
 
     if test (uname) = "Darwin"
-        alias cdic "cd '/Users/mtoohey/Library/Mobile Documents/com~apple~CloudDocs'"
+        alias cdic "cd '/Users/mtoohey/Library/Mobile Documents/'"
     end
 
     alias dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
     alias dcd "docker-compose down --remove-orphans"
 
+    alias lg "lazygit"
+
     if string match -rq ".*MANJARO-ARM.*" (uname -r)
         alias selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
-        alias lazysh "lazygit --git-dir=$HOME/.selfhosting --work-tree=$HOME"
+        alias lsh "lazygit --git-dir=$HOME/.selfhosting --work-tree=$HOME"
     end
 
     alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-    alias lazydf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+    alias ldf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
     if test -d $HOME/.termux
         alias ls "exa -a --group-directories-first"
