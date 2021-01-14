@@ -47,7 +47,6 @@ $battery\
 $status\
 $line_break\
 $time\
-$line_break\
 $character\
 """
 
@@ -74,7 +73,10 @@ format = "at [$time]($style) "
 format = "on [$hostname]($style) "
 
 [character]
-disabled = true
+# disabled = true
+success_symbol = "[>](green)"
+error_symbol = "[>](green)"
+vicmd_symbol = "[<](blue)"
 
 # Nerd Fonts Symbols
 
