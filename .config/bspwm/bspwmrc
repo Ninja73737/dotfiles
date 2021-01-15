@@ -2,15 +2,19 @@
 
 bspc rule -r "*"
 
+pkill sxhkd
 sxhkd &
 
-xrandr --output HDMI3 --auto --pos 0x0 --output HDMI2 --pos 1600x-660 --primary
-xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" 0.1 0 0 0 0.1 0 0 0 1
+pkill picom
+picom &
 
-bspc monitor HDMI2 -d 1 2 3 4 5
-bspc monitor HDMI3 -d 6 7 8 9
-bspc monitor HDMI3 -s HDMI2
-# $HOME/.config/polybar/launchboth.sh &
+xrandr --output HDMI-0 --auto --pos 0x0 --output DVI-D-0 --rotate inverted --pos -1600x660 --primary
+xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" 0.12 0 0 0 0.12 0 0 0 1
+
+bspc monitor HDMI-0 -d 1 2 3 4 5
+bspc monitor DVI-D-0 -d 6 7 8 9
+bspc monitor HDMI-0 -s DVI-D-0
+$HOME/.config/polybar/launchboth.sh &
 
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   true
@@ -18,7 +22,7 @@ bspc config top_padding             0
 bspc config border_width            0
 bspc config window_gap              16
 bspc config border_radius           9
-bspc config pointer_modifier        mod4
+bspc config pointer_modifier        mod1
 bspc config pointer_action1         move
 bspc config pointer_action2         resize_side
 
