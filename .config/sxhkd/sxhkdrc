@@ -4,11 +4,13 @@
 
 # terminal emulator
 alt + Return
-	alacritty
+	kitty
+	# alacritty
 
 # ranger
 alt + shift + Return
-        alacritty -e fish -C 'ranger'
+        kitty fish -C 'ranger'
+        # alacritty -e fish -C 'ranger'
 
 # program launcher
 alt + space
