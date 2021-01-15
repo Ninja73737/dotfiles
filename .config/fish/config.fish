@@ -2,10 +2,10 @@
 
 if test (uname) = "Darwin"
     set -g fish_user_paths "/usr/local/opt/arm-gcc-bin@8/bin" $fish_user_paths
-    set -g fish_user_paths "$HOME/Library/Python/3.8/bin" $fish_user_paths
-    set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 end
 set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
+set -g fish_user_paths "$HOME/.local/bin" $fish_user_paths
+set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 
 if status --is-interactive
 
@@ -19,7 +19,6 @@ if status --is-interactive
     alias dcd "docker-compose down --remove-orphans"
 
     alias lg "lazygit"
-    alias R "R --no-save"
 
     if string match -rq ".*MANJARO-ARM.*" (uname -r)
         alias selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
