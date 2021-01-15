@@ -1,6 +1,11 @@
 #! /usr/bin/env bash
 
-bspc rule -r "*"
+# X Configuration
+
+xrandr --output HDMI-0 --auto --pos 0x0 --output DVI-D-0 --rotate inverted --pos -1600x660 --primary
+xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" 0.12 0 0 0 0.12 0 0 0 1
+
+# Autostart Services
 
 pkill sxhkd
 sxhkd &
@@ -8,8 +13,12 @@ sxhkd &
 pkill picom
 picom &
 
-xrandr --output HDMI-0 --auto --pos 0x0 --output DVI-D-0 --rotate inverted --pos -1600x660 --primary
-xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" 0.12 0 0 0 0.12 0 0 0 1
+pkill rescuetime
+rescuetime &
+
+# bspwm Settings
+
+bspc rule -r "*"
 
 bspc monitor HDMI-0 -d 1 2 3 4 5
 bspc monitor DVI-D-0 -d 6 7 8 9
