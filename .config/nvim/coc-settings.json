@@ -8,7 +8,7 @@
   "python.linting.pep8Enabled": true,
   "python.linting.pep8Args": ["--max-line-length=100"],
   "eslint.options": { "configFile": "/Users/mtoohey/.config/eslint/eslintrc" },
-  "cSpell.ignoreRegExpList": ["[A-Z]{3,}\\d{3,}([A-Z]|\\d)*"],
+  "cSpell.ignoreRegExpList": ["[A-Z]{3}\\d{3,}([A-Z]|\\d)*", "\\\\\\w+((\\[|\\{)[\\\\\\w\\=, ]+(\\}|\\]))*"],
   "cSpell.maxNumberOfProblems": 500,
   "cSpell.maxDuplicateProblems": 500,
   "cSpell.minWordLength": 3,
