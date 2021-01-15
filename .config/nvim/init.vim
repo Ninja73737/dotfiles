@@ -13,6 +13,7 @@ Plug 'tpope/vim-commentary'
 Plug 'machakann/vim-highlightedyank'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'dylanaraps/wal.vim'
+" Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim' }
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
@@ -20,16 +21,32 @@ Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+" Plug 'unblevable/quick-scope'
+Plug 'Yggdroot/indentLine'
+Plug 'easymotion/vim-easymotion'
+Plug 'ron89/thesaurus_query.vim'
 
 call plug#end()
 
 let g:pandoc#modules#disabled = ["folding", "spell"]
 let g:pandoc#syntax#conceal#use = 0
 
-let g:coc_filetype_map = { 'pandoc': 'markdown' , 'rmarkdown': 'markdown' }
+let g:EasyMotion_smartcase = 1
+
+let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
+let g:tq_enabled_backends=["mthesaur_txt"]
+
+let g:coc_filetype_map = { 'pandoc': 'markdown' }
+" let g:coc_filetype_map = { 'pandoc': 'markdown' , 'rmarkdown': 'markdown' }
+" goal
 
 let g:coc_global_extensions = ["coc-css", "coc-db", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-webpack", "coc-vimtex", "coc-xml", "coc-yaml"]
 
+noremap Q <Nop>
+noremap ZQ :quit!<CR>
+noremap ZW :write<CR>
+
+map f <Plug>(easymotion-s2)
 noremap cf :CocFix<CR>
 noremap cF :call CocAction('format')<CR>
 noremap cn :call CocAction('diagnosticNext')<CR>
@@ -45,19 +62,20 @@ autocmd FileType pandoc let g:table_mode_corner='|'
 " let g:table_mode_corner='|'
 
 autocmd FileType pandoc set colorcolumn=81
+autocmd FileType pandoc set tw=80
 autocmd FileType rmarkdown set colorcolumn=81
+autocmd FileType rmarkdown set tw=80
+autocmd FileType rmarkdown set formatoptions+=t
 autocmd FileType python set colorcolumn=101
 
 noremap Rh :silent write <bar> RMarkdown! html<CR>
 noremap RH :silent write <bar> RMarkdown! html<CR>
 noremap Rp :silent write <bar> RMarkdown! pdf<CR>
 noremap RP :silent write <bar> RMarkdown! pdf<CR>
+autocmd FileType rmarkdown noremap ZW :silent write <bar> RMarkdown! html<CR>
+autocmd FileType rmarkdown noremap ZZ :silent write <bar> RMarkdown! pdf<CR><bar> :quit<CR>
 
 noremap LL :LLPStartPreview<CR>
-
-noremap Q <Nop>
-noremap ZQ :quit!<CR>
-noremap ZW :write<CR>
 
 let g:mkdp_auto_start = 1
 let g:mkdp_markdown_css = '/Users/mtoohey/.config/nvim/markdown-preview.css'
@@ -71,6 +89,8 @@ elseif os == "Linux"
     let g:livepreview_previewer = 'zathura'
 endif
 let g:livepreview_cursorhold_recompile = 0
+
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " Enables true color and colorizer
 " set termguicolors
@@ -150,6 +170,7 @@ au BufReadPost *
          \ | endif
 
 let g:airline_theme='wal'
+" let g:airline_theme='gupywal'
 let g:airline_powerline_fonts = 1
 let g:airline_symbols = {}
 let g:airline_skip_empty_sections = 1
@@ -163,6 +184,9 @@ let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_er
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 "extensions
 let g:airline#extensions#coc#enabled = 1
+let g:airline#extensions#wordcount#enabled = 1
+let g:airline#extensions#wordcount#filetypes =
+  \ ['asciidoc', 'help', 'mail', 'markdown', 'nroff', 'org', 'plaintex', 'rmarkdown', 'rst', 'tex', 'text']
 "extension settings
 let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
 let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
@@ -196,4 +220,5 @@ if exists('g:started_by_firenvim')
 
 else
     colorscheme wal
+    " colorscheme gupywal
 endif
