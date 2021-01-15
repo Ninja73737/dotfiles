@@ -1,0 +1,11 @@
+{
+    "show_terminal_tab": false,
+    "jobs_tab_visibility": "closed",
+    "num_spaces_for_tab": 4,
+    "font_size_points": 12,
+    "pdf_previewer": "none",
+    "posix_terminal_shell": "custom",
+    "editor_theme": "Dracula",
+    "custom_shell_command": "/usr/local/bin/fish",
+    "editor_keybindings": "vim"
+}
