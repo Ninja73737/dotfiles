@@ -383,6 +383,8 @@
 	<false/>
 	<key>DownloadsDirectory</key>
 	<string>$HOME/Desktop</string>
+	<key>EnableAPIServer</key>
+	<true/>
 	<key>EnableDivisionView</key>
 	<false/>
 	<key>GlobalKeyMap</key>
@@ -499,6 +501,10 @@
 	<key>NeverWarnAboutShortLivedSessions_3855E253-94FA-409D-A434-597BB095506E</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_3855E253-94FA-409D-A434-597BB095506E_selection</key>
+	<integer>0</integer>
+	<key>NeverWarnAboutShortLivedSessions_6EFE0136-C429-4D2A-8FC1-BFAFDCBE8083</key>
+	<true/>
+	<key>NeverWarnAboutShortLivedSessions_6EFE0136-C429-4D2A-8FC1-BFAFDCBE8083_selection</key>
 	<integer>0</integer>
 	<key>NeverWarnAboutShortLivedSessions_EEB2612A-A040-4608-A413-3FF8CC0CC419</key>
 	<true/>
@@ -711,7 +717,7 @@
 			<key>Command</key>
 			<string></string>
 			<key>Cursor Boost</key>
-			<integer>0</integer>
+			<real>0.0</real>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -7114,7 +7120,7 @@
 			<key>Command</key>
 			<string></string>
 			<key>Cursor Boost</key>
-			<integer>0</integer>
+			<real>0.0</real>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>
@@ -7151,7 +7157,7 @@
 				<real>1</real>
 			</dict>
 			<key>Cursor Type</key>
-			<integer>1</integer>
+			<integer>2</integer>
 			<key>Custom Command</key>
 			<string>No</string>
 			<key>Custom Directory</key>
@@ -7538,6 +7544,8 @@
 			<string></string>
 			<key>Silence Bell</key>
 			<false/>
+			<key>Smart Cursor Color</key>
+			<true/>
 			<key>Sync Title</key>
 			<false/>
 			<key>Tags</key>
@@ -7551,6 +7559,8 @@
 			<key>Use Bold Font</key>
 			<true/>
 			<key>Use Bright Bold</key>
+			<false/>
+			<key>Use Cursor Guide</key>
 			<false/>
 			<key>Use Italic Font</key>
 			<true/>
@@ -7807,7 +7817,7 @@
 				<real>1</real>
 			</dict>
 			<key>Cursor Type</key>
-			<integer>1</integer>
+			<integer>2</integer>
 			<key>Custom Command</key>
 			<string>No</string>
 			<key>Custom Directory</key>
@@ -8194,6 +8204,8 @@
 			<string></string>
 			<key>Silence Bell</key>
 			<false/>
+			<key>Smart Cursor Color</key>
+			<true/>
 			<key>Sync Title</key>
 			<false/>
 			<key>Tags</key>
@@ -8207,6 +8219,8 @@
 			<key>Use Bold Font</key>
 			<true/>
 			<key>Use Bright Bold</key>
+			<false/>
+			<key>Use Cursor Guide</key>
 			<false/>
 			<key>Use Italic Font</key>
 			<true/>
