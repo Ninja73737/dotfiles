@@ -65,7 +65,7 @@ alt + shift + {q,r}
 	bspc {quit,wm -r}
 
 # close and kill
-alt + {_,shift + }w
+alt + {w,q}
 	bspc node -{c,k}
 
 #
@@ -158,5 +158,5 @@ alt + shift + super + {h,j,k,l}
 
 # Browser
 
-alt + shift + {p,u}
-        brave {--profile-directory="Default",--profile-directory="Profile 2"}
+alt + shift + {p,u,g,n}
+        brave {--profile-directory="Default",--profile-directory="Profile 2",--profile-directory="Profile 3",--profile-directory="Profile 4"}
