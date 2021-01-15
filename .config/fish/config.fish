@@ -28,6 +28,8 @@ if status --is-interactive
     alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
     alias ldf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
+    alias R "R --no-save"
+
     if test -d $HOME/.termux
         alias ls "exa -a --group-directories-first"
         alias lsd "exa -al group-directories-first"
