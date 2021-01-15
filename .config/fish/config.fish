@@ -19,6 +19,7 @@ if status --is-interactive
     alias dcd "docker-compose down --remove-orphans"
 
     alias lg "lazygit"
+    alias R "R --no-save"
 
     if string match -rq ".*MANJARO-ARM.*" (uname -r)
         alias selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
