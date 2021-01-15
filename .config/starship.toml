@@ -54,8 +54,6 @@ $character\
 
 [username]
 show_always = true
-style_user = "yellow"
-style_root = "purple"
 format = "[$user]($style) "
 
 [directory]
@@ -63,11 +61,6 @@ format = "in [$path]($style) "
 
 [cmd_duration]
 format = "for [$duration]($style) "
-
-[time]
-# disabled = false
-use_12hr = true
-format = "at [$time]($style) "
 
 [hostname]
 format = "on [$hostname]($style) "
