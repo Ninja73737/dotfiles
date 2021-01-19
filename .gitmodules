@@ -1,3 +1,9 @@
 [submodule ".scripts/macos-accent"]
 	path = .scripts/macos-accent
 	url = https://github.com/mtoohey31/macos-accent
+[submodule ".scripts/zathura-pywal"]
+	path = .scripts/zathura-pywal
+	url = https://github.com/GideonWolfe/Zathura-Pywal
+[submodule ".scripts/bspswallowing"]
+	path = .scripts/bspswallowing
+	url = https://github.com/JopStro/bspswallow
