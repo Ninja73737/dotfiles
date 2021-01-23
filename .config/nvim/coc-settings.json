@@ -8,7 +8,12 @@
   "python.linting.pep8Enabled": true,
   "python.linting.pep8Args": ["--max-line-length=100"],
   "eslint.options": { "configFile": "/Users/mtoohey/.config/eslint/eslintrc" },
-  "cSpell.ignoreRegExpList": ["[A-Z]{3}\\d{3,}([A-Z]|\\d)*", "\\\\\\w+((\\[|\\{)[\\\\\\w\\=, ]+(\\}|\\]))*"],
+  "cSpell.ignoreRegExpList": [
+    "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",
+    "\\\\\\w+((\\[|\\{)[\\\\\\w\\=, ]+(\\}|\\]))*",
+    "]\\(.+\\)",
+    "([A-Z]){2,}"
+  ],
   "cSpell.maxNumberOfProblems": 500,
   "cSpell.maxDuplicateProblems": 500,
   "cSpell.minWordLength": 3,
@@ -28,5 +33,24 @@
     "typescript",
     "typescriptreact",
     "yml"
-  ]
+  ],
+  "diagnostic-languageserver.mergeConfig": true,
+  "diagnostic-languageserver.filetypes": {
+    "json": ["languagetool"],
+    "markdown": ["languagetool"],
+    "pandoc": ["languagetool"],
+    "rmarkdown": ["languagetool"]
+  },
+  "diagnostic-languageserver.debug": true,
+  "diagnostic-languageserver.linters": {
+    "languagetool": {
+      "args": [
+        "-l",
+        "en-CA",
+        "--disable",
+        "WHITESPACE_RULE,EN_QUOTES,ARROWS,MORFOLOGIK_RULE_EN_CA,DASH_RULE,COMMA_PARENTHESIS_WHITESPACE,UNLIKELY_OPENING_PUNCTUATION",
+        "%file"
+      ]
+    }
+  }
 }
