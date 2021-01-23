@@ -41,10 +41,13 @@ alt + shift + f
         flameshot gui
 
 alt + shift + w
-        /home/mtoohey/.scripts/random_feh_bg nord-wallpapers
+        $HOME/.scripts/random_feh_bg nord-wallpapers
 
 alt + shift + i
         imwheel -k -b 45
+
+alt + shift + g
+	$HOME/.scripts/yt_mod_tools
 
 # bspwm
 
