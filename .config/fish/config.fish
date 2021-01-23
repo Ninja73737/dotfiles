@@ -6,7 +6,7 @@ end
 set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
 set -g fish_user_paths "$HOME/.local/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
-
+set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
 if status --is-interactive
 
     # Aliases
@@ -83,7 +83,11 @@ end
         # wal --theme base16-nord -q
     end
 
-    wal -Rnq
+    if test "$TERM_PROGRAM" = "alacritty"
+        cat ~/.cache/wal/sequences
+    else
+        wal -Rnq
+    end
 
     # Clear screen if running inside ranger or over ssh
 
