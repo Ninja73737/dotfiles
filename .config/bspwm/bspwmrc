@@ -4,8 +4,6 @@ X Configuration
 
 $HOME/.scripts/display_setup
 
-# xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" 0.12 0 0 0 0.12 0 0 0 1
-
 # Recover Wallpaper
 
 $HOME/.fehbg
@@ -20,16 +18,11 @@ pgrep rescuetime || rescuetime &
 
 pgrep flashfocus || flashfocus
 
-# pgrep bspswallow || /home/mtoohey/.scripts/bspswallow &
-
 imwheel -k -b 45
 
 $HOME/.config/polybar/launch.sh &
 
-# $HOME/.config/polybar/launchboth.sh &
-
 # bspwm Settings
-
 
 bspc monitor HDMI-0 -d 1 2 3 4 5
 bspc monitor DVI-D-0 -d 6 7 8 9
