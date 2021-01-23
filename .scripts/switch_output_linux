@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [[ "$(pulsemixer --list-sinks | grep Default)" == *"G533"* ]]; then
+    paswitch alsa_output.pci-0000_00_1f.3.analog-stereo
+else
+    paswitch alsa_output.usb-Logitech_G533_Gaming_Headset-00.analog-stereo
+fi

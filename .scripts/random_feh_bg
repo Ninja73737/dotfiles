@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+feh --bg-fill "$(find /home/mtoohey/Pictures/Wallpapers/$1 -name '*.png' | sort -R | tail -1)"
+cd /home/mtoohey/Pictures/Wallpapers/$1
+git pull --ff origin && git reset --hard
