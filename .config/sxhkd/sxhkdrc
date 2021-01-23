@@ -1,162 +1,70 @@
-#
-# wm independent hotkeys
-#
+# Programs
 
-# terminal emulator
 alt + Return
-	kitty
-	# alacritty
+	alacritty
+	# kitty
 
-# ranger
 alt + shift + Return
-        kitty fish -C 'ranger'
-        # alacritty -e fish -C 'ranger'
+        alacritty -e fish -C 'ranger'
+        # kitty fish -C 'ranger'
 
-# program launcher
 alt + space
-	rofi -show drun -show-icons
+	rofi -show drun -show-icons -theme ~/.cache/wal/colors-rofi-dark.rasi
+        # dmenu_run -fn "FiraCode Nerd Font-12" -x 16 -y 16 -w 2528
 
-# window switcher
+alt + slash
+        thunar
+
+alt + shift + c
+        rofi -show calc -modi calc -no-show-match -no-sort -theme ~/.cache/wal/colors-rofi-dark.rasi
+#         = --dmenu=dmenu -- -fn "FiraCode Nerd Font-12" -x 16 -y 16 -w 2528
+
 alt + Tab
-	rofi -show window
+	rofi -show window -show-icons -theme ~/.cache/wal/colors-rofi-dark.rasi
 
-# make sxhkd reload its configuration files:
 alt + shift + s
 	pkill -USR1 -x sxhkd
 
-#
-# VM Stuff
-#
-
-# looking glass
-# super + alt + l
-# 	looking-glass-client -K 70
-
-# switch desktop
-# super + alt + m
-# 	/usr/local/bin/switchmonitors
-
-# switch audio
 alt + shift + o
-	/usr/local/bin/switchoutput
+        $HOME/.scripts/switch_output_linux
 
+alt + shift + {Down,Up}
+        pulsemixer --change-volume {-,+}1
 
-# switch phone
-# super + alt + p
-# 	/usr/local/bin/switchphone
+alt + shift + {Left,Right,space}
+    playerctl {previous,next,play-pause}
 
-#
-# Audio Stuff
-#
+{XF86AudioLowerVolume,XF86AudioRaiseVolume}
+	pulsemixer --change-volume {-,+}1
 
-# up
-XF86AudioRaiseVolume
-	pulsemixer --change-volume +1
+alt + shift + f
+        flameshot gui
 
-# down
-XF86AudioLowerVolume
-	pulsemixer --change-volume -1
-#
-# bspwm hotkeys
-#
+alt + shift + w
+        /home/mtoohey/.scripts/random_feh_bg nord-wallpapers
 
-# quit/restart bspwm
-alt + shift + {q,r}
-	bspc {quit,wm -r}
+alt + shift + i
+        imwheel -k -b 45
 
-# close and kill
-alt + {w,q}
-	bspc node -{c,k}
+# bspwm
 
-#
-# state/flags
-#
-
-# set the window state
-alt + shift + {t,f}
-	bspc node -t {tiled,floating}
-
-######!!!!!!!!! pseudo_tiled is missing rn!!!
-
-# set the node flags
-# super + ctrl + {m,x,y,z}
-# 	bspc node -g {marked,locked,sticky,private}
-
-# quick balance
 alt + shift + b
 	bspc node @/ --balance
 
-#
-# focus/swap
-#
-
-# focus the node in the given direction
 alt + shift + {_,super + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
-# focus the node for the given path jump
-# super + {p,b,comma,period}
-# 	bspc node -f @{parent,brother,first,second}
-
-# focus the next/previous desktop in the current monitor
-# super + {button5,button4}
-# 	bspc config pointer_follows_focus false && bspc desktop -f {prev,next}.local && sleep 0.1 && bspc config pointer_follows_focus true
-
-# move and follow window to the next/previous desktop in the current monitor
-# super + shift + {button5,button4}
-# 	bspc node -d {prev,next}.local --follow
-
-# focus the last node/desktop
-#super + {grave,Tab}
-#	bspc {node,desktop} -f last
-
-# focus the older or newer node in the focus history
-#super + {o,i}
-#	bspc wm -h off; \
-#	bspc node {older,newer} -f; \
-#	bspc wm -h on
-
-# focus or send to the given desktop
 alt + shift + {_,super + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
 
-#
-# preselect
-#
-
-# preselect the direction
-# super + ctrl + {Left,Down,Up,Right}
-# 	bspc node -p {west,south,north,east}
-
-# preselect the ratio
-#super + ctrl + {1-9}
-#	bspc node -o 0.{1-9}
-
-# cancel the preselection for the focused node
-#super + ctrl + space
-#	bspc node -p cancel
-
-# cancel the preselection for the focused desktop
-#super + ctrl + shift + space
-#	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
-
-#
-# move/resize
-#
-
-# expand a window by moving one of its side outward
-alt + shift + super + {h,j,k,l}
-	bspc node -z {left -1 0,bottom 0 1,top 0 -1,right 1 0}
-
-# contract a window by moving one of its side inward
-#super + alt + shift + {Left,Down,Up,Right}
-#	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
-
-# move a floating window
-#super + shift + {Left,Down,Up,Right}
-#	bspc node -v {-20 0,0 20,0 -20,20 0}
-
-# Browser
-
 alt + shift + {p,u,g,n}
         brave {--profile-directory="Default",--profile-directory="Profile 2",--profile-directory="Profile 3",--profile-directory="Profile 4"}
+
+alt + shift + {q,r}
+	bspc {quit,wm -r}
+
+alt + {w,q}
+	bspc node -{c,k}
+
+alt + shift + t
+	bspc node -t ~tiled

@@ -1,0 +1,42 @@
+env:
+  TERM: xterm-256color
+  TERM_PROGRAM: alacritty
+
+window:
+  padding:
+    x: 6
+    y: 6
+  dynamic_padding: true
+  title: Alacritty
+  class:
+    instance: Alacritty
+    general: Alacritty
+
+scrolling:
+  history: 5000
+
+font:
+  size: 12.0
+  normal:
+    family: FiraCode Nerd Font
+    style: Regular
+  bold:
+    family: FiraCode Nerd Font
+    style: Bold
+  italic:
+    family: FiraCode Nerd Font
+    style: Italic
+  bold_italic:
+    family: FiraCode Nerd Font
+    style: Bold Italic
+
+background_opacity: 0.8
+
+cursor:
+  style:
+    shape: Beam
+    blinking: Always
+    vi_mode_style: Block
+
+debug:
+  log_level: Info
