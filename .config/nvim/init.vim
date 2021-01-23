@@ -17,7 +17,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-sleuth'
 Plug 'sheerun/vim-polyglot'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-Plug 'lingnand/pandoc-preview.vim',
+" Plug 'lingnand/pandoc-preview.vim',
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
 Plug 'tpope/vim-commentary'
 Plug 'norcalli/nvim-colorizer.lua'
@@ -40,7 +40,7 @@ call plug#end()
 " Previewers"
 " " " " " " "
 
-let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[0:-2], '/') . '/markdown-preview.css'
+let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdown-preview.css'
 let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
 let g:mkdp_page_title = '${name}.md'
 
@@ -53,6 +53,16 @@ elseif os == "Linux"
     let g:pandoc_preview_pdf_cmd = 'zathura'
 endif
 let g:livepreview_cursorhold_recompile = 0
+
+function! PandocPreview ()
+  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
+  execute '!pandoc -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
+endfunction
+
+function! ZathuraCurrent ()
+  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
+  execute '!zathura "' .output_path . '"'
+endfunction
 
 " " " " " " " " " " " " " " " " " "
 " Linters and Syntax Highlighters "
@@ -100,7 +110,8 @@ noremap cprh :silent write <bar> RMarkdown html<CR>
 noremap cprH :silent write <bar> RMarkdown! html<CR>
 noremap cprp :silent write <bar> RMarkdown pdf<CR>
 noremap cprP :silent write <bar> RMarkdown! pdf<CR>
-noremap cpp :PandocPreview<CR>
+noremap cpp :silent write <bar> silent call PandocPreview()<CR>
+noremap cpP :silent write <bar> silent call PandocPreview() <bar> silent call ZathuraCurrent()<CR>
 
 " " " " " " " " " " " " " " " "
 " FileType Dependent Settings "
