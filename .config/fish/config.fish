@@ -28,7 +28,11 @@ if status --is-interactive
     alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
     alias ldf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
-    alias R "R --no-save"
+    alias R "R --quiet --no-save"
+    alias python "python -q"
+    alias python2 "python2 -q"
+    alias python3 "python3 -q"
+    alias capi "curl -L -H 'User-Agent: Mozilla' -H 'Cookie: troute=t1;'"
 
     if test -d $HOME/.termux
         alias ls "exa -a --group-directories-first"
@@ -83,7 +87,7 @@ end
         # wal --theme base16-nord -q
     end
 
-    if test "$TERM_PROGRAM" = "alacritty"
+    if test "$TERM_PROGRAM" = "alacritty" -o -d $HOME/.termux
         cat ~/.cache/wal/sequences
     else
         wal -Rnq
@@ -98,9 +102,7 @@ end
     # Pretty Stuff
 
     if not string match -rq ".*ish.*" (uname -r)
-        if not test -d $HOME/.termux
-            source ~/.cache/wal/colors.fish
-        end
+        source ~/.cache/wal/colors.fish
 
         neofetch
 
