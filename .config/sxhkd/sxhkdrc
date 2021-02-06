@@ -1,73 +1,81 @@
 # Programs
 
 alt + Return
-	alacritty
-	# kitty
+    alacritty
+    # kitty
 
 alt + shift + Return
-        alacritty -e fish -C 'ranger'
-        # kitty fish -C 'ranger'
+    alacritty -e fish -C 'rg'
+    # kitty fish -C 'rg'
 
 alt + space
-	rofi -show drun -show-icons -theme ~/.cache/wal/colors-rofi-dark.rasi
-        # dmenu_run -fn "FiraCode Nerd Font-12" -x 16 -y 16 -w 2528
+    rofi -show drun -show-icons -theme ~/.cache/wal/colors-rofi-dark.rasi
+    # dmenu_run -fn "FiraCode Nerd Font-12" -x 16 -y 16 -w 2528
 
 alt + slash
-        thunar
+    thunar
 
 alt + shift + c
-        rofi -show calc -modi calc -no-show-match -no-sort -theme ~/.cache/wal/colors-rofi-dark.rasi
-#         = --dmenu=dmenu -- -fn "FiraCode Nerd Font-12" -x 16 -y 16 -w 2528
+    rofi -show calc -modi calc -no-show-match -no-sort -theme ~/.cache/wal/colors-rofi-dark.rasi
 
 alt + Tab
-	rofi -show window -show-icons -theme ~/.cache/wal/colors-rofi-dark.rasi
+    rofi -show window -show-icons -theme ~/.cache/wal/colors-rofi-dark.rasi
 
 alt + shift + s
-	pkill -USR1 -x sxhkd
+    pkill -USR1 -x sxhkd
 
 alt + shift + o
-        $HOME/.scripts/switch_output_linux
+    $HOME/.scripts/switch_output_linux
 
 alt + shift + {Down,Up}
-        pulsemixer --change-volume {-,+}1
+    pulsemixer --change-volume {-,+}1
 
 alt + shift + {Left,Right,space}
-    playerctl {previous,next,play-pause}
+    playerctl --player=spotify {previous,next,play-pause}
 
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
-	pulsemixer --change-volume {-,+}1
+    pulsemixer --change-volume {-,+}1
 
 alt + shift + f
-        flameshot gui
+    flameshot gui
 
 alt + shift + w
-        $HOME/.scripts/random_feh_bg nord-wallpapers
+    $HOME/.scripts/random_feh_bg -u
 
 alt + shift + i
-        imwheel -k -b 45
+    imwheel -k -b 45
 
-alt + shift + g
-	$HOME/.scripts/yt_mod_tools
+alt + shift + y
+    $HOME/.scripts/yt_mod_tools
 
 # bspwm
 
 alt + shift + b
-	bspc node @/ --balance
+    bspc node @/ --balance
 
 alt + shift + {_,super + }{h,j,k,l}
-	bspc node -{f,s} {west,south,north,east}
+    bspc node -{f,s} {west,south,north,east}
 
 alt + shift + {_,super + }{1-9,0}
-	bspc {desktop -f,node -d} '^{1-9,10}'
+    bspc {desktop -f,node -d} '^{1-9,10}'
 
 alt + shift + {p,u,g,n}
-        brave {--profile-directory="Default",--profile-directory="Profile 2",--profile-directory="Profile 3",--profile-directory="Profile 4"}
+    brave {--profile-directory="Default",--profile-directory="Profile 2",--profile-directory="Profile 3",--profile-directory="Profile 4"}
 
 alt + shift + {q,r}
-	bspc {quit,wm -r}
+    bspc {quit,wm -r}
 
 alt + {w,q}
-	bspc node -{c,k}
+    bspc node -{c,k}
 
-alt + shift + t
-	bspc node -t ~tiled
+alt + backslash
+    bspc node focused.tiled -t pseudo_tiled || bspc node focused.pseudo_tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled
+
+alt + shift + backslash
+    bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t pseudo_tiled || bspc node focused.pseudo_tiled -t tiled
+
+# button4
+#     xdotool key Caps_Lock; xdotool click 4; xdotool click 4; xdotool click 4; xdotool key Caps_Lock
+
+# button5
+#     xdotool key Caps_Lock; xdotool click 5; xdotool click 5; xdotool click 5; xdotool key Caps_Lock
