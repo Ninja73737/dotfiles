@@ -28,6 +28,15 @@ if status --is-interactive
     alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
     alias ldf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
+    if string match -rq ".*arch*" (uname -r)
+        alias rm "trash"
+    end
+
+    alias nv "nvim"
+    alias ka "kak; cat $HOME/.cache/wal/sequences"
+    alias sc "sc-im; cat $HOME/.cache/wal/sequences"
+    alias rg "ranger; cat $HOME/.cache/wal/sequences"
+
     alias R "R --quiet --no-save"
     alias python "python -q"
     alias python2 "python2 -q"
@@ -62,8 +71,19 @@ end
     set fish_cursor_insert line
     set fish_cursor_replace_one underscore
 
+    # Environment Variables
+
     export VISUAL=nvim
     export EDITOR=nvim
+
+    ## Athame
+
+    export ATHAME_SHOW_MODE 0
+
+    ## NNN
+
+    export NNN_TRASH=1
+    export NNN_BMS="c:~/Courses"
 
     # Update wal Colours
 
