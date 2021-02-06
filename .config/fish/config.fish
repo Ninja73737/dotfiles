@@ -36,6 +36,7 @@ if status --is-interactive
     alias ka "kak; cat $HOME/.cache/wal/sequences"
     alias sc "sc-im; cat $HOME/.cache/wal/sequences"
     alias rg "ranger; cat $HOME/.cache/wal/sequences"
+    alias yay "yay --answeredit None --answerclean None --answerdiff None"
 
     alias R "R --quiet --no-save"
     alias python "python -q"
