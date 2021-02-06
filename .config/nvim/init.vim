@@ -1,137 +1,4 @@
 " " " " " " " " " " " "
-" Pre-Plugin Settings "
-" " " " " " " " " " " "
-
-let g:polyglot_disabled = ['autoindent']
-set nocompatible
-
-" " " " " "
-" Plugins "
-" " " " " "
-
-call plug#begin()
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-Plug 'ryanoasis/vim-devicons'
-Plug 'tpope/vim-sleuth'
-Plug 'sheerun/vim-polyglot'
-Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-" Plug 'lingnand/pandoc-preview.vim',
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
-Plug 'tpope/vim-commentary'
-Plug 'norcalli/nvim-colorizer.lua'
-Plug 'dylanaraps/wal.vim'
-" Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim' }
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'vim-pandoc/vim-rmarkdown'
-Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
-Plug 'dhruvasagar/vim-table-mode'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'Yggdroot/indentLine'
-Plug 'easymotion/vim-easymotion'
-Plug 'ron89/thesaurus_query.vim'
-
-call plug#end()
-
-" " " " " " "
-" Previewers"
-" " " " " " "
-
-let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdown-preview.css'
-let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
-let g:mkdp_page_title = '${name}.md'
-
-let os = substitute(system('uname'), "\n", "", "")
-if os == "Darwin"
-    let g:livepreview_previewer = 'open -a Preview'
-    let g:pandoc_preview_pdf_cmd = 'open -a Preview'
-elseif os == "Linux"
-    let g:livepreview_previewer = 'zathura'
-    let g:pandoc_preview_pdf_cmd = 'zathura'
-endif
-let g:livepreview_cursorhold_recompile = 0
-
-function! PandocPreview ()
-  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
-  execute '!pandoc -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
-endfunction
-
-function! ZathuraCurrent ()
-  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
-  execute '!zathura "' .output_path . '"'
-endfunction
-
-" " " " " " " " " " " " " " " " " "
-" Linters and Syntax Highlighters "
-" " " " " " " " " " " " " " " " " "
-
-let g:rainbow_active = 1
-
-let g:pandoc#modules#disabled = ["folding", "spell"]
-let g:pandoc#syntax#conceal#use = 0
-
-let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
-let g:tq_enabled_backends=["mthesaur_txt"]
-
-let g:coc_filetype_map = { 'pandoc': 'markdown' }
-" let g:coc_filetype_map = { 'pandoc': 'markdown' , 'rmarkdown': 'markdown' }
-" goal
-
-let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-webpack", "coc-vimtex", "coc-xml", "coc-yaml"]
-
-" " " " " " " " " " " " " " " 
-" Navigation and Remappings "
-" " " " " " " " " " " " " " "
-
-let g:EasyMotion_smartcase = 1
-
-noremap ZQ :quit!<CR>
-noremap ZW :write<CR>
-
-autocmd User EasyMotionPromptBegin silent! CocDisable
-autocmd User EasyMotionPromptEnd silent! CocEnable
-
-map f <Plug>(easymotion-s2)
-noremap cf :CocFix<CR>
-nmap cF <Plug>(coc-codeaction)
-noremap cm :call CocAction('format')<CR>
-noremap cn :call CocAction('diagnosticNext')<CR>
-noremap cp :call CocAction('diagnosticPrevious')<CR>
-
-noremap ch :noh<CR>
-noremap ct :TableModeToggle<CR>
-
-noremap cpl :LLPStartPreview<CR>
-noremap cpm :MarkdownPreviewToggle<CR>
-noremap cprh :silent write <bar> RMarkdown html<CR>
-noremap cprH :silent write <bar> RMarkdown! html<CR>
-noremap cprp :silent write <bar> RMarkdown pdf<CR>
-noremap cprP :silent write <bar> RMarkdown! pdf<CR>
-noremap cpp :silent write <bar> silent call PandocPreview()<CR>
-noremap cpP :silent write <bar> silent call PandocPreview() <bar> silent call ZathuraCurrent()<CR>
-
-" " " " " " " " " " " " " " " "
-" FileType Dependent Settings "
-" " " " " " " " " " " " " " " "
-
-autocmd FileType tex let b:coc_pairs_disabled = ['<']
-autocmd FileType pandoc let g:table_mode_corner='|'
-
-autocmd FileType pandoc set colorcolumn=81
-autocmd FileType pandoc set tw=80
-autocmd FileType rmarkdown set colorcolumn=81
-autocmd FileType rmarkdown set tw=80
-autocmd FileType rmarkdown set formatoptions+=t
-autocmd FileType python set colorcolumn=101
-
-" Enables true color and colorizer
-" set termguicolors
-" lua require'colorizer'.setup()
-
-" " " " " " " " " " " "
 " General Vim Settings"
 " " " " " " " " " " " "
 
@@ -173,11 +40,173 @@ au BufReadPost *
          \ |   exe "normal! g`\""
          \ | endif
 
-" Airline
+" " " " " " " " " " " "
+" Pre-Plugin Settings "
+" " " " " " " " " " " "
+
+" let g:polyglot_disabled = ['autoindent']
+set nocompatible
+
+" " " " " "
+" Plugins "
+" " " " " "
+
+call plug#begin()
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+Plug 'ryanoasis/vim-devicons'
+" Plug 'tpope/vim-sleuth'
+Plug 'sheerun/vim-polyglot'
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+" Plug 'lingnand/pandoc-preview.vim',
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
+Plug 'tpope/vim-commentary'
+Plug 'norcalli/nvim-colorizer.lua'
+Plug 'dylanaraps/wal.vim'
+" Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim' }
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'easymotion/vim-easymotion'
+Plug 'ron89/thesaurus_query.vim'
+Plug 'chaoren/vim-wordmotion'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'vim-scripts/loremipsum'
+Plug 'vimwiki/vimwiki'
+Plug 'itchyny/calendar.vim'
+
+call plug#end()
+
+" " " " " " "
+" Previewers"
+" " " " " " "
+
+let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdown-preview.css'
+let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
+let g:mkdp_page_title = '${name}.md'
+let g:mkdp_filetypes = ['markdown', 'pandoc', 'rmarkdown']
+let g:mkdp_command_for_global = 1
+
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+autocmd FileType vimwiki setlocal syntax=pandoc
+let g:vimwiki_conceallevel = 0
+
+let os = substitute(system('uname'), "\n", "", "")
+if os == "Darwin"
+    let g:livepreview_previewer = 'open -a Preview'
+    let g:pandoc_preview_pdf_cmd = 'open -a Preview'
+elseif os == "Linux"
+    let g:livepreview_previewer = 'zathura'
+    let g:pandoc_preview_pdf_cmd = 'zathura'
+endif
+let g:livepreview_cursorhold_recompile = 0
+
+function! PandocPreview ()
+  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
+  execute '!pandoc -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
+endfunction
+
+function! ZathuraCurrent ()
+  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
+  execute '!zathura "' .output_path . '"'
+endfunction
+
+" " " " " " " " " " " " " " " " " "
+" Linters and Syntax Highlighters "
+" " " " " " " " " " " " " " " " " "
+
+let g:rainbow_active = 1
+
+let g:pandoc#modules#disabled = ["folding", "spell"]
+let g:pandoc#syntax#conceal#use = 0
+
+let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
+let g:tq_enabled_backends=["mthesaur_txt"]
+
+let g:coc_filetype_map = { 'pandoc': 'markdown' }
+" let g:coc_filetype_map = { 'pandoc': 'markdown' , 'rmarkdown': 'markdown' }
+" goal
+
+let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-webpack", "coc-vimtex", "coc-xml", "coc-yaml"]
+
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=8
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=8
+
+" " " " " " " " " " " " " " " 
+" Navigation and Remappings "
+" " " " " " " " " " " " " " "
+
+let g:EasyMotion_smartcase = 1
+
+noremap ZQ :quit!<CR>
+noremap ZW :write<CR>
+
+autocmd User EasyMotionPromptBegin silent! CocDisable
+autocmd User EasyMotionPromptEnd silent! CocEnable
+
+noremap! <C-BS> <C-w>
+" Necessary for the backspace remap above for some reason...
+noremap! <C-h> <C-w>
+map f <Plug>(easymotion-s2)
+noremap cf :CocFix<CR>
+nmap cF <Plug>(coc-codeaction)
+noremap cm :call CocAction('format')<CR>
+noremap cn :call CocAction('diagnosticNext')<CR>
+noremap cN :call CocAction('diagnosticPrevious')<CR>
+
+noremap ch :noh<CR>
+noremap ct :TableModeToggle<CR>
+
+noremap cpl :LLPStartPreview<CR>
+nmap cpm <Plug>MarkdownPreviewToggle
+noremap cprh :silent write <bar> RMarkdown html<CR>
+noremap cprH :silent write <bar> RMarkdown! html<CR>
+noremap cprp :silent write <bar> RMarkdown pdf<CR>
+noremap cprP :silent write <bar> RMarkdown! pdf<CR>
+noremap cpp :silent write <bar> call PandocPreview()<CR>
+noremap cpP :silent write <bar> call PandocPreview() <bar> silent call ZathuraCurrent()<CR>
+noremap cz :silent call ZathuraCurrent()<CR>
+noremap cpy :silent !wal -R<CR>
+
 " " " " " " " " " " " " " " " "
-" Firenvim Dependent Settings "
+" FileType Dependent Settings "
 " " " " " " " " " " " " " " " "
 
+autocmd FileType tex let b:coc_pairs_disabled = ['<']
+autocmd FileType pandoc let b:coc_pairs_disabled = ['<']
+autocmd FileType pandoc let g:table_mode_corner='|'
+
+autocmd FileType pandoc set colorcolumn=81
+autocmd FileType pandoc set tw=80
+autocmd FileType pandoc set formatoptions+=t
+autocmd FileType rmarkdown set colorcolumn=81
+autocmd FileType rmarkdown set tw=80
+autocmd FileType rmarkdown set formatoptions+=t
+autocmd FileType python set colorcolumn=101
+
+autocmd FileType pandoc set tabstop=3
+autocmd FileType pandoc set shiftwidth=3
+autocmd FileType pandoc set softtabstop=3
+
+" Enables true color and colorizer
+" set termguicolors
+" lua require'colorizer'.setup()
+
+" " " " " "
+" Airline "
+" " " " " "
+
+let g:airline_section_y = ''
 let g:airline_theme='wal'
 let g:airline_powerline_fonts = 1
 let g:airline_symbols = {}
@@ -191,15 +220,15 @@ let g:airline_powerline_fonts = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 "extensions
-let g:airline#extensions#coc#enabled = 1
+" let g:airline#extensions#coc#enabled = 1
 let g:airline#extensions#wordcount#enabled = 1
 let g:airline#extensions#wordcount#filetypes =
-  \ ['asciidoc', 'help', 'mail', 'markdown', 'nroff', 'org', 'plaintex', 'rmarkdown', 'rst', 'tex', 'text']
+  \ ['asciidoc', 'help', 'mail', 'markdown', 'nroff', 'org', 'plaintex', 'pandoc', 'rmarkdown', 'rst', 'tex', 'text']
 "extension settings
-let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
-let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
-let airline#extensions#coc#warning_symbol = ':'
-let airline#extensions#coc#error_symbol = ':'
+" let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+" let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
+" let airline#extensions#coc#warning_symbol = ':'
+" let airline#extensions#coc#error_symbol = ':'
 
 " " " " " " " " " " " " " " " "
 " Firenvim Dependent Settings "

@@ -1,6 +1,8 @@
 {
   "markdownlint.config": {
     "MD033": false,
+    "MD030": false,
+    "MD005": false,
     "MD007": { "indent": 4 },
     "MD026": false,
     "MD034": false
@@ -11,12 +13,11 @@
   "cSpell.ignoreRegExpList": [
     "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",
     "\\\\\\w+((\\[|\\{)[\\\\\\w\\=, ]+(\\}|\\]))*",
-    "]\\(.+\\)",
-    "([A-Z]){2,}"
+    "]\\(.+\\)"
   ],
-  "cSpell.maxNumberOfProblems": 500,
-  "cSpell.maxDuplicateProblems": 500,
-  "cSpell.minWordLength": 3,
+  "latex.build.onSave": true,
+  "latex.forwardSearch.executable": "zathura",
+  "latex.forwardSearch.args": ["%p"],
   "cSpell.language": "en-GB",
   "cSpell.enabledLanguageIds": [
     "csharp",
@@ -32,16 +33,16 @@
     "tex",
     "typescript",
     "typescriptreact",
+    "vimwiki",
     "yml"
   ],
   "diagnostic-languageserver.mergeConfig": true,
   "diagnostic-languageserver.filetypes": {
-    "json": ["languagetool"],
-    "markdown": ["languagetool"],
-    "pandoc": ["languagetool"],
-    "rmarkdown": ["languagetool"]
+    "json": [],
+    "markdown": [],
+    "pandoc": [],
+    "rmarkdown": []
   },
-  "diagnostic-languageserver.debug": true,
   "diagnostic-languageserver.linters": {
     "languagetool": {
       "args": [
@@ -52,5 +53,12 @@
         "%file"
       ]
     }
-  }
+  },
+  "cSpell.userWords": [
+    "L'Hôpital's",
+    "Toohey",
+    "analyzed",
+    "analyzing",
+    "supremum"
+  ]
 }
