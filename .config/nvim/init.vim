@@ -263,3 +263,11 @@ else
     colorscheme wal
     " colorscheme gupywal
 endif
+
+" " " " " " " " " " " " " " "
+" Athame Dependent Settings "
+" " " " " " " " " " " " " " "
+
+if $ATHAME_ENABLED == '1'
+  let g:wordmotion_nomap = 1
+endif
