@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
+yay -Sy &> /dev/null
 yay -Qu | wc -l
