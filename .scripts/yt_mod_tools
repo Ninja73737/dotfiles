@@ -20,7 +20,7 @@ bspc node -p south
 
 bspc node -o 0.61
 
-brave --new-window --profile-directory="Profile 4" "https://translate.google.com/"
+brave --new-window --profile-directory="Profile 4" "https://translate.google.com/?sl=auto&tl=en&op=translate"
 
 sleep 0.5
 
