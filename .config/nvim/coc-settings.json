@@ -9,7 +9,6 @@
   },
   "python.linting.pep8Enabled": true,
   "python.linting.pep8Args": ["--max-line-length=100"],
-  "eslint.options": { "configFile": "/Users/mtoohey/.config/eslint/eslintrc" },
   "cSpell.ignoreRegExpList": [
     "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",
     "\\\\\\w+((\\[|\\{)[\\\\\\w\\=, ]+(\\}|\\]))*",
@@ -22,8 +21,6 @@
   "cSpell.enabledLanguageIds": [
     "csharp",
     "go",
-    "javascript",
-    "javascriptreact",
     "json",
     "markdown",
     "rmarkdown",
@@ -31,8 +28,6 @@
     "php",
     "plaintext",
     "tex",
-    "typescript",
-    "typescriptreact",
     "vimwiki",
     "yml"
   ],
