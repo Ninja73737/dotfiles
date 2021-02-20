@@ -34,9 +34,11 @@ if status --is-interactive
 
     alias nv "nvim"
     alias ka "kak; cat $HOME/.cache/wal/sequences"
-    alias sc "sc-im; cat $HOME/.cache/wal/sequences"
+    function sc
+        sc-im $argv
+        cat $HOME/.cache/wal/sequences
+    end
     alias rg "ranger; cat $HOME/.cache/wal/sequences"
-    alias yay "yay --answeredit None --answerclean None --answerdiff None"
 
     alias R "R --quiet --no-save"
     alias python "python -q"
@@ -76,15 +78,6 @@ end
 
     export VISUAL=nvim
     export EDITOR=nvim
-
-    ## Athame
-
-    export ATHAME_SHOW_MODE 0
-
-    ## NNN
-
-    export NNN_TRASH=1
-    export NNN_BMS="c:~/Courses"
 
     # Update wal Colours
 
