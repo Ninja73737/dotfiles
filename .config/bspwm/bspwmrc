@@ -4,23 +4,11 @@ X Configuration
 
 $HOME/.scripts/display_setup
 
-# Recover Wallpaper
+xinput --set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "libinput Accel Profile Enabled" 0, 1
 
-$HOME/.fehbg
+sensitivity_factor=1.25
 
-# Autostart Services
-
-pgrep sxhkd || sxhkd &
-
-pgrep picom || picom &
-
-pgrep rescuetime || rescuetime &
-
-pgrep flashfocus || flashfocus &
-
-imwheel -k -b 45 &
-
-$HOME/.config/polybar/launch.sh &
+# xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" $sensitivity_factor 0 0 0 $sensitivity_factor 0 0 0 1
 
 # bspwm Settings
 
@@ -47,3 +35,21 @@ bspc rule -r "*"
 
 bspc rule -a Gimp state=floating follow=on
 bspc rule -a Zathura state=tiled
+
+# Autostart Services
+
+pgrep sxhkd || sxhkd &
+
+pgrep picom || picom &
+
+pgrep rescuetime || rescuetime &
+
+pgrep flashfocus || flashfocus &
+
+# imwheel -k -b 45 &
+
+$HOME/.config/polybar/launch.sh &
+
+# Recover Wallpaper and Theme
+
+wal -R
