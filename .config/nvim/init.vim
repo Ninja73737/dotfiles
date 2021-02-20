@@ -55,13 +55,14 @@ call plug#begin()
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-Plug 'ryanoasis/vim-devicons'
+" Plug 'ryanoasis/vim-devicons'
 " Plug 'tpope/vim-sleuth'
 Plug 'sheerun/vim-polyglot'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 " Plug 'lingnand/pandoc-preview.vim',
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'dylanaraps/wal.vim'
 " Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim' }
@@ -75,10 +76,10 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'easymotion/vim-easymotion'
 Plug 'ron89/thesaurus_query.vim'
 Plug 'chaoren/vim-wordmotion'
-Plug 'nathanaelkane/vim-indent-guides'
+" Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/loremipsum'
 Plug 'vimwiki/vimwiki'
-Plug 'itchyny/calendar.vim'
+Plug 'mtoohey31/structure.nvim', { 'do': 'cd rplugin/node/ && npm install && cd ../../frontend/ && npm install && npm run build'}
 
 call plug#end()
 
@@ -96,6 +97,7 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
 autocmd FileType vimwiki setlocal syntax=pandoc
 let g:vimwiki_conceallevel = 0
+let g:vimwiki_key_mappings = { 'all_maps': 0, }
 
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Darwin"
@@ -133,7 +135,7 @@ let g:coc_filetype_map = { 'pandoc': 'markdown' }
 " let g:coc_filetype_map = { 'pandoc': 'markdown' , 'rmarkdown': 'markdown' }
 " goal
 
-let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-docker", "coc-eslint", "coc-fish", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-webpack", "coc-vimtex", "coc-xml", "coc-yaml"]
+let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-docker", "coc-fish", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-vimtex", "coc-xml", "coc-yaml"]
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 2
@@ -206,29 +208,26 @@ autocmd FileType pandoc set softtabstop=3
 " Airline "
 " " " " " "
 
+let g:airline_section_c = airline#section#create_left(["%{join(split(expand('%:p'), '/')[-3:], '/')}"])
 let g:airline_section_y = ''
+let g:airline_section_z = airline#section#create_right(['%{virtcol(".")}x%{line(".")}/%{line("$")}'])
 let g:airline_theme='wal'
-let g:airline_powerline_fonts = 1
-let g:airline_symbols = {}
-let g:airline_skip_empty_sections = 1
-let g:airline_left_sep = ' '
-let g:airline_left_alt_sep = '|'
-let g:airline_right_sep = ' '
-let g:airline_right_alt_sep = '|'
-let g:airline_symbols_branch = ''
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
+" let g:airline_symbols = {}
+" let g:airline_skip_empty_sections = 1
+let g:airline_left_sep = ''
+" let g:airline_left_alt_sep = '|'
+let g:airline_right_sep = ''
+" let g:airline_right_alt_sep = '|'
+" let g:airline_symbols_branch = ''
+" let g:airline_powerline_fonts = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 "extensions
-" let g:airline#extensions#coc#enabled = 1
+let g:airline#extensions#coc#enabled = 1
 let g:airline#extensions#wordcount#enabled = 1
 let g:airline#extensions#wordcount#filetypes =
   \ ['asciidoc', 'help', 'mail', 'markdown', 'nroff', 'org', 'plaintex', 'pandoc', 'rmarkdown', 'rst', 'tex', 'text']
-"extension settings
-" let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
-" let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
-" let airline#extensions#coc#warning_symbol = ':'
-" let airline#extensions#coc#error_symbol = ':'
 
 " " " " " " " " " " " " " " " "
 " Firenvim Dependent Settings "
@@ -244,16 +243,16 @@ if exists('g:started_by_firenvim')
 
     let g:dont_write = v:false
     function! Autowrite(timer) abort
-	let g:dont_write = v:false
-	write
+    let g:dont_write = v:false
+    write
     endfunction
 
     function! Delay_Autowrite() abort
-	if g:dont_write
+    if g:dont_write
             return
-	end
-	let g:dont_write = v:true
-	call timer_start(3000, 'Autowrite')
+    end
+    let g:dont_write = v:true
+    call timer_start(3000, 'Autowrite')
     endfunction
 
     au TextChanged * ++nested call Delay_Autowrite()
@@ -271,3 +270,7 @@ endif
 if $ATHAME_ENABLED == '1'
   let g:wordmotion_nomap = 1
 endif
+
+let g:struct_filetypes = ['markdown', 'vimwiki', 'pandoc', 'rmarkdown']
+let g:struct_autostart = 1
+let g:struct_refocus_bspwm = 1
