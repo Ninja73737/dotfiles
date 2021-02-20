@@ -42,7 +42,7 @@ alt + shift + f
 alt + shift + w
     $HOME/.scripts/random_feh_bg -u
 
-alt + shift + i
+alt + shift + m
     imwheel -k -b 45
 
 alt + shift + y
@@ -79,3 +79,6 @@ alt + shift + backslash
 
 # button5
 #     xdotool key Caps_Lock; xdotool click 5; xdotool click 5; xdotool click 5; xdotool key Caps_Lock
+
+alt + shift + i
+    $HOME/.scripts/linein_listen_linux
