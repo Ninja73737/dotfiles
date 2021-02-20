@@ -7,6 +7,7 @@ set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
 set -g fish_user_paths "$HOME/.local/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
+
 if status --is-interactive
 
     # Aliases
@@ -60,11 +61,11 @@ if status --is-interactive
 
     function sudo
         if test "$argv" = !!
-        eval command sudo $history[1]
-    else
-        command sudo $argv
+            eval command sudo $history[1]
+        else
+            command sudo $argv
         end
-end
+    end
 
     # Fish Settings
 
@@ -79,33 +80,7 @@ end
     export VISUAL=nvim
     export EDITOR=nvim
 
-    # Update wal Colours
-
-    if test (uname) = "Darwin"
-        # # wal --theme base16-nord -nq
-
-        # # set current_wallpaper (sqlite3 -readonly ~/Library/Application\ Support/Dock/desktoppicture.db 'SELECT * FROM data ORDER BY rowID DESC LIMIT 1;')
-        # set current_wallpaper (osascript -e 'tell app "finder" to get posix path of (get desktop picture as alias)')
-
-        # set dark_mode (defaults read -g AppleInterfaceStyle 2>/dev/null)
-        # # set dark_mode (osascript -e 'tell application "System Events" to tell appearance preferences to get dark mode')
-
-        # if test -z "$dark_mode"
-        # # if test "$dark_mode" = "false"
-        #     wal -i $current_wallpaper -nql
-        # else
-        #     wal -i $current_wallpaper -nq
-        # end
-        # update_spicetify
-    else if string match -rq ".*MANJARO-ARM.*" (uname -r)
-        # wal --theme base16-nord -q
-    end
-
-    if test "$TERM_PROGRAM" = "alacritty" -o -d $HOME/.termux
-        cat ~/.cache/wal/sequences
-    else
-        wal -Rnq
-    end
+    # Pretty Stuff
 
     # Clear screen if running inside ranger or over ssh
 
@@ -113,10 +88,38 @@ end
         clear
     end
 
-    # Pretty Stuff
-
     if not string match -rq ".*ish.*" (uname -r)
-        source ~/.cache/wal/colors.fish
+        if test -n "$SSH_CLIENT"
+            set -U fish_color_autosuggestion      brblack
+            set -U fish_color_cancel              -r
+            set -U fish_color_command             brgreen
+            set -U fish_color_comment             brmagenta
+            set -U fish_color_cwd                 green
+            set -U fish_color_cwd_root            red
+            set -U fish_color_end                 brmagenta
+            set -U fish_color_error               brred
+            set -U fish_color_escape              brcyan
+            set -U fish_color_history_current     --bold
+            set -U fish_color_host                normal
+            set -U fish_color_match               --background=brblue
+            set -U fish_color_normal              normal
+            set -U fish_color_operator            cyan
+            set -U fish_color_param               brblue
+            set -U fish_color_quote               yellow
+            set -U fish_color_redirection         bryellow
+            set -U fish_color_search_match        'bryellow' '--background=brblack'
+            set -U fish_color_selection           'white' '--bold' '--background=brblack'
+            set -U fish_color_status              red
+            set -U fish_color_user                brgreen
+            set -U fish_color_valid_path          --underline
+            set -U fish_pager_color_completion    normal
+            set -U fish_pager_color_description   yellow
+            set -U fish_pager_color_prefix        'white' '--bold' '--underline'
+            set -U fish_pager_color_progress      'brwhite' '--background=cyan'
+        else
+            cat ~/.cache/wal/sequences
+            source ~/.cache/wal/colors.fish
+        end
 
         neofetch
 
