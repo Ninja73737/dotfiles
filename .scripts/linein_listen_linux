@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+if [[ -z $(pactl list modules | grep module-loopback) ]]; then pactl load-module module-loopback latency_msec=10 source=alsa_input.pci-0000_00_1f.3.analog-stereo sink=alsa_output.usb-Logitech_G533_Gaming_Headset-00.analog-stereo; else pactl unload-module module-loopback; fi
