@@ -10,6 +10,7 @@ window:
   class:
     instance: Alacritty
     general: Alacritty
+  # decorations: buttonless
 
 scrolling:
   history: 5000

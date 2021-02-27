@@ -45,8 +45,8 @@ alt + shift + w
 alt + shift + m
     imwheel -k -b 45
 
-alt + shift + y
-    $HOME/.scripts/yt_mod_tools
+# alt + shift + y
+#     $HOME/.scripts/yt_mod_tools
 
 # bspwm
 

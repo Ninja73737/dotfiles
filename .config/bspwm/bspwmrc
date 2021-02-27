@@ -42,9 +42,13 @@ pgrep sxhkd || sxhkd &
 
 pgrep picom || picom &
 
+pgrep flashfocus || flashfocus &
+
+pgrep dunst || dunst &
+
 pgrep rescuetime || rescuetime &
 
-pgrep flashfocus || flashfocus &
+pgrep mailspring || mailspring --background &
 
 # imwheel -k -b 45 &
 
@@ -52,4 +56,4 @@ $HOME/.config/polybar/launch.sh &
 
 # Recover Wallpaper and Theme
 
-fish -c "sleep 5; wal -R" &
+fish -c "sleep 1; wal -R" &
