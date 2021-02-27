@@ -54,18 +54,16 @@ set nocompatible
 call plug#begin()
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-" Plug 'ryanoasis/vim-devicons'
-" Plug 'tpope/vim-sleuth'
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'sheerun/vim-polyglot'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-" Plug 'lingnand/pandoc-preview.vim',
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
+" Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'dylanaraps/wal.vim'
-" Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim' }
+" Plug 'dylanaraps/wal.vim'
+Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim', 'do':  'sed -i \"s/set cursorline/\\\\" set cursorline/g\" colors/gupywal.vim' }
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
@@ -76,7 +74,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'easymotion/vim-easymotion'
 Plug 'ron89/thesaurus_query.vim'
 Plug 'chaoren/vim-wordmotion'
-" Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/loremipsum'
 Plug 'vimwiki/vimwiki'
 Plug 'mtoohey31/structure.nvim', { 'do': 'cd rplugin/node/ && npm install && cd ../../frontend/ && npm install && npm run build'}
@@ -144,6 +141,8 @@ let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=8
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=8
 
+set nocursorline
+
 " " " " " " " " " " " " " " " 
 " Navigation and Remappings "
 " " " " " " " " " " " " " " "
@@ -180,6 +179,8 @@ noremap cpP :silent write <bar> call PandocPreview() <bar> silent call ZathuraCu
 noremap cz :silent call ZathuraCurrent()<CR>
 noremap cpy :silent !wal -R<CR>
 
+noremap gCC :silent write <bar> :!gcc % && ./a.out<CR>
+
 " " " " " " " " " " " " " " " "
 " FileType Dependent Settings "
 " " " " " " " " " " " " " " " "
@@ -196,9 +197,9 @@ autocmd FileType rmarkdown set tw=80
 autocmd FileType rmarkdown set formatoptions+=t
 autocmd FileType python set colorcolumn=101
 
-autocmd FileType pandoc set tabstop=3
-autocmd FileType pandoc set shiftwidth=3
-autocmd FileType pandoc set softtabstop=3
+" autocmd FileType pandoc set tabstop=3
+" autocmd FileType pandoc set shiftwidth=3
+" autocmd FileType pandoc set softtabstop=3
 
 " Enables true color and colorizer
 " set termguicolors
@@ -259,8 +260,8 @@ if exists('g:started_by_firenvim')
     au TextChangedI * ++nested call Delay_Autowrite()
 
 else
-    colorscheme wal
-    " colorscheme gupywal
+    " colorscheme wal
+    colorscheme gupywal
 endif
 
 " " " " " " " " " " " " " " "
