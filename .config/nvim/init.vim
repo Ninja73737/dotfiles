@@ -63,7 +63,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'norcalli/nvim-colorizer.lua'
 " Plug 'dylanaraps/wal.vim'
-Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim', 'do':  'sed -i \"s/set cursorline/\\\\" set cursorline/g\" colors/gupywal.vim' }
+Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim', 'do':  'sed -i.bak \"s/set cursorline/\\\\" set cursorline/g\" colors/gupywal.vim' }
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
