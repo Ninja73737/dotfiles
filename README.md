@@ -14,6 +14,10 @@ git clone https://github.com/mtoohey31/dotfiles/
 
 ...then copy everything to where it needs to go.
 
+There are quite a few dependencies so if something is behaving unexpectedly, try
+taking a look at the script, it's likely that a program it depends on is
+missing.
+
 If you would like to also keep your dotfiles in GitHub so that you have them
 backed up, create your own fork of the repository on GitHub, then clone the
 repository with the following commands instead. Please be aware that running
