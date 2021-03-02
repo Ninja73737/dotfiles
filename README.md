@@ -2,7 +2,7 @@
 
 My cross-platform (MacOS and Linux) dotfiles.
 
-![Screenshot](.config/screenshots/preview-jan-26-2021.png)
+![Screenshot](.config/screenshots/ultrawide.png)
 
 ## Usage
 

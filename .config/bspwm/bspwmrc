@@ -50,6 +50,8 @@ pgrep rescuetime || rescuetime &
 
 pgrep mailspring || mailspring --background &
 
+pgrep discord || discord &
+
 # imwheel -k -b 45 &
 
 $HOME/.config/polybar/launch.sh &

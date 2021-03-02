@@ -34,11 +34,11 @@ if status --is-interactive
     end
 
     alias nv "nvim"
-    alias ka "kak; cat $HOME/.cache/wal/sequences"
     function sc
         sc-im $argv
         cat $HOME/.cache/wal/sequences
     end
+    alias lf "lf-ueberzug"
     alias rg "ranger; cat $HOME/.cache/wal/sequences"
 
     alias R "R --quiet --no-save"
