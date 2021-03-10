@@ -18,6 +18,7 @@ bspc monitor HDMI-0 -s DVI-D-0
 
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   true
+bspc config pointer_follows_monitor true
 bspc config top_padding             0
 bspc config border_width            0
 bspc config window_gap              16
@@ -39,20 +40,14 @@ bspc rule -a Zathura state=tiled
 # Autostart Services
 
 pgrep sxhkd || sxhkd &
-
-pgrep picom || picom &
-
+pgrep picom || picom --experimental-backends &
 pgrep flashfocus || flashfocus &
-
 pgrep dunst || dunst &
-
 pgrep rescuetime || rescuetime &
-
 pgrep mailspring || mailspring --background &
-
 pgrep discord || discord &
-
-# imwheel -k -b 45 &
+pgrep spotify || spotify &
+# pgrep notion-app || notion-app &
 
 $HOME/.config/polybar/launch.sh &
 

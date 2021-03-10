@@ -8,6 +8,10 @@ set -g fish_user_paths "$HOME/.local/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
 
+if test -d /opt/android-sdk/cmdline-tools/latest/bin
+    set -g fish_user_paths "/opt/android-sdk/cmdline-tools/latest/bin" $fish_user_paths
+end
+
 if status --is-interactive
 
     # Aliases

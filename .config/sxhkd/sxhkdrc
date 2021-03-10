@@ -1,16 +1,15 @@
+#!/usr/bin/env bash
+
 # Programs
 
 alt + Return
     alacritty
-    # kitty
 
 alt + shift + Return
-    alacritty -e fish -C 'rg'
-    # kitty fish -C 'rg'
+    alacritty -e fish -C 'lf'
 
 alt + space
     rofi -show drun -show-icons -theme ~/.cache/wal/colors-rofi-dark.rasi
-    # dmenu_run -fn "FiraCode Nerd Font-12" -x 16 -y 16 -w 2528
 
 alt + slash
     thunar
@@ -54,7 +53,7 @@ alt + shift + b
     bspc node @/ --balance
 
 alt + shift + {_,super + }{h,j,k,l}
-    bspc node -{f,s} {west,south,north,east}
+    bash -c "COMMAND="{f,s}" && DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -\$COMMAND \$DIR || bspc monitor -\$COMMAND \$DIR"
 
 alt + shift + {_,super + }{1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}'
