@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+git clone https://github.com/slavistan/lf-gadgets/
+cd lf-gadgets/lf-ueberzug
+sudo -E make install
+cd ../..
+rm -rf lf-gadgets
