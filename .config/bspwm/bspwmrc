@@ -45,7 +45,7 @@ pgrep flashfocus || flashfocus &
 pgrep dunst || dunst &
 pgrep rescuetime || rescuetime &
 pgrep mailspring || mailspring --background &
-pgrep discord || discord &
+pgrep Discord || discord &
 pgrep spotify || spotify &
 # pgrep notion-app || notion-app &
 

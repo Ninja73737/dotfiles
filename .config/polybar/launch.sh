@@ -10,5 +10,4 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
 # Launch bar
 source ~/.cache/wal/colors.sh
-echo $color2
 polybar -c ~/.config/polybar/config.ini main &
