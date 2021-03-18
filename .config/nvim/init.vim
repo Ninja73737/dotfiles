@@ -20,9 +20,9 @@ set clipboard=unnamedplus
 set notimeout
 
 " Indentation
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+" set tabstop=4
+" set shiftwidth=4
+" set softtabstop=4
 
 set expandtab
 set smarttab
@@ -39,7 +39,7 @@ set noshowmode
 
 "" Restore cursor position
 au BufReadPost *
-         \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit' 
+         \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
          \ |   exe "normal! g`\""
          \ | endif
 
@@ -56,12 +56,11 @@ set nocompatible
 
 call plug#begin()
 
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'sheerun/vim-polyglot'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
-" Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'norcalli/nvim-colorizer.lua'
@@ -69,18 +68,15 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim', 'do':  'sed -i.bak \"s/set cursorline/\\\\" set cursorline/g\" colors/gupywal.vim' }
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'vim-pandoc/vim-rmarkdown'
 Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'easymotion/vim-easymotion'
 Plug 'ron89/thesaurus_query.vim'
 Plug 'chaoren/vim-wordmotion'
 Plug 'vim-scripts/loremipsum'
 Plug 'vimwiki/vimwiki'
-" Plug 'mtoohey31/structure.nvim', { 'do': 'cd rplugin/node/ && npm install && cd ../../frontend/ && npm install && npm run build'}
-Plug 'RRethy/vim-illuminate'
+Plug 'itchyny/lightline.vim'
+Plug 'ferrine/md-img-paste.vim'
 
 call plug#end()
 
@@ -88,10 +84,13 @@ call plug#end()
 " Previewers"
 " " " " " " "
 
+let g:mdip_imgdir = expand('%:t:r')
+let g:mdip_imgdir_intext = escape(expand('%:t:r'), ' ')
+
 let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdown-preview.css'
 let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
 let g:mkdp_page_title = '${name}.md'
-let g:mkdp_filetypes = ['markdown', 'pandoc', 'rmarkdown']
+let g:mkdp_filetypes = ['markdown', 'pandoc', 'rmd']
 let g:mkdp_command_for_global = 1
 
 let g:vimwiki_list = [{'path': '~/vimwiki/',
@@ -99,7 +98,9 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
 autocmd FileType vimwiki setlocal syntax=pandoc
 autocmd FileType vimwiki setlocal commentstring=<!--%s-->
 let g:vimwiki_conceallevel = 0
-let g:vimwiki_key_mappings = { 'all_maps': 0, }
+
+autocmd BufNewFile,BufRead *.Rmd set filetype=rmd
+autocmd BufNewFile,BufRead *.pmd set filetype=pandoc | PandocHighlight python
 
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Darwin"
@@ -112,8 +113,9 @@ endif
 let g:livepreview_cursorhold_recompile = 0
 
 function! PandocPreview ()
-  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
-  execute '!pandoc -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
+  let output_path = expand('%:p:r') . '.pdf'
+  execute '!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
+  " execute '!pandoc --listings --highlight-style $HOME/.config/pandoc/nord.theme --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
 endfunction
 
 function! ZathuraCurrent ()
@@ -121,12 +123,11 @@ function! ZathuraCurrent ()
   execute '!zathura "' .output_path . '"'
 endfunction
 
+let R_args = ['--quiet']
+
 " " " " " " " " " " " " " " " " " "
 " Linters and Syntax Highlighters "
 " " " " " " " " " " " " " " " " " "
-
-autocmd VimEnter * hi illuminatedWord cterm=underline gui=underline
-let g:Illuminate_highlightUnderCursor = 0
 
 let g:rainbow_active = 1
 
@@ -136,9 +137,9 @@ let g:pandoc#syntax#conceal#use = 0
 let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
 let g:tq_enabled_backends=["mthesaur_txt"]
 
-let g:coc_filetype_map = { 'pandoc': 'markdown' , 'rmarkdown': 'markdown', 'vimwiki': 'markdown' }
+let g:coc_filetype_map = { 'pandoc': 'markdown', 'vimwiki': 'markdown' }
 
-let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-vimtex", "coc-xml", "coc-yaml"]
+let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-vimlsp",  "coc-vimtex", "coc-xml", "coc-yaml"]
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 2
@@ -174,14 +175,41 @@ noremap ct :TableModeToggle<CR>
 
 noremap cpl :LLPStartPreview<CR>
 nmap cpm <Plug>MarkdownPreviewToggle
-noremap cprh :silent write <bar> RMarkdown html<CR>
-noremap cprH :silent write <bar> RMarkdown! html<CR>
-noremap cprp :silent write <bar> RMarkdown pdf<CR>
-noremap cprP :silent write <bar> RMarkdown! pdf<CR>
+" noremap cprh :silent write <bar> RMarkdown html<CR>
+" noremap cprH :silent write <bar> RMarkdown! html<CR>
+" noremap cprp :silent write <bar> RMarkdown pdf<CR>
+" noremap cprP :silent write <bar> RMarkdown! pdf<CR>
 noremap cpp :silent write <bar> call PandocPreview()<CR>
 noremap cpP :silent write <bar> call PandocPreview() <bar> silent call ZathuraCurrent()<CR>
 noremap cz :silent call ZathuraCurrent()<CR>
-noremap cpy :silent !wal -R<CR>
+noremap cpw :silent !wal -R<CR>
+
+noremap cP :call mdip#MarkdownClipboardImage()<CR>
+
+let g:vimwiki_key_mappings = { 'all_maps': 0 }
+noremap cI :VimwikiIndex<CR>
+
+let R_assign = 0
+
+autocmd FileType markdown,vimwiki
+      \ noremap c<CR> :VimwikiFollowLink<CR>|
+      \ noremap c<BS> :VimwikiGoBackLink<CR>|
+      \ noremap c<Space> :VimwikiToggleListItem<CR>|
+      \ inoremap <CR> <ESC>:VimwikiReturn 3 5<CR>|
+      \ noremap o A<ESC>:VimwikiReturn 3 5<CR>|
+      \ noremap O kA<ESC>:VimwikiReturn 3 5<CR>|
+      \ inoremap <TAB> <ESC>:VimwikiListChangeLvl increase 1<CR>a|
+      \ inoremap <S-TAB> <ESC>:VimwikiListChangeLvl decrease 1<CR>a|
+      \ noremap <TAB> <ESC>:VimwikiListChangeLvl increase 1<CR>|
+      \ noremap <S-TAB> <ESC>:VimwikiListChangeLvl decrease 1<CR>|
+      \ autocmd CompleteChanged * silent! iunmap <CR>|
+      \ autocmd CompleteDone * inoremap <CR> <ESC>:VimwikiReturn 3 5<CR>|
+      \ imap <C-B> **
+      " \ imap <C-B> **|
+      " \ imap <C-I> *|
+      " \ imap <C-E> $
+
+autocmd BufNewFile,BufRead *.pmd noremap cpy :write<BAR>!pweave %<CR>
 
 noremap gCC :silent write <bar> :!gcc % && ./a.out<CR>
 
@@ -192,7 +220,7 @@ noremap gCC :silent write <bar> :!gcc % && ./a.out<CR>
 autocmd FileType tex let b:coc_pairs_disabled = ['<']
 autocmd FileType pandoc let b:coc_pairs_disabled = ['<']
 autocmd FileType pandoc let g:table_mode_corner='|'
-autocmd FileType markdown,rmarkdown,vimwiki,tex let b:coc_pairs = [["$", "$"]]
+autocmd FileType markdown,rmd,vimwiki,tex let b:coc_pairs = [["$", "$"]]
 
 " autocmd FileType pandoc set colorcolumn=81
 " autocmd FileType pandoc set tw=80
@@ -207,28 +235,8 @@ autocmd FileType python set colorcolumn=101
 " autocmd FileType pandoc set softtabstop=3
 
 " Enables true color and colorizer
-" set termguicolors
-" lua require'colorizer'.setup()
-
-" " " " " "
-" Airline "
-" " " " " "
-
-" let g:airline_section_c = airline#section#create_left(["%{join(split(expand('%:p'), '/')[-3:], '/')}"])
-let g:airline_section_y = ''
-let g:airline_section_z = airline#section#create_right(['%{virtcol(".")}x%{line(".")}/%{line("$")}'])
-let g:airline_theme='wal'
-let g:airline_skip_empty_sections = 1
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-" let g:airline_symbols_branch = ''
-let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
-let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
-
-let g:airline#extensions#coc#enabled = 1
-let g:airline#extensions#wordcount#enabled = 1
-let g:airline#extensions#wordcount#filetypes =
-  \ ['asciidoc', 'help', 'mail', 'markdown', 'nroff', 'org', 'plaintex', 'pandoc', 'rmarkdown', 'rst', 'tex', 'text', 'vimwiki']
+set termguicolors
+lua require'colorizer'.setup()
 
 " " " " " " " " " " " " " " " "
 " Firenvim Dependent Settings "
@@ -263,6 +271,13 @@ else
     colorscheme gupywal
 endif
 
-" let g:struct_filetypes = ['markdown', 'vimwiki', 'pandoc', 'rmarkdown']
-" let g:struct_autostart = 1
-" let g:struct_refocus_bspwm = 1
+let g:lightline = {
+      \ 'active': {
+      \   'right': [['cocstatus'], ['lineinfo'], ['filetype']]
+      \ },
+      \ 'colorscheme': 'pywal',
+      \ 'separator' : { 'left': '', 'right': '' },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \}
+      \ }
