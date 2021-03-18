@@ -1,25 +1,25 @@
-## Set CRAN Mirror:
+# Set CRAN Mirror:
 local({
   r <- getOption("repos")
   r["CRAN"] <- "https://cloud.r-project.org/"
   options(repos = r)
 })
 
-## Use HTTPS
+# Use HTTPS
 options(download.file.method = "libcurl")
 
-## Create hidden environment
+# Overwite q() function with save disabled
 .env <- new.env()
-
-## Define new q() function
 .env$q <- function(save = "no", ...) {
-
   quit(save = save, ...)
-
 }
-
-## Attach hidden environment
 attach(.env, warn.conflicts = FALSE)
 
-## Set prompt
-options(prompt=">> ", continue=".. ")
+# Set prompt
+options(prompt = ">> ", continue = ".. ")
+
+# Return previous value as fraction
+last_frac <- function() {
+  library(MASS)
+  return(as.fractions(.Last.value))
+}
