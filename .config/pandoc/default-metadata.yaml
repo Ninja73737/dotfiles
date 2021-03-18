@@ -1,0 +1,13 @@
+geometry:
+  - a4paper
+  - margin=2cm
+mainfont: "SF Pro Text"
+monofont: "FiraCode Nerd Font"
+indent: true
+linestretch: 1.25
+header-includes: |
+  <!-- \pagenumbering{gobble} -->
+  \usepackage{mdframed}
+  \newmdenv[rightline=false,bottomline=false,topline=false,linewidth=2pt,skipabove=\parskip]{customblockquote}
+  \renewenvironment{quote}{\begin{customblockquote}\list{}{\rightmargin=0em\leftmargin=0em}%
+  \item\relax\ignorespaces}{\unskip\unskip\endlist\end{customblockquote}}
