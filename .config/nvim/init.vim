@@ -64,8 +64,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.co
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'norcalli/nvim-colorizer.lua'
-" Plug 'dylanaraps/wal.vim'
-Plug 'typkrft/wal.vim', { 'as': 'gupywal.vim', 'do':  'sed -i.bak \"s/set cursorline/\\\\" set cursorline/g\" colors/gupywal.vim' }
+Plug 'mtoohey31/tgc_wal.vim'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
@@ -268,7 +267,8 @@ if exists('g:started_by_firenvim')
     au TextChangedI * ++nested call Delay_Autowrite()
 else
     " colorscheme wal
-    colorscheme gupywal
+    " colorscheme gupywal
+    colorscheme tgc_wal
 endif
 
 let g:lightline = {
