@@ -1,6 +1,14 @@
-/* @import url("file:///home/gideon/.config/nvim/configs/colors.css"); */
+main {
+  background-color: var(--background);
+}
 
-body { background-color: var(--background); }
+body {
+  background-color: var(--background);
+}
+
+header#page-header {
+  border: none;
+}
 
 .markdown-body ol ol,
 .markdown-body ul ol,
@@ -14,16 +22,18 @@ body { background-color: var(--background); }
   margin-bottom: 0;
 }
 .markdown-body {
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
   color: var(--foreground);
   line-height: 1.6;
   word-wrap: break-word;
   padding: 45px;
   background: var(--background);
-  border: 1px solid var(--foreground);
-  -webkit-border-radius: 0 0 3px 3px;
-  border-radius: 0 0 3px 3px;
+  border: none;
+  /* border: 1px solid var(--foreground); */
+  /* -webkit-border-radius: 0 0 3px 3px; */
+  /* border-radius: 0 0 3px 3px; */
 }
 .markdown-body > *:first-child {
   margin-top: 0 !important;
@@ -79,7 +89,9 @@ body { background-color: var(--background); }
 .markdown-body pre {
   margin-top: 0;
   margin-bottom: 16px;
-  background-color: var(--background) !important; /* Changes background of code block */
+  background-color: var(
+    --background
+  ) !important; /* Changes background of code block */
 }
 .markdown-body h1 {
   margin: 0.67em 0;
@@ -144,7 +156,7 @@ li::marker {
   color: var(--color14) !important; /* changes color of bullet points */
 }
 .markdown-body dl {
-  margin-bottom: 1.3em
+  margin-bottom: 1.3em;
 }
 .markdown-body dl dt {
   font-weight: 700;
@@ -172,7 +184,9 @@ li::marker {
   border-spacing: 0;
 }
 .markdown-body table tr {
-  background-color: var(--background) !important; /* Changes bacground color of tables */
+  background-color: var(
+    --background
+  ) !important; /* Changes bacground color of tables */
   border-top: 1px solid var(--color4);
 }
 .markdown-body table tr:nth-child(2n) {
@@ -212,7 +226,8 @@ li::marker {
   content: normal;
 }
 .markdown-body code {
-  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  /* font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace; */
+  font-family: FiraCode Nerd Font;
   padding: 0;
   padding-top: 0.2em;
   padding-bottom: 0.2em;
@@ -248,7 +263,8 @@ li::marker {
   list-style-type: none;
 }
 .task-list-item input {
-  font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin: 0 0.35em 0.25em -1.6em;
   vertical-align: middle;
 }
@@ -267,7 +283,6 @@ li::marker {
   box-sizing: border-box;
   padding: 0;
 }
-
 
 /* Below are the page settings */
 
@@ -302,12 +317,7 @@ li::marker {
   font-size: 14px;
   font-weight: 600;
   color: var(--foreground) !important;
-
-
 }
-
-
-
 
 /* Highlight settings */
 
@@ -349,7 +359,7 @@ li::marker {
 .hljs-title,
 .hljs-section,
 .hljs-selector-id {
-  color: var(--color3) !important; /* Color of function title */ 
+  color: var(--color3) !important; /* Color of function title */
   font-weight: bold;
 }
 
@@ -359,7 +369,7 @@ li::marker {
 
 .hljs-type,
 .hljs-class .hljs-title {
-  color: var(--color2) !important; /* Color of class title */ 
+  color: var(--color2) !important; /* Color of class title */
   font-weight: bold;
 }
 
@@ -373,13 +383,13 @@ li::marker {
 .hljs-regexp,
 .hljs-link {
   /* color: #009926; */
-  color: var(--color9) !important; 
+  color: var(--color9) !important;
 }
 
 .hljs-symbol,
 .hljs-bullet {
   /* color: #990073; */
-  color: var(--color10) !important; 
+  color: var(--color10) !important;
 }
 
 .hljs-built_in,
