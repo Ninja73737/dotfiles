@@ -7,3 +7,9 @@
 [submodule ".scripts/bspswallowing"]
 	path = .scripts/bspswallowing
 	url = https://github.com/JopStro/bspswallow
+[submodule ".config/qutebrowser/qutewal"]
+	path = .config/qutebrowser/qutewal
+	url = https://gitlab.com/jjzmajic/qutewal
+[submodule ".scripts/qutebrowser-profile"]
+	path = .scripts/qutebrowser-profile-repo
+	url = https://github.com/jtyers/qutebrowser-profile

@@ -56,7 +56,7 @@ alt + shift + {_,super + }{1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}' --follow
 
 alt + shift + {p,u,g,n}
-    brave {--profile-directory="Default",--profile-directory="Profile 2",--profile-directory="Profile 3",--profile-directory="Profile 4"}
+    $HOME/.scripts/qutebrowser-profile --new {personal,university,gaming,mod}
 
 alt + shift + {q,r}
     bspc {quit,wm -r}
