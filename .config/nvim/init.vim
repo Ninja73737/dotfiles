@@ -34,6 +34,13 @@ filetype plugin indent on
 set ignorecase
 set smartcase
 
+" Command completion
+" set wildmenu
+" set wildmode=longest,list,full
+
+" Syntax
+syntax on
+
 " Hide secondary status indicator
 set noshowmode
 
@@ -76,6 +83,9 @@ Plug 'vim-scripts/loremipsum'
 Plug 'vimwiki/vimwiki'
 Plug 'itchyny/lightline.vim'
 Plug 'ferrine/md-img-paste.vim'
+Plug 'mtoohey31/doctest.nvim'
+Plug 'reedes/vim-pencil'
+Plug 'tools-life/taskwiki'
 
 call plug#end()
 
@@ -98,6 +108,11 @@ autocmd FileType vimwiki setlocal syntax=pandoc
 autocmd FileType vimwiki setlocal commentstring=<!--%s-->
 let g:vimwiki_conceallevel = 0
 
+let g:pencil#wrapModeDefault = 'soft'
+autocmd BufNewFile,BufRead *.tex call pencil#init()
+
+autocmd BufNewFile,BufRead *.tex setlocal syntax=pandoc
+
 autocmd BufNewFile,BufRead *.Rmd set filetype=rmd
 autocmd BufNewFile,BufRead *.pmd set filetype=pandoc | PandocHighlight python
 
@@ -114,7 +129,7 @@ let g:livepreview_cursorhold_recompile = 0
 function! PandocPreview ()
   let output_path = expand('%:p:r') . '.pdf'
   execute '!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
-  " execute '!pandoc --listings --highlight-style $HOME/.config/pandoc/nord.theme --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
+  " execute '!pandoc --highlight-style $HOME/.config/pandoc/nord.theme --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
 endfunction
 
 function! ZathuraCurrent ()
@@ -131,7 +146,7 @@ let R_args = ['--quiet']
 let g:rainbow_active = 1
 
 let g:pandoc#modules#disabled = ["folding", "spell"]
-let g:pandoc#syntax#conceal#use = 0
+" let g:pandoc#syntax#conceal#use = 0
 
 let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
 let g:tq_enabled_backends=["mthesaur_txt"]
@@ -162,7 +177,7 @@ autocmd User EasyMotionPromptEnd silent! CocEnable
 noremap! <C-BS> <C-w>
 " Necessary for the backspace remap above for some reason...
 noremap! <C-h> <C-w>
-map f <Plug>(easymotion-s2)
+map f <Plug>(easymotion-bd-w)
 noremap cf :CocFix<CR>
 nmap cF <Plug>(coc-codeaction)
 noremap cm :call CocAction('format')<CR>
@@ -174,10 +189,6 @@ noremap ct :TableModeToggle<CR>
 
 noremap cpl :LLPStartPreview<CR>
 nmap cpm <Plug>MarkdownPreviewToggle
-" noremap cprh :silent write <bar> RMarkdown html<CR>
-" noremap cprH :silent write <bar> RMarkdown! html<CR>
-" noremap cprp :silent write <bar> RMarkdown pdf<CR>
-" noremap cprP :silent write <bar> RMarkdown! pdf<CR>
 noremap cpp :silent write <bar> call PandocPreview()<CR>
 noremap cpP :silent write <bar> call PandocPreview() <bar> silent call ZathuraCurrent()<CR>
 noremap cz :silent call ZathuraCurrent()<CR>
@@ -224,9 +235,6 @@ autocmd FileType markdown,rmd,vimwiki,tex let b:coc_pairs = [["$", "$"]]
 " autocmd FileType pandoc set colorcolumn=81
 " autocmd FileType pandoc set tw=80
 " autocmd FileType pandoc set formatoptions+=t
-" autocmd FileType rmarkdown set colorcolumn=81
-" autocmd FileType rmarkdown set tw=80
-" autocmd FileType rmarkdown set formatoptions+=t
 autocmd FileType python set colorcolumn=101
 
 " autocmd FileType pandoc set tabstop=3
@@ -275,9 +283,22 @@ let g:lightline = {
       \ 'active': {
       \   'right': [['cocstatus'], ['lineinfo'], ['filetype']]
       \ },
+      \ 'separator' : { 'left': '', 'right': '' },
+      \ 'subseparator' : { 'left': '', 'right': '' },
       \ 'colorscheme': 'pywal',
-      \ 'separator' : { 'left': '', 'right': '' },
-      \ 'component_function': {
-      \   'cocstatus': 'coc#status'
-      \}
+      \ 'component_function': { 'cocstatus': 'coc#status' }
       \ }
+hi clear Conceal
+let g:pandoc#syntax#conceal#blacklist = ["atx", "codeblock_start", "codeblock_delim"]
+let R_openpdf = 0
+let g:taskwiki_disable_concealcursor = 1
+let g:taskwiki_suppress_mappings = 1
+
+" hi EasyMotionTarget ctermbg=none ctermfg=green
+" hi EasyMotionShade  ctermbg=none ctermfg=blue
+
+" hi EasyMotionTarget2First ctermbg=none ctermfg=red
+" hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
+
+" hi EasyMotionMoveHL ctermbg=green ctermfg=black
+" hi EasyMotionIncSearch ctermbg=green ctermfg=black

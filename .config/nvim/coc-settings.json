@@ -1,6 +1,7 @@
 {
   "diagnostic.enableSign": false,
   "markdownlint.config": {
+    "MD005": false,
     "MD013": false,
     "MD026": false,
     "MD028": false,
@@ -23,7 +24,8 @@
     "\\\\\\w+((\\[|\\{)[\\\\\\w\\=, ]+(\\}|\\]))*",
     "]\\(.+\\)",
     "^\\s*\\w+: ",
-    "```.*\\n(.+\\n)*```$"
+    "```[^`]*```",
+    "`[^\\n`]+`"
   ],
   "latex.build.onSave": true,
   "latex.forwardSearch.executable": "zathura",
@@ -38,6 +40,7 @@
     "pandoc",
     "php",
     "plaintext",
+    "rmd",
     "tex",
     "vimwiki",
     "yml"
@@ -62,17 +65,23 @@
   },
   "cSpell.userWords": [
     "CERB",
+    "Confounders",
     "L'Hôpital's",
     "Lemieux",
     "Popsicle",
     "Toohey",
+    "Voluntariness",
     "analyzed",
     "analyzes",
     "analyzing",
+    "centered",
+    "confounder",
     "disincentivized",
     "doctest",
+    "explainability",
     "invertibility",
-    "supremum"
+    "supremum",
+    "triangularizable"
   ],
   "languageserver": {
     "ccls": {
