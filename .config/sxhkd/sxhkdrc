@@ -15,7 +15,7 @@ alt + slash
     thunar
 
 alt + shift + c
-    rofi -show calc -modi calc -no-show-match -no-sort
+    bspc rule -a "Alacritty" -o state=floating && alacritty -e /home/mtoohey/.scripts/rcalc
 
 alt + Tab
     rofi -show window
