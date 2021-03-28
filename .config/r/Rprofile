@@ -8,13 +8,6 @@ local({
 # Use HTTPS
 options(download.file.method = "libcurl")
 
-# Overwite q() function with save disabled
-.env <- new.env()
-.env$q <- function(save = "no", ...) {
-  quit(save = save, ...)
-}
-attach(.env, warn.conflicts = FALSE)
-
 # Set prompt
 options(prompt = ">> ", continue = ".. ")
 
