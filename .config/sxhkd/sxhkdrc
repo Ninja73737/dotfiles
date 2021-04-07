@@ -39,10 +39,7 @@ alt + shift + f
     flameshot gui
 
 alt + shift + w
-    $HOME/.scripts/random_feh_bg -u
-
-# alt + shift + y
-#     $HOME/.scripts/yt_mod_tools
+    $HOME/.scripts/random_bg -u
 
 # bspwm
 
@@ -65,16 +62,10 @@ alt + {w,q}
     bspc node -{c,k}
 
 alt + backslash
-    bspc node focused.tiled -t pseudo_tiled || bspc node focused.pseudo_tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled
+    bspc node focused.tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled
 
 alt + shift + backslash
-    bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t pseudo_tiled || bspc node focused.pseudo_tiled -t tiled
-
-# button4
-#     xdotool key Caps_Lock; xdotool click 4; xdotool click 4; xdotool click 4; xdotool key Caps_Lock
-
-# button5
-#     xdotool key Caps_Lock; xdotool click 5; xdotool click 5; xdotool click 5; xdotool key Caps_Lock
+    bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t tiled
 
 alt + shift + i
     $HOME/.scripts/linein_listen_linux
