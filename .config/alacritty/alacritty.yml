@@ -35,7 +35,7 @@ background_opacity: 0.8
 cursor:
   style:
     shape: Beam
-    blinking: Always
+    blinking: Off
     vi_mode_style: Block
 
 debug:
