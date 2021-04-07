@@ -11,7 +11,6 @@ configuration {
   line-padding:          10;
   bw:                    0;
   padding:               0;
-  separator-style:       none;
   line-margin:           0;
   window-format:         "{w} {c} {t}";
 }
