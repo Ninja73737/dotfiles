@@ -1,24 +1,5 @@
 {
-  "diagnostic.enableSign": false,
-  "markdownlint.config": {
-    "MD005": false,
-    "MD013": false,
-    "MD026": false,
-    "MD028": false,
-    "MD029": false,
-    "MD030": false,
-    "MD033": false,
-    "MD036": false
-  },
-  "git.addedSign.hlGroup": "DiffAdd",
-  "git.removedSign.hlGroup": "DiffDelete",
-  "git.changedSign.hlGroup": "DiffChange",
-  "git.changeRemovedSign.hlGroup": "DiffChange",
-  "git.topRemovedSign.hlGroup": "DiffDelete",
-  "git.conflict.incoming.hlGroup": "WarningMsg",
-  "git.conflict.current.hlGroup": "Error",
-  "python.linting.pep8Enabled": true,
-  "python.linting.pep8Args": ["--max-line-length=100"],
+  "cSpell.language": "en-GB",
   "cSpell.ignoreRegExpList": [
     "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",
     "\\\\\\w+((\\[|\\{)[\\\\\\w\\=, ]+(\\}|\\]))*",
@@ -27,10 +8,6 @@
     "```[^`]*```",
     "`[^\\n`]+`"
   ],
-  "latex.build.onSave": true,
-  "latex.forwardSearch.executable": "zathura",
-  "latex.forwardSearch.args": ["%p"],
-  "cSpell.language": "en-GB",
   "cSpell.enabledLanguageIds": [
     "csharp",
     "go",
@@ -43,7 +20,33 @@
     "rmd",
     "tex",
     "vimwiki",
+    "yaml",
     "yml"
+  ],
+  "cSpell.userWords": [
+    "CERB",
+    "Confounders",
+    "L'Hôpital's",
+    "Lemieux",
+    "Maclaurin",
+    "Popsicle",
+    "Toohey",
+    "Voluntariness",
+    "analyzed",
+    "analyzes",
+    "analyzing",
+    "centered",
+    "confounder",
+    "counterintuitively",
+    "disincentivized",
+    "docstrings",
+    "doctest",
+    "explainability",
+    "extremum",
+    "incongruent",
+    "invertibility",
+    "supremum",
+    "triangularizable"
   ],
   "diagnostic-languageserver.mergeConfig": true,
   "diagnostic-languageserver.filetypes": {
@@ -63,26 +66,24 @@
       ]
     }
   },
-  "cSpell.userWords": [
-    "CERB",
-    "Confounders",
-    "L'Hôpital's",
-    "Lemieux",
-    "Popsicle",
-    "Toohey",
-    "Voluntariness",
-    "analyzed",
-    "analyzes",
-    "analyzing",
-    "centered",
-    "confounder",
-    "disincentivized",
-    "doctest",
-    "explainability",
-    "invertibility",
-    "supremum",
-    "triangularizable"
-  ],
+  "diagnostic.enableSign": false,
+  "markdownlint.config": {
+    "MD005": false,
+    "MD013": false,
+    "MD026": false,
+    "MD028": false,
+    "MD029": false,
+    "MD030": false,
+    "MD033": false,
+    "MD036": false
+  },
+  "git.addedSign.hlGroup": "DiffAdd",
+  "git.removedSign.hlGroup": "DiffDelete",
+  "git.changedSign.hlGroup": "DiffChange",
+  "git.changeRemovedSign.hlGroup": "DiffChange",
+  "git.topRemovedSign.hlGroup": "DiffDelete",
+  "git.conflict.incoming.hlGroup": "WarningMsg",
+  "git.conflict.current.hlGroup": "Error",
   "languageserver": {
     "ccls": {
       "command": "ccls",
@@ -98,5 +99,8 @@
         }
       }
     }
-  }
+  },
+  "latex.build.onSave": true,
+  "latex.forwardSearch.executable": "/usr/bin/zathura",
+  "latex.forwardSearch.args": ["--synctex-forward", "%l:1:%f", "%p"]
 }
