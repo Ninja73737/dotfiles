@@ -1,9 +1,6 @@
 [submodule ".scripts/macos-accent"]
 	path = .scripts/macos-accent
 	url = https://github.com/mtoohey31/macos-accent
-[submodule ".scripts/bspswallowing"]
-	path = .scripts/bspswallowing
-	url = https://github.com/JopStro/bspswallow
 [submodule ".config/qutebrowser/qutewal"]
 	path = .config/qutebrowser/qutewal
 	url = https://gitlab.com/jjzmajic/qutewal
