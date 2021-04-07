@@ -86,6 +86,10 @@ if status --is-interactive
 
     # Pretty Stuff
 
+    # LF Icons
+
+    source $HOME/.config/lf/icons
+
     # Clear screen if running inside ranger or over ssh
 
     if test -n "$RANGER_LEVEL" -o -n "$SSH_CLIENT"

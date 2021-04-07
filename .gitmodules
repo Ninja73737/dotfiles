@@ -1,9 +1,6 @@
 [submodule ".scripts/macos-accent"]
 	path = .scripts/macos-accent
 	url = https://github.com/mtoohey31/macos-accent
-[submodule ".scripts/zathura-pywal"]
-	path = .scripts/zathura-pywal
-	url = https://github.com/GideonWolfe/Zathura-Pywal
 [submodule ".scripts/bspswallowing"]
 	path = .scripts/bspswallowing
 	url = https://github.com/JopStro/bspswallow
@@ -13,3 +10,6 @@
 [submodule ".scripts/qutebrowser-profile"]
 	path = .scripts/qutebrowser-profile-repo
 	url = https://github.com/jtyers/qutebrowser-profile
+[submodule ".scripts/lf-exa-icons"]
+	path = .scripts/lf-exa-icons
+	url = https://github.com/mtoohey31/lf-exa-icons
