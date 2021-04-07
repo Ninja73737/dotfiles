@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-source $HOME/.cache/wal/colors.bash.spicetify
+source $HOME/.cache/wal/colors.spicetify.bash
+# source $HOME/.cache/wal/colors.bash.spicetify
 spicetify -q update
