@@ -14,9 +14,9 @@ let s:p.normal.right = [ [ background, color1 ], [ background, color8 ] ]
 let s:p.normal.warning = [ [ background, color4 ] ]
 let s:p.normal.error = [ [ background, color2 ] ]
 
-let s:p.inactive.left =  [ [ foreground, color1 ], [ foreground, color8 ] ]
+let s:p.inactive.left =  [ [ background, color1 ], [ background, color8 ] ]
 let s:p.inactive.middle = [ [ foreground, background ] ]
-let s:p.inactive.right = [ [ foreground, color1 ], [ foreground, color8 ] ]
+let s:p.inactive.right = [ [ background, color1 ], [ background, color8 ] ]
 
 let s:p.insert.left = [ [ background, color5 ], [ background, color8 ] ]
 let s:p.insert.right = [ [ background, color5 ], [ background, color8 ] ]
