@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+$HOME/.scripts/update_spicetify
+$HOME/.scripts/update_zathura

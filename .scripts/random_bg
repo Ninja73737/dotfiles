@@ -8,10 +8,10 @@ elif [[ $1 == "-u" ]] && [[ -n $2 ]]; then
     wget "https://source.unsplash.com/3840x2160/?$2" -O "$HOME/Pictures/Wallpapers/random/$2.jpeg"
     wal -c
     wal -i "$HOME/Pictures/Wallpapers/random/$2.jpeg"
-    $HOME/.scripts/update_spicetify
+    $HOME/.scripts/pywal_hooks
 elif [[ $1 == -u ]]; then
     wget "https://source.unsplash.com/3840x2160/" -O "$HOME/Pictures/Wallpapers/random/random.jpeg"
     wal -c
     wal -i "$HOME/Pictures/Wallpapers/random/random.jpeg"
-    $HOME/.scripts/update_spicetify
+    $HOME/.scripts/pywal_hooks
 fi

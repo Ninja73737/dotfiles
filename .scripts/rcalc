@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+cat .cache/wal/sequences
+
+R --quiet --no-save
