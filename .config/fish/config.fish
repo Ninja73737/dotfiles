@@ -14,24 +14,22 @@ end
 
 # Aliases and Functions
 
-if test (uname) = "Darwin"
-    alias cdic "cd '/Users/mtoohey/Library/Mobile Documents/'"
-end
+abbr dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
+abbr dcd "docker-compose down --remove-orphans"
 
-alias dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
-alias dcd "docker-compose down --remove-orphans"
-
+abbr lg "lazygit"
 alias lg "lazygit"
 
 if string match -rq ".*MANJARO-ARM.*" (uname -r)
-    alias selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
-    alias lsh "lazygit --git-dir=$HOME/.selfhosting --work-tree=$HOME"
+    abbr selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
+    abbr lsh "lazygit --git-dir=$HOME/.selfhosting --work-tree=$HOME"
 end
 
-alias dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-alias ldf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+abbr dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+abbr ldf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 if which trash &> /dev/null
+    abbr rm "trash"
     alias rm "trash"
 end
 
@@ -40,8 +38,8 @@ if which trash-restore &> /dev/null
     alias trash-undo "echo '' | trash-restore 2>/dev/null | sed '\$d' | sort -k2,3 -k1,1n | awk 'END {print \$1}' | trash-restore >/dev/null 2>&1"
 end
 
-alias v "nvim"
-alias nv "nvim"
+abbr v "nvim"
+abbr nv "nvim"
 alias vi "nvim"
 alias vim "nvim"
 
@@ -50,7 +48,7 @@ function sc
     cat $HOME/.cache/wal/sequences
 end
 
-alias zth "zathura --fork"
+abbr zth "zathura --fork"
 alias R "R --quiet --no-save"
 alias python "python -q"
 alias python2 "python2 -q"
