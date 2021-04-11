@@ -5,20 +5,17 @@
 alt + Return
     alacritty
 
-alt + shift + Return
+alt + slash
     alacritty -e fish -C 'lf'
 
 alt + space
     rofi -show drun
 
-alt + slash
-    thunar
-
-alt + shift + c
-    bspc rule -a "Alacritty" -o state=floating && alacritty -e /home/mtoohey/.scripts/rcalc
-
 alt + Tab
     rofi -show window
+
+alt + shift + c
+    bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 
 alt + shift + s
     pkill -USR1 -x sxhkd
@@ -27,13 +24,13 @@ alt + shift + o
     $HOME/.scripts/switch_output_linux
 
 alt + shift + {Down,Up}
-    pulsemixer --change-volume {-,+}1
+    pulsemixer --change-volume {-,+}2
 
 alt + shift + {Left,Right,space}
     playerctl --player=spotify {previous,next,play-pause}
 
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
-    pulsemixer --change-volume {-,+}1
+    pulsemixer --change-volume {-,+}2
 
 alt + shift + f
     flameshot gui
@@ -41,7 +38,13 @@ alt + shift + f
 alt + shift + w
     $HOME/.scripts/random_bg -u
 
-# bspwm
+alt + shift + d
+    sleep 1; xset dpms force off
+
+alt + shift + i
+    $HOME/.scripts/linein_listen_linux
+
+# BSPWM
 
 alt + shift + b
     bspc node @/ --balance
@@ -62,10 +65,7 @@ alt + {w,q}
     bspc node -{c,k}
 
 alt + backslash
-    bspc node focused.tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled
-
-alt + shift + backslash
     bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t tiled
 
-alt + shift + i
-    $HOME/.scripts/linein_listen_linux
+alt + shift + backslash
+    bspc node focused.tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled
