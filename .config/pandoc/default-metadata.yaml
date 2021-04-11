@@ -4,6 +4,7 @@ geometry:
 mainfont: "SF Pro Text"
 monofont: "FiraCode Nerd Font"
 indent: true
+colorlinks: true
 linestretch: 1.25
 header-includes: |
   <!-- \pagenumbering{gobble} -->
