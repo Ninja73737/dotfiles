@@ -2,6 +2,9 @@
 " General Vim Settings"
 " " " " " " " " " " " "
 
+set wildmode=longest,list,full
+set shortmess+=c
+
 " Enables relative line numbers
 set number relativenumber
 
@@ -19,26 +22,15 @@ set clipboard=unnamedplus
 " Disable timeout, which forces the use of mappings that do not overlap each other
 set notimeout
 
-" Indentation
-" set tabstop=4
-" set shiftwidth=4
-" set softtabstop=4
-
 set expandtab
 set smarttab
 set autoindent
 
 filetype plugin indent on
 
-" Search case
 set ignorecase
 set smartcase
 
-" Command completion
-" set wildmenu
-" set wildmode=longest,list,full
-
-" Syntax
 syntax on
 
 " Hide secondary status indicator
@@ -54,7 +46,6 @@ au BufReadPost *
 " Pre-Plugin Settings "
 " " " " " " " " " " " "
 
-" let g:polyglot_disabled = ['autoindent']
 set nocompatible
 
 " " " " " "
@@ -66,7 +57,6 @@ call plug#begin()
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
-Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -84,8 +74,11 @@ Plug 'vimwiki/vimwiki'
 Plug 'itchyny/lightline.vim'
 Plug 'ferrine/md-img-paste.vim'
 Plug 'mtoohey31/doctest.nvim'
+Plug 'mtoohey31/vim-refocus'
 Plug 'reedes/vim-pencil'
 Plug 'tools-life/taskwiki'
+Plug 'ActivityWatch/aw-watcher-vim'
+Plug 'luochen1990/rainbow'
 
 call plug#end()
 
@@ -99,7 +92,7 @@ let g:mdip_imgdir_intext = escape(expand('%:t:r'), ' ')
 let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdown-preview.css'
 let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
 let g:mkdp_page_title = '${name}.md'
-let g:mkdp_filetypes = ['markdown', 'pandoc', 'rmd']
+let g:mkdp_filetypes = ['markdown', 'pandoc', 'pmd', 'rmd']
 let g:mkdp_command_for_global = 1
 
 let g:vimwiki_list = [{'path': '~/vimwiki/',
@@ -129,12 +122,10 @@ let g:livepreview_cursorhold_recompile = 0
 function! PandocPreview ()
   let output_path = expand('%:p:r') . '.pdf'
   execute '!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
-  " execute '!pandoc --highlight-style $HOME/.config/pandoc/nord.theme --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
 endfunction
 
 function! ZathuraCurrent ()
-  let output_path = join(split(expand('%:p'), '\.')[:-2], '.') . '.pdf'
-  execute '!zathura "' .output_path . '"'
+  call system('zth "' . expand('%:p:r') . '.pdf"')
 endfunction
 
 let R_args = ['--quiet']
@@ -145,22 +136,42 @@ let R_args = ['--quiet']
 
 let g:rainbow_active = 1
 
+source ~/.cache/wal/colors-wal.vim
+
+" Incorrect order is intentional, 7 is foreground
+let g:rainbow_conf = {
+      \ 'guifgs': [color7, color1, color2, color3, color4, color5, color6, color8, color7, color1, color2, color3, color4, color5, color6, color8, color7, color1, color2, color3, color4, color5, color6, color8, color7, color1, color2, color3, color4, color5, color6, color8],
+      \ 'ctermfgs': [7, 1, 2, 3, 4, 5, 6, 8, 7, 1, 2, 3, 4, 5, 6, 8, 7, 1, 2, 3, 4, 5, 6, 8, 7, 1, 2, 3, 4, 5, 6, 8],
+      \ 'guis': [''],
+      \ 'cterms': [''],
+      \ 'operators': '_,_',
+      \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+      \ 'separately': {
+      \   '*': {},
+      \   'markdown': {
+      \     'parentheses_options': 'containedin=markdownCode contained',
+      \   },
+      \   'haskell': {
+      \     'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/\v\{\ze[^-]/ end=/}/ fold']
+      \   },
+      \   'vim': {
+      \     'parentheses_options': 'containedin=vimFuncBody',
+      \   },
+      \   'perl': {
+      \     'syn_name_prefix': 'perlBlockFoldRainbow',
+      \   },
+      \   'css': 0,
+      \ }
+      \ }
+
 let g:pandoc#modules#disabled = ["folding", "spell"]
-" let g:pandoc#syntax#conceal#use = 0
 
 let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
 let g:tq_enabled_backends=["mthesaur_txt"]
 
 let g:coc_filetype_map = { 'pandoc': 'markdown', 'vimwiki': 'markdown' }
 
-let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-vimlsp",  "coc-vimtex", "coc-xml", "coc-yaml"]
-
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=8
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=8
+let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-dictionary", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-word", "coc-vimlsp",  "coc-xml", "coc-yaml"]
 
 " " " " " " " " " " " " " " " 
 " Navigation and Remappings "
@@ -168,8 +179,9 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=8
 
 let g:EasyMotion_smartcase = 1
 
-noremap ZQ :quit!<CR>
-noremap ZW :write<CR>
+noremap Q :quit!<CR>
+noremap W :write<CR>
+noremap Z :wq<CR>
 
 autocmd User EasyMotionPromptBegin silent! CocDisable
 autocmd User EasyMotionPromptEnd silent! CocEnable
@@ -183,15 +195,21 @@ nmap cF <Plug>(coc-codeaction)
 noremap cm :call CocAction('format')<CR>
 noremap cn :call CocAction('diagnosticNext')<CR>
 noremap cN :call CocAction('diagnosticPrevious')<CR>
-
 noremap ch :noh<CR>
 noremap ct :TableModeToggle<CR>
-
-noremap cpl :LLPStartPreview<CR>
+noremap cpl :CocCommand latex.Build<CR>
+" TODO: Implement universal preview function
+call timer_start(0, 'PreviewMap')
+function! PreviewMap (timer)
+  if &filetype == "tex"
+    noremap cz :VimRefocusOneShot<CR>:CocCommand latex.ForwardSearch<CR>
+  else
+    noremap cz :silent call ZathuraCurrent()<CR>
+  endif
+endfunction
 nmap cpm <Plug>MarkdownPreviewToggle
 noremap cpp :silent write <bar> call PandocPreview()<CR>
 noremap cpP :silent write <bar> call PandocPreview() <bar> silent call ZathuraCurrent()<CR>
-noremap cz :silent call ZathuraCurrent()<CR>
 noremap cpw :silent !wal -R<CR>
 
 noremap cP :call mdip#MarkdownClipboardImage()<CR>
@@ -215,13 +233,6 @@ autocmd FileType markdown,vimwiki
       \ autocmd CompleteChanged * silent! iunmap <CR>|
       \ autocmd CompleteDone * inoremap <CR> <ESC>:VimwikiReturn 3 5<CR>|
       \ imap <C-B> **
-      " \ imap <C-B> **|
-      " \ imap <C-I> *|
-      " \ imap <C-E> $
-
-autocmd BufNewFile,BufRead *.pmd noremap cpy :write<BAR>!pweave %<CR>
-
-noremap gCC :silent write <bar> :!gcc % && ./a.out<CR>
 
 " " " " " " " " " " " " " " " "
 " FileType Dependent Settings "
@@ -232,18 +243,15 @@ autocmd FileType pandoc let b:coc_pairs_disabled = ['<']
 autocmd FileType pandoc let g:table_mode_corner='|'
 autocmd FileType markdown,rmd,vimwiki,tex let b:coc_pairs = [["$", "$"]]
 
-" autocmd FileType pandoc set colorcolumn=81
-" autocmd FileType pandoc set tw=80
-" autocmd FileType pandoc set formatoptions+=t
 autocmd FileType python set colorcolumn=101
-
-" autocmd FileType pandoc set tabstop=3
-" autocmd FileType pandoc set shiftwidth=3
-" autocmd FileType pandoc set softtabstop=3
 
 " Enables true color and colorizer
 set termguicolors
-lua require'colorizer'.setup()
+lua <<
+if jit ~= nil then
+    require'colorizer'.setup()
+end
+.
 
 " " " " " " " " " " " " " " " "
 " Firenvim Dependent Settings "
@@ -274,25 +282,52 @@ if exists('g:started_by_firenvim')
     au TextChanged * ++nested call Delay_Autowrite()
     au TextChangedI * ++nested call Delay_Autowrite()
 else
-    " colorscheme wal
-    " colorscheme gupywal
     colorscheme tgc_wal
 endif
 
 let g:lightline = {
       \ 'active': {
-      \   'right': [['cocstatus'], ['lineinfo'], ['filetype']]
+      \   'right': [['cocstatus'], ['percent', 'lineinfo'], ['filetype']]
+      \ },
+      \ 'inactive': {
+      \   'left': [[], ['filename']],
+      \   'right': [[], ['percent', 'lineinfo'], ['filetype']]
       \ },
       \ 'separator' : { 'left': '', 'right': '' },
       \ 'subseparator' : { 'left': '', 'right': '' },
       \ 'colorscheme': 'pywal',
-      \ 'component_function': { 'cocstatus': 'coc#status' }
+      \ 'component_function': { 'cocstatus': 'coc#status', 'wc': 'WordCount'}
       \ }
+
+autocmd FileType vimwiki,pandoc,rmd if (index(g:lightline['active']['right'][1], 'wc') == -1)|call add(g:lightline['active']['right'][1], 'wc')|endif
+
 hi clear Conceal
 let g:pandoc#syntax#conceal#blacklist = ["atx", "codeblock_start", "codeblock_delim"]
 let R_openpdf = 0
 let g:taskwiki_disable_concealcursor = 1
 let g:taskwiki_suppress_mappings = 1
+
+function! WordCount()
+  " if filereadable(expand('%:p:r') . '.pdf')
+  "   return substitute(system('pdftotext "' . expand('%:p:r') . '.pdf" - | wc -w'), '\n', '', '') . ' W'
+  " else
+    let s:old_status = v:statusmsg
+    let position = getpos(".")
+    exe ":silent normal g\<c-g>"
+    let stat = v:statusmsg
+    let s:word_count = 0
+    if stat != '--No lines in buffer--'
+      if stat =~ "^Selected"
+        let s:word_count = str2nr(split(v:statusmsg)[5])
+      else
+        let s:word_count = str2nr(split(v:statusmsg)[11])
+      end
+      let v:statusmsg = s:old_status
+    end
+    call setpos('.', position)
+    return s:word_count . ' W'
+  " endif
+endfunction
 
 " hi EasyMotionTarget ctermbg=none ctermfg=green
 " hi EasyMotionShade  ctermbg=none ctermfg=blue
@@ -302,3 +337,5 @@ let g:taskwiki_suppress_mappings = 1
 
 " hi EasyMotionMoveHL ctermbg=green ctermfg=black
 " hi EasyMotionIncSearch ctermbg=green ctermfg=black
+
+let g:vim_refocus_kill_flashfocus = 1
