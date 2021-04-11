@@ -1,3 +1,37 @@
 set icons on
 set smartcase on
 set shell fish
+set previewer pistol
+set dirfirst!
+set scrolloff 3
+
+cmd trash %{{
+    set IFS " "
+    trash "$fx" && set LF_TRASH_HISTORY $LF_TRASH_HISTORY "$fx" || set LF_TRASH_HISTORY "$fx"
+}}
+map D trash
+cmd trash-undo %{{
+    # Credit for this one-liner goes to @norcalli here: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
+    echo '' | trash-restore 2>/dev/null | sed '$d' | sort -k2,3 -k1,1n | awk 'END {print $1}' | trash-restore >/dev/null 2>&1
+}}
+map u trash-undo
+map d
+map dd cut
+map go %echo "\"$fx\"" | string join '" "' | xargs dragon-drag-and-drop -a -x
+map r reload
+map R rename
+map S $fish
+cmd touch &{{
+    set IFS " "
+    touch "$argv"
+    lf -remote "send $id select \"$argv\""
+}}
+map t push :touch<space>
+cmd mkdir &{{
+    set IFS " "
+    mkdir -p -- "$argv"
+    lf -remote "send $id select \"$argv\""
+    echo yeet
+}}
+map m push :mkdir<space>
+map gi $lazygit
