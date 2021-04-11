@@ -1,16 +1,19 @@
 #! /usr/bin/env bash
 
-X Configuration
+# X Configuration
 
 $HOME/.scripts/display_setup
 
 xinput --set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "libinput Accel Profile Enabled" 0, 1
 
-sensitivity_factor=1.25
+# Set display DPMS blanking time
+xset s 1800
 
+# Set mouse sensitivity, has some issues but I forgot what the issues are...
+# sensitivity_factor=1.25
 # xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" $sensitivity_factor 0 0 0 $sensitivity_factor 0 0 0 1
 
-# bspwm Settings
+# BSPWM Settings
 
 bspc monitor HDMI-0 -d 1 2 3 4 5
 bspc monitor DVI-D-0 -d 6 7 8 9
@@ -30,26 +33,26 @@ bspc config split_ratio             0.5
 bspc config borderless_monocle      false
 bspc config gapless_monocle         false
 
-# bspwm Rules
+# BSPWM Rules
 
 bspc rule -r "*"
 
 bspc rule -a Gimp state=floating follow=on
 bspc rule -a Zathura state=tiled
+bspc rule -a Bitwarden state=floating
 
 # Autostart Services
+
+$HOME/.config/polybar/launch.sh
 
 pgrep sxhkd || sxhkd &
 pgrep picom || picom --experimental-backends &
 pgrep flashfocus || flashfocus &
 pgrep dunst || dunst &
-pgrep rescuetime || rescuetime &
 pgrep mailspring || mailspring --background &
-pgrep Discord || discord &
+which discord && (pgrep Discord || discord &) || which discord-canary && (pgrep DiscordCanary || discord-canary &)
 pgrep spotify || spotify &
-# pgrep notion-app || notion-app &
-
-$HOME/.config/polybar/launch.sh &
+pkill aw-qt; sleep 10; aw-qt &
 
 # Recover Wallpaper and Theme
 
