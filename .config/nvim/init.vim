@@ -1,6 +1,7 @@
 " " " " " " " " " " " "
 " General Vim Settings"
 " " " " " " " " " " " "
+set concealcursor=
 
 set wildmode=longest,list,full
 set shortmess+=c
@@ -46,6 +47,8 @@ au BufReadPost *
 " Pre-Plugin Settings "
 " " " " " " " " " " " "
 
+let g:polyglot_disabled = ['autoindent']
+
 set nocompatible
 
 " " " " " "
@@ -58,12 +61,14 @@ call plug#begin()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'mtoohey31/tgc_wal.vim'
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc', { 'for': 'tex' }
+Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'tex' }
 Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'easymotion/vim-easymotion'
@@ -79,6 +84,8 @@ Plug 'reedes/vim-pencil'
 Plug 'tools-life/taskwiki'
 Plug 'ActivityWatch/aw-watcher-vim'
 Plug 'luochen1990/rainbow'
+Plug 'thaerkh/vim-indentguides'
+Plug 'dkarter/bullets.vim'
 
 call plug#end()
 
@@ -95,19 +102,16 @@ let g:mkdp_page_title = '${name}.md'
 let g:mkdp_filetypes = ['markdown', 'pandoc', 'pmd', 'rmd']
 let g:mkdp_command_for_global = 1
 
+let g:vimwiki_conceallevel = 0
 let g:vimwiki_list = [{'path': '~/vimwiki/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
-autocmd FileType vimwiki setlocal syntax=pandoc
-autocmd FileType vimwiki setlocal commentstring=<!--%s-->
-let g:vimwiki_conceallevel = 0
+" let g:vimwiki_filetypes = ['markdown']
+autocmd FileType vimwiki.markdown setlocal commentstring=<!--%s-->
 
 let g:pencil#wrapModeDefault = 'soft'
 autocmd BufNewFile,BufRead *.tex call pencil#init()
-
-autocmd BufNewFile,BufRead *.tex setlocal syntax=pandoc
-
 autocmd BufNewFile,BufRead *.Rmd set filetype=rmd
-autocmd BufNewFile,BufRead *.pmd set filetype=pandoc | PandocHighlight python
+" autocmd BufNewFile,BufRead *.md set filetype=vimwiki.markdown
 
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Darwin"
@@ -133,6 +137,15 @@ let R_args = ['--quiet']
 " " " " " " " " " " " " " " " " " "
 " Linters and Syntax Highlighters "
 " " " " " " " " " " " " " " " " " "
+
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_math = 1
+let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_strikethrough = 1
+set conceallevel=2
 
 let g:rainbow_active = 1
 
@@ -169,8 +182,9 @@ let g:pandoc#modules#disabled = ["folding", "spell"]
 let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
 let g:tq_enabled_backends=["mthesaur_txt"]
 
-let g:coc_filetype_map = { 'pandoc': 'markdown', 'vimwiki': 'markdown' }
+let g:coc_filetype_map = { 'vimwiki.markdown': 'markdown' }
 
+" For coc-r-lsp: install.packages("languageserver")
 let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-dictionary", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-word", "coc-vimlsp",  "coc-xml", "coc-yaml"]
 
 " " " " " " " " " " " " " " " 
@@ -182,6 +196,7 @@ let g:EasyMotion_smartcase = 1
 noremap Q :quit!<CR>
 noremap W :write<CR>
 noremap Z :wq<CR>
+noremap E :edit 
 
 autocmd User EasyMotionPromptBegin silent! CocDisable
 autocmd User EasyMotionPromptEnd silent! CocEnable
@@ -206,6 +221,7 @@ function! PreviewMap (timer)
   else
     noremap cz :silent call ZathuraCurrent()<CR>
   endif
+  set concealcursor=""
 endfunction
 nmap cpm <Plug>MarkdownPreviewToggle
 noremap cpp :silent write <bar> call PandocPreview()<CR>
@@ -223,15 +239,15 @@ autocmd FileType markdown,vimwiki
       \ noremap c<CR> :VimwikiFollowLink<CR>|
       \ noremap c<BS> :VimwikiGoBackLink<CR>|
       \ noremap c<Space> :VimwikiToggleListItem<CR>|
-      \ inoremap <CR> <ESC>:VimwikiReturn 3 5<CR>|
-      \ noremap o A<ESC>:VimwikiReturn 3 5<CR>|
-      \ noremap O kA<ESC>:VimwikiReturn 3 5<CR>|
+      " \ inoremap <CR> <ESC>:VimwikiReturn 3 5<CR>|
+      " \ noremap o A<ESC>:VimwikiReturn 3 5<CR>|
+      " \ noremap O kA<ESC>:VimwikiReturn 3 5<CR>|
       \ inoremap <TAB> <ESC>:VimwikiListChangeLvl increase 1<CR>a|
       \ inoremap <S-TAB> <ESC>:VimwikiListChangeLvl decrease 1<CR>a|
       \ noremap <TAB> <ESC>:VimwikiListChangeLvl increase 1<CR>|
       \ noremap <S-TAB> <ESC>:VimwikiListChangeLvl decrease 1<CR>|
-      \ autocmd CompleteChanged * silent! iunmap <CR>|
-      \ autocmd CompleteDone * inoremap <CR> <ESC>:VimwikiReturn 3 5<CR>|
+      " \ autocmd CompleteChanged * silent! iunmap <CR>|
+      " \ autocmd CompleteDone * inoremap <CR> <ESC>:VimwikiReturn 3 5<CR>|
       \ imap <C-B> **
 
 " " " " " " " " " " " " " " " "
@@ -243,15 +259,18 @@ autocmd FileType pandoc let b:coc_pairs_disabled = ['<']
 autocmd FileType pandoc let g:table_mode_corner='|'
 autocmd FileType markdown,rmd,vimwiki,tex let b:coc_pairs = [["$", "$"]]
 
-autocmd FileType python set colorcolumn=101
+autocmd FileType python set colorcolumn=81
 
 " Enables true color and colorizer
-set termguicolors
-lua <<
+if empty($SSH_CONNECTION)
+  execute "hi Normal ctermbg=NONE guifg=" . color7 ." ctermfg=7"
+  set termguicolors
+  lua << EOF
 if jit ~= nil then
     require'colorizer'.setup()
 end
-.
+EOF
+endif
 
 " " " " " " " " " " " " " " " "
 " Firenvim Dependent Settings "
@@ -328,14 +347,5 @@ function! WordCount()
     return s:word_count . ' W'
   " endif
 endfunction
-
-" hi EasyMotionTarget ctermbg=none ctermfg=green
-" hi EasyMotionShade  ctermbg=none ctermfg=blue
-
-" hi EasyMotionTarget2First ctermbg=none ctermfg=red
-" hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
-
-" hi EasyMotionMoveHL ctermbg=green ctermfg=black
-" hi EasyMotionIncSearch ctermbg=green ctermfg=black
 
 let g:vim_refocus_kill_flashfocus = 1
