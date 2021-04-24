@@ -43,17 +43,25 @@ bspc rule -a Bitwarden state=floating
 
 # Autostart Services
 
+# Because it can't handle the tray disappearing for a few seconds
+killall -q aw-qt
+
 $HOME/.config/polybar/launch.sh
 
 pgrep sxhkd || sxhkd &
 pgrep picom || picom --experimental-backends &
 pgrep flashfocus || flashfocus &
-pgrep dunst || dunst &
+pgrep dunst || $HOME/.config/dunst/launch.sh
+pgrep blueberry-tray || blueberry-tray
+prep agent || /usr/lib/geoclue-2.0/demos/agent &
+pgrep redshift || redshift &
 pgrep mailspring || mailspring --background &
 which discord && (pgrep Discord || discord &) || which discord-canary && (pgrep DiscordCanary || discord-canary &)
 pgrep spotify || spotify &
-pkill aw-qt; sleep 10; aw-qt &
+pgrep redshift || redshift &
+
+bash -c "while pgrep -u $UID -x aw-qt > /dev/null; do sleep 0.1; done; sleep 5; aw-qt" &
 
 # Recover Wallpaper and Theme
 
-fish -c "sleep 1; wal -R" &
+bash -c "sleep 5; wal -R" &

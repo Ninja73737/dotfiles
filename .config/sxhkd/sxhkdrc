@@ -32,6 +32,9 @@ alt + shift + {Left,Right,space}
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
     pulsemixer --change-volume {-,+}2
 
+alt + shift + a
+    bspc rule -a scrcpy -o state=floating && scrcpy -w
+
 alt + shift + f
     flameshot gui
 
@@ -62,7 +65,7 @@ alt + shift + {q,r}
     bspc {quit,wm -r}
 
 alt + {w,q}
-    bspc node -{c,k}
+    if test (xprop -id (xprop -root _NET_ACTIVE_WINDOW | sed 's/^.* //g') WM_CLASS | sed 's/^.* //g') = "\"scrcpy\""; set scrcpy 1; end; bspc node -{c,k}; if test -n "$scrcpy"; adb shell input keyevent 26; end
 
 alt + backslash
     bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t tiled

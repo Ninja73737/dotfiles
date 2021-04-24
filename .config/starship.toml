@@ -21,6 +21,7 @@ $golang\
 $helm\
 $java\
 $julia\
+$kotlin\
 $nim\
 $nodejs\
 $ocaml\
@@ -30,27 +31,29 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$scala\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
 $memory_usage\
 $aws\
 $gcloud\
+$openstack\
 $env_var\
 $crystal\
-$cmd_duration\
 $custom\
+$cmd_duration\
+$line_break\
+$lua\
 $jobs\
 $battery\
-$status\
-$line_break\
 $time\
-$character\
-"""
-
-# My Module Modifications
+$status\
+$shell\
+$character"""
 
 [username]
 show_always = true
@@ -63,6 +66,7 @@ format = "in [$path]($style) "
 format = "for [$duration]($style) "
 
 [hostname]
+style = "bold green"
 format = "on [$hostname]($style) "
 
 [character]
@@ -70,6 +74,25 @@ format = "on [$hostname]($style) "
 success_symbol = "[>](green)"
 error_symbol = "[>](green)"
 vicmd_symbol = "[<](blue)"
+
+[git_branch]
+symbol = ""
+
+[git_commit]
+format = "at [$hash]($style) [$tag]($style)"
+
+[git_status]
+format = "(with [$all_status$ahead_behind]($style) )"
+conflicted = "C"
+ahead = "H"
+behind = "B"
+diverged = "D"
+untracked = "U"
+stashed = "S"
+modified = "M"
+staged = "A"
+renamed = "R"
+deleted = "X"
 
 # Nerd Fonts Symbols
 
@@ -96,8 +119,8 @@ symbol = " "
 [elm]
 symbol = " "
 
-[git_branch]
-symbol = " "
+# [git_branch]
+# symbol = " "
 
 [golang]
 symbol = " "

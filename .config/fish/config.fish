@@ -20,6 +20,9 @@ abbr dcd "docker-compose down --remove-orphans"
 abbr lg "lazygit"
 alias lg "lazygit"
 
+abbr vf "nvim -c 'G | only'"
+alias vf "nvim -c 'G | only'"
+
 if string match -rq ".*MANJARO-ARM.*" (uname -r)
     abbr selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
     abbr lsh "lazygit --git-dir=$HOME/.selfhosting --work-tree=$HOME"
@@ -49,6 +52,7 @@ function sc
 end
 
 abbr zth "zathura --fork"
+alias zth "zathura --fork"
 alias R "R --quiet --no-save"
 alias python "python -q"
 alias python2 "python2 -q"

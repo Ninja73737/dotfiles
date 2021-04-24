@@ -26,6 +26,16 @@ config.bind('so', 'config-source')
 config.bind('e', 'edit-url')
 config.bind('(', 'jseval --world=main -f ~/.config/qutebrowser/js/slowDown.js')
 config.bind(')', 'jseval --world=main -f ~/.config/qutebrowser/js/speedUp.js')
+config.bind('wp', 'hint links spawn --detach random_bg -l {hint-url}')
+
+# For Fixing: https://github.com/qutebrowser/qutebrowser/issues/2236
+config.bind('o', 'set statusbar.show always;; set-cmd-text -s :open')
+config.bind('O', 'set statusbar.show always;; set-cmd-text -s :open -t')
+config.bind(':', 'set statusbar.show always;; set-cmd-text :')
+config.bind('/', 'set-cmd-text /')
+config.bind('<Escape>', 'mode-enter normal;; set statusbar.show in-mode', mode='command')
+config.bind('<Return>', 'command-accept;; set statusbar.show in-mode', mode='command')
+
 
 # Theming
 c.fonts.default_size = '12pt'
@@ -34,8 +44,8 @@ c.fonts.web.family.standard = 'SF Pro Text'
 c.fonts.web.family.sans_serif = 'SF Pro Text'
 c.fonts.web.family.serif = 'New York'
 c.fonts.web.family.fixed = 'FiraCode Nerd Font'
+config.set('window.transparent', True)
 
 config.set('colors.webpage.preferred_color_scheme', 'dark')
-config.source('qutewal.py')
 
 # TODO: Set up fileselect configuration options
