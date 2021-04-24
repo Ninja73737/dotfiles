@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+get_devpath() {
+  if [[ -d "/sys/class/hwmon" ]]; then
+    for dev in /sys/class/hwmon/*; do
+      dev_name=$(sed -e 's/[[:space:]=]/_/g' $dev/name)
+      if [[ "$dev_name" == "corsaircpro" ]]; then
+        readlink -f $dev/device | sed -e 's/^\/sys\///'
+        exit 0
+      fi
+    done
+    echo "Error: \"corsaircpro\" device not found."
+    exit 1
+  else
+    echo "Error: /sys/class/hwmon/ does not exist."
+    exit 1
+  fi
+}
+
+sudo sed -i "s/hwmon4=devices.*$/hwmon4=$(get_devpath | sed 's/\//\\\//g')/g" /etc/fancontrol
+
+sudo systemctl restart fancontrol

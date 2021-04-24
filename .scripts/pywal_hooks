@@ -2,3 +2,4 @@
 
 $HOME/.scripts/update_spicetify
 xrdb $HOME/.Xresources
+pkill dunst; $HOME/.config/dunst/launch.sh

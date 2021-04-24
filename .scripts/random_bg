@@ -14,4 +14,9 @@ elif [[ $1 == -u ]]; then
     wal -c
     wal -i "$HOME/Pictures/Wallpapers/random/random.jpeg"
     $HOME/.scripts/pywal_hooks
+elif [[ $1 == -l ]] && [[ -n $2 ]]; then
+    wget "https://source.unsplash.com/$(echo $2 | sed "s/^.*\\///g")/3840x2160/" -O "$HOME/Pictures/Wallpapers/random/random.jpeg"
+    wal -c
+    wal -i "$HOME/Pictures/Wallpapers/random/random.jpeg"
+    $HOME/.scripts/pywal_hooks
 fi
