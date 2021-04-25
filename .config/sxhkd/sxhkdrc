@@ -32,6 +32,9 @@ alt + shift + {Left,Right,space}
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
     pulsemixer --change-volume {-,+}2
 
+{XF86MonBrightnessDown,XF86MonBrightnessUp}
+    xbacklight -inc {-,+}10
+
 alt + shift + a
     bspc rule -a scrcpy -o state=floating && scrcpy -w
 
@@ -59,7 +62,7 @@ alt + shift + {_,super + }{1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}' --follow
 
 alt + shift + {p,u,g,n}
-    $HOME/.scripts/qutebrowser-profile --new {personal,university,gaming,mod}
+    qutebrowser-profile --new {personal,university,gaming,mod}
 
 alt + shift + {q,r}
     bspc {quit,wm -r}

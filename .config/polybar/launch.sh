@@ -8,4 +8,11 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 0.1; done
 
 # Launch bar
 source $HOME/.cache/wal/colors.sh
-polybar -c $HOME/.config/polybar/config.ini main &
+case $HOSTNAME in
+  horizon-arch)
+    polybar -c $HOME/.config/polybar/config.ini ultrawide &
+    ;;
+  arch-air)
+    polybar -c $HOME/.config/polybar/config.ini laptop &
+    ;;
+esac

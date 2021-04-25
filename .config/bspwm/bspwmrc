@@ -15,9 +15,17 @@ xset s 1800
 
 # BSPWM Settings
 
-bspc monitor HDMI-0 -d 1 2 3 4 5
-bspc monitor DVI-D-0 -d 6 7 8 9
-bspc monitor HDMI-0 -s DVI-D-0
+case $HOSTNAME in
+  horizon-arch)
+    bspc monitor HDMI-0 -d 1 2 3 4 5
+    bspc monitor DVI-D-0 -d 6 7 8 9
+    bspc monitor HDMI-0 -s DVI-D-0
+    ;;
+  arch-air)
+    bspc monitor eDP1 -d 1 2 3 4 5 6 7 8 9 0
+    xmodmap $HOME/.config/Xmodmap/laptop
+    ;;
+esac
 
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   true
@@ -64,4 +72,4 @@ bash -c "while pgrep -u $UID -x aw-qt > /dev/null; do sleep 0.1; done; sleep 5; 
 
 # Recover Wallpaper and Theme
 
-bash -c "sleep 5; wal -R" &
+fish -c "sleep 1; wal -R" &
