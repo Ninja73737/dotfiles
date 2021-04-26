@@ -1,4 +1,5 @@
 {
+  "coc.preferences.formatOnType": true,
   "cSpell.language": "en-GB",
   "cSpell.ignoreRegExpList": [
     "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",

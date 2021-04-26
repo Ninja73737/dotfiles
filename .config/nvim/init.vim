@@ -91,7 +91,8 @@ call plug#end()
 
 " " " " " " "
 " Previewers"
-" " " " " " "
+
+autocmd TermOpen * startinsert
 
 let g:mdip_imgdir = expand('%:t:r')
 let g:mdip_imgdir_intext = escape(expand('%:t:r'), ' ')
@@ -227,6 +228,7 @@ nmap cpm <Plug>MarkdownPreviewToggle
 noremap cpp :silent write <bar> call PandocPreview()<CR>
 noremap cpP :silent write <bar> call PandocPreview() <bar> silent call ZathuraCurrent()<CR>
 noremap cpw :silent !wal -R<CR>
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 noremap cP :call mdip#MarkdownClipboardImage()<CR>
 

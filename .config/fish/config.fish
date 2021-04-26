@@ -24,12 +24,12 @@ abbr vf "nvim -c 'G | only'"
 alias vf "nvim -c 'G | only'"
 
 if string match -rq ".*MANJARO-ARM.*" (uname -r)
-    abbr selfhosting "git --git-dir=$HOME/.selfhosting --work-tree=$HOME"
-    abbr lsh "lazygit --git-dir=$HOME/.selfhosting --work-tree=$HOME"
+    abbr selfhosting "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
+    abbr lsh "lazygit --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
 end
 
-abbr dotfiles "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-abbr ldf "lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+abbr dotfiles "git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
+abbr ldf "lazygit --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
 
 if which trash &> /dev/null
     abbr rm "trash"
