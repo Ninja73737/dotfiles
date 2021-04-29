@@ -5,7 +5,7 @@ config.set('auto_save.session', True)
 c.editor.command = ['fish', '-c', 'bspc rule -a Alacritty -o state=floating && alacritty -e fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
 config.set('content.fullscreen.window', True)
 config.set('tabs.show', 'switching')
-config.set('tabs.show_switching_delay', 1250)
+config.set('tabs.show_switching_delay', 1500)
 config.set('tabs.last_close', 'close')
 config.set('completion.height', '25%')
 config.set('content.headers.do_not_track', None)
@@ -47,5 +47,6 @@ c.fonts.web.family.fixed = 'FiraCode Nerd Font'
 config.set('window.transparent', True)
 
 config.set('colors.webpage.preferred_color_scheme', 'dark')
+config.source('qutewal.py')
 
 # TODO: Set up fileselect configuration options

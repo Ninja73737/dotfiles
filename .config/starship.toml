@@ -55,6 +55,8 @@ $status\
 $shell\
 $character"""
 
+add_newline = false
+
 [username]
 show_always = true
 format = "[$user]($style) "

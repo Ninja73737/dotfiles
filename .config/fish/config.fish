@@ -55,7 +55,6 @@ abbr zth "zathura --fork"
 alias zth "zathura --fork"
 alias R "R --quiet --no-save"
 alias python "python -q"
-alias python2 "python2 -q"
 alias python3 "python3 -q"
 
 if test -d $HOME/.termux
@@ -135,9 +134,9 @@ if status --is-interactive
         source ~/.cache/wal/colors.fish
     end
 
-    if which neofetch &> /dev/null
-        neofetch
-    end
+    # if which neofetch &> /dev/null
+    #     neofetch
+    # end
 
     if which starship &> /dev/null
         starship init fish | source

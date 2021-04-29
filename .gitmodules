@@ -4,7 +4,7 @@
 [submodule ".config/qutebrowser/qutewal"]
 	path = .config/qutebrowser/qutewal
 	url = https://gitlab.com/jjzmajic/qutewal
-[submodule ".scripts/qutebrowser-profile"]
+[submodule ".scripts/qutebrowser-profile-repo"]
 	path = .scripts/qutebrowser-profile-repo
 	url = https://github.com/jtyers/qutebrowser-profile
 [submodule ".scripts/lf-exa-icons"]
