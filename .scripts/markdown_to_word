@@ -1,9 +1,0 @@
-#!/bin/bash
-
-basename=$(basename "$1" .md)
-
-output="${basename}.docx"
-
-echo $output
-
-pandoc -o "$output" -f markdown -t docx "$1"

@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-ps aux | grep "python3 /home/mtoohey/.scripts/yoda" | awk '{print $2}' | xargs kill -SIGTERM

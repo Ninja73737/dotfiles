@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-paru -Sy &> /dev/null
-echo $(( $(paru -Qu | wc -l) - $(grep 'IgnorePkg *=' /etc/pacman.conf | awk -F ',' '{ print NF }') ))
