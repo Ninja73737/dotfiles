@@ -1,5 +1,14 @@
 {
   "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "html",
+    "javascript",
+    "markdown",
+    "python",
+    "svelte",
+    "typescript"
+  ],
   "cSpell.language": "en-GB",
   "cSpell.ignoreRegExpList": [
     "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",
@@ -18,6 +27,7 @@
     "pandoc",
     "php",
     "plaintext",
+    "python",
     "rmd",
     "tex",
     "vimwiki",
@@ -29,11 +39,11 @@
     "L'Hôpital's",
     "Lemieux",
     "Maclaurin",
-    "mochi",
     "Toohey",
     "analyzed",
     "analyzes",
     "analyzing",
+    "apophenia",
     "centered",
     "collateralized",
     "confounder",
@@ -47,8 +57,10 @@
     "furloughed",
     "incongruent",
     "invertibility",
+    "mochi",
     "popsicle",
     "supremum",
+    "telos",
     "triangularizable",
     "voluntariness"
   ],
@@ -76,6 +88,7 @@
     "MD005": false,
     "MD013": false,
     "MD022": false,
+    "MD024": false,
     "MD026": false,
     "MD028": false,
     "MD029": false,
@@ -84,13 +97,7 @@
     "MD033": false,
     "MD036": false
   },
-  "git.addedSign.hlGroup": "DiffAdd",
-  "git.removedSign.hlGroup": "DiffDelete",
-  "git.changedSign.hlGroup": "DiffChange",
-  "git.changeRemovedSign.hlGroup": "DiffChange",
-  "git.topRemovedSign.hlGroup": "DiffDelete",
-  "git.conflict.incoming.hlGroup": "WarningMsg",
-  "git.conflict.current.hlGroup": "Error",
+  "git.enableGutters": false,
   "languageserver": {
     "ccls": {
       "command": "ccls",

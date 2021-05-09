@@ -1,9 +1,9 @@
 format = """
 $username\
 $hostname\
-$shlvl\
 $kubernetes\
 $directory\
+$shlvl\
 $git_branch\
 $git_commit\
 $git_state\
@@ -72,7 +72,6 @@ style = "bold green"
 format = "on [$hostname]($style) "
 
 [character]
-# disabled = true
 success_symbol = "[>](green)"
 error_symbol = "[>](green)"
 vicmd_symbol = "[<](blue)"
@@ -81,7 +80,7 @@ vicmd_symbol = "[<](blue)"
 symbol = ""
 
 [git_commit]
-format = "at [$hash]($style) [$tag]($style)"
+format = "at [$hash]($style) [$tag]($style) "
 
 [git_status]
 format = "(with [$all_status$ahead_behind]($style) )"
@@ -95,6 +94,10 @@ modified = "M"
 staged = "A"
 renamed = "R"
 deleted = "X"
+
+[shlvl]
+format = "depth [$shlvl]($style) "
+disabled = false
 
 # Nerd Fonts Symbols
 

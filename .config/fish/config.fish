@@ -1,12 +1,35 @@
+# startx
+
+if test -z "$DISPLAY"
+    if test -n "$SSH_CONNECTION" -a ! -n "$TMUX"
+        exec tmux
+    else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
+        exec startx
+    end
+end
+
 # Paths
 
 if test (uname) = "Darwin"
     set -g fish_user_paths "/usr/local/opt/arm-gcc-bin@8/bin" $fish_user_paths
 end
-set -g fish_user_paths "$HOME/.scripts/" $fish_user_paths
+set -g fish_user_paths "$HOME/.scripts" $fish_user_paths
 set -g fish_user_paths "$HOME/.local/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
+set -g fish_user_paths "$HOME/.npm-global/" $fish_user_paths
+
+# TODO: Remove this temporary export
+set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
+
+abbr tm "taskmatter"
+alias tm "taskmatter"
+
+set -x GOPATH "$HOME/.go"
+
+if test -d $HOME/.go
+    set -g fish_user_paths "$HOME/.go/bin" $fish_user_paths
+end
 
 if test -d /opt/android-sdk/cmdline-tools/latest/bin
     set -g fish_user_paths "/opt/android-sdk/cmdline-tools/latest/bin" $fish_user_paths
@@ -17,19 +40,19 @@ end
 abbr dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
 abbr dcd "docker-compose down --remove-orphans"
 
-abbr lg "lazygit"
-alias lg "lazygit"
-
 abbr vf "nvim -c 'G | only'"
 alias vf "nvim -c 'G | only'"
+
+abbr pcp "rsync -r --info=progress2"
+alias pcp "rsync -r --info=progress2"
 
 if string match -rq ".*MANJARO-ARM.*" (uname -r)
     abbr selfhosting "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
     abbr lsh "lazygit --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
 end
 
-abbr dotfiles "git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
-abbr ldf "lazygit --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
+abbr dot "git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
+alias dot "git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
 
 if which trash &> /dev/null
     abbr rm "trash"
@@ -87,8 +110,8 @@ set fish_cursor_replace_one underscore
 
 # Environment Variables
 
-export VISUAL=nvim
-export EDITOR=nvim
+export VISUAL=(which nvim)
+export EDITOR=(which nvim)
 
 if status --is-interactive
 
@@ -97,8 +120,6 @@ if status --is-interactive
     # LF Icons
 
     source $HOME/.config/lf/icons
-
-    # Clear screen if running inside ranger or over ssh
 
     if test -n "$SSH_CONNECTION"
         set -U fish_color_autosuggestion      brblack
@@ -127,18 +148,23 @@ if status --is-interactive
         set -U fish_pager_color_description   yellow
         set -U fish_pager_color_prefix        'white' '--bold' '--underline'
         set -U fish_pager_color_progress      'brwhite' '--background=cyan'
-
-        clear
     else
         cat ~/.cache/wal/sequences
         source ~/.cache/wal/colors.fish
     end
 
-    # if which neofetch &> /dev/null
-    #     neofetch
-    # end
-
     if which starship &> /dev/null
         starship init fish | source
     end
+
+    # Single Command Prompt
+
+    function prompt
+        while read cmd -S -c "$argv " -p fish_prompt -R fish_right_prompt
+            eval $cmd
+        end
+    end
+
+    abbr pg "prompt git"
+    alias pg "prompt git"
 end

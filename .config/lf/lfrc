@@ -20,13 +20,18 @@ map dd cut
 map go %echo "\"$fx\"" | string join '" "' | xargs dragon-drag-and-drop -a -x
 map r reload
 map R rename
-map S $fish
 cmd touch &{{
     set IFS " "
     touch "$argv"
     lf -remote "send $id select \"$argv\""
 }}
+cmd edit ${{
+    set IFS " "
+    $EDITOR "$argv"
+    lf -remote "send $id select \"$argv\""
+}}
 map t push :touch<space>
+map E push :edit<space>
 cmd mkdir &{{
     set IFS " "
     mkdir -p -- "$argv"
@@ -34,4 +39,3 @@ cmd mkdir &{{
     echo yeet
 }}
 map m push :mkdir<space>
-map gi $lazygit
