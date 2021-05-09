@@ -1,3 +1,5 @@
+from os.path import expanduser, join
+
 # Misc
 config.load_autoconfig(False)
 config.set('statusbar.show', 'in-mode')
@@ -54,6 +56,6 @@ c.fonts.web.family.fixed = 'FiraCode Nerd Font'
 config.set('window.transparent', True)
 
 config.set('colors.webpage.preferred_color_scheme', 'dark')
-config.source('qutewal.py')
+config.source(join(expanduser('~'), '.config/qutebrowser/qutewal/qutewal.py'))
 
 # TODO: Set up fileselect configuration options

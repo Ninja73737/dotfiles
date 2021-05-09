@@ -16,7 +16,7 @@ xset s 1800
 # BSPWM Settings
 
 case $HOSTNAME in
-  horizon-arch)
+  horizon)
     bspc monitor HDMI-0 -d 1 2 3 4 5
     bspc monitor DVI-D-0 -d 6 7 8 9
     bspc monitor HDMI-0 -s DVI-D-0
@@ -38,8 +38,9 @@ bspc config pointer_action1         move
 bspc config pointer_action2         resize_side
 
 bspc config split_ratio             0.5
-bspc config borderless_monocle      false
-bspc config gapless_monocle         false
+bspc config borderless_monocle      true
+bspc config gapless_monocle         true
+bspc config single_monocle          true
 
 # BSPWM Rules
 
@@ -61,7 +62,7 @@ pgrep picom || picom --experimental-backends &
 pgrep flashfocus || flashfocus &
 pgrep dunst || $HOME/.config/dunst/launch.sh
 pgrep blueberry-tray || blueberry-tray
-prep agent || /usr/lib/geoclue-2.0/demos/agent &
+pgrep agent || /usr/lib/geoclue-2.0/demos/agent &
 pgrep redshift || redshift &
 pgrep mailspring || mailspring --background &
 which discord && (pgrep Discord || discord &) || which discord-canary && (pgrep DiscordCanary || discord-canary &)
