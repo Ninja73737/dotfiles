@@ -9,7 +9,7 @@ local({
 options(download.file.method = "libcurl")
 
 # Set prompt
-options(prompt = ">> ", continue = ".. ")
+options(prompt = "r > ", continue = "    ")
 
 # Return previous value as fraction
 last_frac <- function() {

@@ -111,6 +111,7 @@ autocmd BufNewFile,BufRead *.Rmd set filetype=rmd
 let R_args = ['--quiet']
 let R_assign = 0
 let R_openpdf = 0
+let R_auto_start = 1
 
 Plug 'mbbill/undotree'
 
@@ -226,8 +227,10 @@ else
   colorscheme nord
 endif
 
-autocmd TermOpen * startinsert
+autocmd BufWinEnter,WinEnter term://* startinsert
+autocmd TermOpen * set nonumber norelativenumber
 tnoremap <ESC> <C-\><C-n>
+tnoremap <C-w> <C-\><C-n><C-w>
 
 function! PandocPreview ()
   let output_path = expand('%:p:r') . '.pdf'
