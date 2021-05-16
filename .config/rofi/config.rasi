@@ -1,5 +1,5 @@
 configuration {
-  font:                  "SF Pro Display 14";
+  font:                  "JetBrainsMono Nerd Font 14";
   show-icons:            true;
   drun-display-format:   "{icon}{name}";
   display-run:           ">";
@@ -7,7 +7,7 @@ configuration {
   display-window:        "􀇴";
   modi:                  "window,run,drun";
   lines:                 7;
-  width:                 15;
+  width:                 30;
   line-padding:          10;
   bw:                    0;
   padding:               0;

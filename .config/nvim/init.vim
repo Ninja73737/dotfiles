@@ -3,7 +3,7 @@ set shortmess+=c
 if empty($SSH_CONNECTION)
   set pumblend=20
 endif
-set guifont=FiraCode\ Nerd\ Font:h14
+set guifont=JetBrainsMono\ Nerd\ Font:h14
 set pumheight=15
 set number relativenumber
 set mouse=a
@@ -33,12 +33,10 @@ call plug#begin()
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-let g:coc_filetype_map = { 'vimwiki.markdown': 'markdown' }
 " For coc-r-lsp: install.packages("languageserver")
 let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-dictionary", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-go", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-word", "coc-vimlsp",  "coc-xml", "coc-yaml"]
-autocmd FileType tex let b:coc_pairs_disabled = ['<']
-autocmd FileType pandoc let b:coc_pairs_disabled = ['<']
-autocmd FileType markdown,rmd,vimwiki,tex let b:coc_pairs = [["$", "$"]]
+autocmd FileType markdown,rmd,tex let b:coc_pairs_disabled = ['<']
+autocmd FileType markdown,rmd,tex let b:coc_pairs = [["$", "$"]]
 noremap cf :CocFix<CR>
 nmap cF <Plug>(coc-codeaction)
 noremap cm :call CocAction('format')<CR>
@@ -55,7 +53,7 @@ Plug 'leafOfTree/vim-svelte-plugin'
 
 let g:vim_svelte_plugin_use_typescript = 1
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install && rm ~/.config/nvim/plugged/markdown-preview.nvim/app/_static/favicon.ico'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 
 let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
 let g:mkdp_page_title = '${name}.md'
@@ -101,9 +99,10 @@ let g:rainbow_conf = {
       \ }
 
 Plug 'vim-pandoc/vim-pandoc', { 'for': 'tex' }
-Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'tex' }
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
-let g:pandoc#syntax#conceal#blacklist = ["atx", "codeblock_start", "codeblock_delim"]
+autocmd FileType markdown set syntax=markdown.pandoc
+let g:pandoc#syntax#conceal#blacklist = ["atx", "codeblock_start", "codeblock_delim", "quotes"]
 let g:pandoc#modules#disabled = ["folding", "spell"]
 
 Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
@@ -142,16 +141,6 @@ let g:tq_enabled_backends=["mthesaur_txt"]
 
 Plug 'chaoren/vim-wordmotion'
 Plug 'vim-scripts/loremipsum'
-Plug 'vimwiki/vimwiki'
-
-let g:vimwiki_conceallevel = 0
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
-let g:vimwiki_key_mappings = { 'all_maps': 0 }
-" let g:vimwiki_filetypes = ['markdown']
-" autocmd FileType vimwiki.markdown setlocal commentstring=<!--%s-->
-autocmd FileType vimwiki set filetype=markdown
-
 Plug 'itchyny/lightline.vim'
 
 function! LineInfo()
@@ -169,7 +158,8 @@ let g:lightline = {
       \ 'subseparator' : { 'left': '', 'right': '' },
       \ 'component_function': { 'cocstatus': 'coc#status', 'wc': 'WordCount', 'custom_lineinfo': 'LineInfo'}
       \ }
-autocmd FileType vimwiki,markdown,pandoc,rmd if (index(g:lightline['active']['right'][1], 'wc') == -1)|call add(g:lightline['active']['right'][1], 'wc')|endif
+autocmd FileType markdown,rmd,tex if (index(g:lightline['active']['right'][1], 'wc') == -1)|call add(g:lightline['active']['right'][1], 'wc')|endif
+
 if empty($SSH_CONNECTION)
   let g:lightline['colorscheme'] = 'pywal'
 else
@@ -191,15 +181,17 @@ let g:vim_refocus_kill_flashfocus = 1
 Plug 'kana/vim-skeleton'
 Plug 'reedes/vim-pencil'
 
+let g:pencil#conceallevel = 2
 let g:pencil#wrapModeDefault = 'soft'
-autocmd FileType markdown,rmd,vimwiki,tex call pencil#init()
+let g:pencil#cursorwrap = 0
+autocmd FileType markdown,rmd,tex call pencil#init()
 
-Plug 'ActivityWatch/aw-watcher-vim'
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'thaerkh/vim-indentguides'
+" Plug 'thaerkh/vim-indentguides'
 Plug 'dkarter/bullets.vim'
 
 let g:bullets_outline_levels = ['ABC', 'num', 'std-']
+let g:bullets_renumber_on_change = 0
 nmap <Tab> >>
 nmap <S-Tab> <<
 imap <Tab> <C-t>
@@ -215,7 +207,7 @@ Plug 'mg979/vim-visual-multi'
 Plug 'airblade/vim-gitgutter'
 Plug 'mtoohey31/tgc_wal.vim'
 Plug 'norcalli/nvim-colorizer.lua'
-" Plug 'itsvinayak/image.vim'
+Plug 'itsvinayak/image.vim'
 
 call plug#end()
 
@@ -235,6 +227,7 @@ else
 endif
 
 autocmd TermOpen * startinsert
+tnoremap <ESC> <C-\><C-n>
 
 function! PandocPreview ()
   let output_path = expand('%:p:r') . '.pdf'
@@ -244,15 +237,6 @@ endfunction
 function! ZathuraCurrent ()
   call system('zth "' . expand('%:p:r') . '.pdf"')
 endfunction
-
-let g:vim_markdown_conceal_code_blocks = 0
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_math = 1
-let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_no_default_key_mappings = 1
-let g:vim_markdown_strikethrough = 1
-set conceallevel=2
 
 noremap Q :quit!<CR>
 noremap W :write<CR>
@@ -300,3 +284,6 @@ function! WordCount()
   " endif
 endfunction
 
+noremap cH :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>

@@ -2,10 +2,12 @@
   "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
+    "go",
     "html",
     "javascript",
     "markdown",
     "python",
+    "rust",
     "svelte",
     "typescript"
   ],
@@ -44,6 +46,7 @@
     "analyzes",
     "analyzing",
     "apophenia",
+    "astroglia",
     "centered",
     "collateralized",
     "confounder",
@@ -52,12 +55,15 @@
     "disincentivized",
     "docstrings",
     "doctest",
+    "dyscalculia",
     "explainability",
     "extremum",
     "furloughed",
+    "glia",
     "incongruent",
     "invertibility",
     "mochi",
+    "phineas",
     "popsicle",
     "supremum",
     "telos",
@@ -98,22 +104,6 @@
     "MD036": false
   },
   "git.enableGutters": false,
-  "languageserver": {
-    "ccls": {
-      "command": "ccls",
-      "args": ["--log-file=/tmp/ccls.log", "-v=1"],
-      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
-      "rootPatterns": [".ccls", "compile_commands.json"],
-      "initializationOptions": {
-        "cache": {
-          "directory": "/tmp/ccls"
-        },
-        "client": {
-          "snippetSupport": true
-        }
-      }
-    }
-  },
   "latex.build.onSave": true,
   "latex.forwardSearch.executable": "/usr/bin/zathura",
   "latex.forwardSearch.args": ["--synctex-forward", "%l:1:%f", "%p"],

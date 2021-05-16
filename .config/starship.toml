@@ -55,8 +55,6 @@ $status\
 $shell\
 $character"""
 
-add_newline = false
-
 [username]
 show_always = true
 format = "[$user]($style) "
@@ -95,9 +93,21 @@ staged = "A"
 renamed = "R"
 deleted = "X"
 
-[shlvl]
-format = "depth [$shlvl]($style) "
+[shell]
 disabled = false
+
+[shlvl]
+format = "at depth [$shlvl]($style) "
+disabled = false
+
+[custom.pacman]
+description = "Number of available updates"
+command = """
+nohup fish -c 'test (math (stat /tmp/numupdates --format "%Y" 2>/dev/null) + 3600) -lt (date +%s) && checkupdates | wc -l > /tmp/numupdates' & disown
+cat /tmp/numupdates
+"""
+when = "test $SSH_CONNECTION && which checkupdates && if test (cat /tmp/numupdates) -lt 25; exit 1; end"
+format = "with [$output]($style) updates "
 
 # Nerd Fonts Symbols
 

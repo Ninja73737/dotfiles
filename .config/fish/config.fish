@@ -18,6 +18,7 @@ set -g fish_user_paths "$HOME/.local/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.npm-global/" $fish_user_paths
+set -g fish_user_paths "$HOME/.pnpm-global/bin/" $fish_user_paths
 
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
@@ -77,6 +78,14 @@ end
 abbr zth "zathura --fork"
 alias zth "zathura --fork"
 alias R "R --quiet --no-save"
+
+# function python2 --wraps python2
+#     if test -n $argv
+#         eval (which python2)" -ic ''"
+#     else
+#         eval (which python2) $argv
+#     end
+# end
 alias python "python -q"
 alias python3 "python3 -q"
 

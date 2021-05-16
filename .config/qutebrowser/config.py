@@ -1,4 +1,8 @@
 from os.path import expanduser, join
+import json
+
+with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
+    pywal = json.load(file)
 
 # Misc
 config.load_autoconfig(False)
@@ -48,14 +52,22 @@ config.bind('<Return>', 'command-accept;; set statusbar.show in-mode',
 
 # Theming
 c.fonts.default_size = '12pt'
-c.fonts.default_family = 'FiraCode Nerd Font'
+c.fonts.default_family = 'JetBrainsMono Nerd Font'
 c.fonts.web.family.standard = 'SF Pro Text'
 c.fonts.web.family.sans_serif = 'SF Pro Text'
 c.fonts.web.family.serif = 'New York'
-c.fonts.web.family.fixed = 'FiraCode Nerd Font'
+c.fonts.web.family.fixed = 'JetBrainsMono Nerd Font'
 config.set('window.transparent', True)
 
 config.set('colors.webpage.preferred_color_scheme', 'dark')
 config.source(join(expanduser('~'), '.config/qutebrowser/qutewal/qutewal.py'))
+
+config.set('url.searchengines',
+           {'DEFAULT': 'https://duckduckgo.com/?q={}&kt=SF+Pro+Text&kj=' +
+            pywal['colors']['color2'] + '&k7=' +
+            pywal['special']['background'] + '&kx=' +
+            pywal['colors']['color1'] + '&k8' +
+            pywal['special']['foreground'] + '&k9' +
+            pywal['colors']['color2'] + '&kaa' + pywal['colors']['color2'] + '&kae=d'})
 
 # TODO: Set up fileselect configuration options

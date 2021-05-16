@@ -39,3 +39,4 @@ cmd mkdir &{{
     echo yeet
 }}
 map m push :mkdir<space>
+map gc cd ~/Courses

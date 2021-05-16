@@ -23,8 +23,8 @@ alt + shift + s
 alt + shift + o
     $HOME/.scripts/switch_output_linux
 
-alt + shift + {Down,Up}
-    pulsemixer --change-volume {-,+}2
+alt + shift + {_, super + } {Down,Up}
+    pulsemixer { ,--id (pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g")} --change-volume {-,+}2
 
 alt + shift + {Left,Right,space}
     playerctl --player=spotify {previous,next,play-pause}
@@ -34,9 +34,6 @@ alt + shift + {Left,Right,space}
 
 {XF86MonBrightnessDown,XF86MonBrightnessUp}
     xbacklight -inc {-,+}10
-
-alt + shift + a
-    bspc rule -a scrcpy -o state=floating && scrcpy -w
 
 alt + shift + f
     flameshot gui
@@ -64,11 +61,14 @@ alt + shift + {_,super + }{1-9,0}
 alt + shift + {p,u,g,n}
     qutebrowser-profile --new {personal,university,gaming,mod}
 
+alt + shift + super + {p,u,g,n}
+    brave --profile-directory="{Default,Profile 2,Profile 3,Profile 4}"
+
 alt + shift + {q,r}
     bspc {quit,wm -r}
 
 alt + {w,q}
-    if test (xprop -id (xprop -root _NET_ACTIVE_WINDOW | sed 's/^.* //g') WM_CLASS | sed 's/^.* //g') = "\"scrcpy\""; set scrcpy 1; end; bspc node -{c,k}; if test -n "$scrcpy"; adb shell input keyevent 26; end
+    bspc node -{c,k}
 
 alt + backslash
     bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t tiled

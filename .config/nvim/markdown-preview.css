@@ -77,29 +77,31 @@ header#page-header {
 .markdown-body h6:hover .anchor {
   visibility: visible;
 }
+.markdown-body h1::before,
+.markdown-body h2::before,
+.markdown-body h3::before,
+.markdown-body h4::before,
+.markdown-body h5::before,
+.markdown-body h6::before {
+  font-family: monospace;
+}
 .markdown-body h1::before {
   content: "# ";
-  font-family: FiraCode Nerd Font;
 }
 .markdown-body h2::before {
   content: "## ";
-  font-family: FiraCode Nerd Font;
 }
 .markdown-body h3::before {
   content: "### ";
-  font-family: FiraCode Nerd Font;
 }
 .markdown-body h4::before {
   content: "#### ";
-  font-family: FiraCode Nerd Font;
 }
 .markdown-body h5::before {
   content: "##### ";
-  font-family: FiraCode Nerd Font;
 }
 .markdown-body h6::before {
   content: "###### ";
-  font-family: FiraCode Nerd Font;
 }
 .markdown-body p,
 .markdown-body blockquote,
@@ -245,8 +247,7 @@ li::marker {
   content: normal;
 }
 .markdown-body code {
-  /* font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace; */
-  font-family: FiraCode Nerd Font;
+  font-family: monospace;
   padding: 0;
   padding-top: 0.2em;
   padding-bottom: 0.2em;
@@ -257,8 +258,6 @@ li::marker {
 }
 .markdown-body code:before,
 .markdown-body code:after {
-  /* letter-spacing: -0.2em; */
-  /* content: "\00a0"; */
   content: "`";
 }
 .markdown-body a {

@@ -1,4 +1,4 @@
 set guioptions ""
 set adjust-open "width"
-set font "FiraCode Nerd Font 12"
+set font "JetBrainsMono Nerd Font 12"
 include "../../.cache/wal/zathuracolors"
