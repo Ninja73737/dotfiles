@@ -12,7 +12,7 @@ case $HOSTNAME in
   horizon)
     polybar -c $HOME/.config/polybar/config.ini ultrawide &
     ;;
-  arch-air)
+  air)
     polybar -c $HOME/.config/polybar/config.ini laptop &
     ;;
 esac

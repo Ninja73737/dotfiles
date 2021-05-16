@@ -21,7 +21,7 @@ case $HOSTNAME in
     bspc monitor DVI-D-0 -d 6 7 8 9
     bspc monitor HDMI-0 -s DVI-D-0
     ;;
-  arch-air)
+  air)
     bspc monitor eDP1 -d 1 2 3 4 5 6 7 8 9 0
     xmodmap $HOME/.config/Xmodmap/laptop
     ;;
