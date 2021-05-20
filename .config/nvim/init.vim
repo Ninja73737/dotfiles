@@ -39,11 +39,11 @@ autocmd FileType markdown,rmd,tex let b:coc_pairs_disabled = ['<']
 autocmd FileType markdown,rmd,tex let b:coc_pairs = [["$", "$"]]
 noremap cf :CocFix<CR>
 nmap cF <Plug>(coc-codeaction)
-noremap cm :call CocAction('format')<CR>
-noremap cn :call CocAction('diagnosticNext')<CR>
-noremap cN :call CocAction('diagnosticPrevious')<CR>
+noremap cm <CMD>call CocAction('format')<CR>
+noremap cn <CMD>call CocAction('diagnosticNext')<CR>
+noremap cN <CMD>call CocAction('diagnosticPrevious')<CR>
 noremap cpl :CocCommand latex.Build<CR>
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 Plug 'sheerun/vim-polyglot'
 
@@ -205,10 +205,22 @@ let g:goyo_width = "85%"
 noremap cg :Goyo<BAR>Limelight!!<CR>
 
 Plug 'mg979/vim-visual-multi'
+
+let g:VM_maps = {}
+let g:VM_maps["Find Under"] = "<C-m>"
+let g:VM_maps["Find Subword Under"] = "<C-m>"
+
 Plug 'airblade/vim-gitgutter'
 Plug 'mtoohey31/tgc_wal.vim'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'itsvinayak/image.vim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+noremap cr <CMD>Telescope live_grep<CR>
+
+Plug 'mtoohey31/chafa.vim'
 
 call plug#end()
 

@@ -1,33 +1,34 @@
 #!/usr/bin/env bash
 
-# Programs
-
-alt + Return
+super + Return
     alacritty
 
-alt + slash
+super + slash
     alacritty -e fish -C 'lf'
 
-alt + space
+super + space
     rofi -show drun
 
-alt + Tab
+super + Tab
     rofi -show window
 
-alt + shift + c
+super + c
     bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 
-alt + shift + s
+super + s
     pkill -USR1 -x sxhkd
 
-alt + shift + o
+super + o
     $HOME/.scripts/switch_output_linux
 
-alt + shift + {_, super + } {Down,Up}
-    pulsemixer { ,--id (pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g")} --change-volume {-,+}2
+super + {Down,Up}
+    pulsemixer --change-volume {-,+}2
 
-alt + shift + {Left,Right,space}
+super + shift + {Left,Right,space}
     playerctl --player=spotify {previous,next,play-pause}
+
+super + shift + {Down,Up}
+    pulsemixer --id (pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g") --change-volume {-,+}2
 
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
     pulsemixer --change-volume {-,+}2
@@ -35,43 +36,47 @@ alt + shift + {Left,Right,space}
 {XF86MonBrightnessDown,XF86MonBrightnessUp}
     xbacklight -inc {-,+}10
 
-alt + shift + f
+super + f
     flameshot gui
 
-alt + shift + w
+super + y
     $HOME/.scripts/random_bg -u
 
-alt + shift + d
+super + d
     sleep 1; xset dpms force off
 
-alt + shift + i
+super + i
     $HOME/.scripts/linein_listen_linux
 
-# BSPWM
+super + m
+    bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
 
-alt + shift + b
+super + b
     bspc node @/ --balance
 
-alt + shift + {_,super + }{h,j,k,l}
+super + {_,shift + }{h,j,k,l}
     bash -c "COMMAND="{f,s}" && DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -\$COMMAND \$DIR || bspc monitor -\$COMMAND \$DIR"
 
-alt + shift + {_,super + }{1-9,0}
-    bspc {desktop -f,node -d} '^{1-9,10}' --follow
+super + {1-9,0}
+    bspc desktop -f '^{1-9,10}'
 
-alt + shift + {p,u,g,n}
+super + shift + {1-9,0}
+    bspc node -d '^{1-9,10}' --follow
+
+super + {p,u,g,n}
     qutebrowser-profile --new {personal,university,gaming,mod}
 
-alt + shift + super + {p,u,g,n}
+super + shift + {p,u,g,n}
     brave --profile-directory="{Default,Profile 2,Profile 3,Profile 4}"
 
-alt + shift + {q,r}
+super + shift + {q,r}
     bspc {quit,wm -r}
 
-alt + {w,q}
+super + {w,q}
     bspc node -{c,k}
 
-alt + backslash
+super + backslash
     bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t tiled
 
-alt + shift + backslash
+super + shift + backslash
     bspc node focused.tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled

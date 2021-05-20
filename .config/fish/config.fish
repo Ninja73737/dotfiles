@@ -4,6 +4,7 @@ if test -z "$DISPLAY"
     if test -n "$SSH_CONNECTION" -a ! -n "$TMUX"
         exec tmux
     else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
+        export _JAVA_AWT_WM_NONREPARENTING=1
         exec startx
     end
 end
@@ -101,6 +102,17 @@ function sudo
     end
 end
 
+# Single Command Prompt
+
+function prompt
+    while read cmd -S -c "$argv " -p fish_prompt -R fish_right_prompt
+        eval $cmd
+    end
+end
+
+abbr pg "prompt git"
+alias pg "prompt git"
+
 # Fish Settings
 
 fish_vi_key_bindings
@@ -157,15 +169,4 @@ if status --is-interactive
     if which starship &> /dev/null
         starship init fish | source
     end
-
-    # Single Command Prompt
-
-    function prompt
-        while read cmd -S -c "$argv " -p fish_prompt -R fish_right_prompt
-            eval $cmd
-        end
-    end
-
-    abbr pg "prompt git"
-    alias pg "prompt git"
 end
