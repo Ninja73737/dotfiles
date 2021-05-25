@@ -48,6 +48,7 @@ config.bind('<Escape>', 'mode-enter normal;; set statusbar.show in-mode',
             mode='command')
 config.bind('<Return>', 'command-accept;; set statusbar.show in-mode',
             mode='command')
+config.bind('<ESC>', 'fake-key <ESC>')
 
 
 # Theming

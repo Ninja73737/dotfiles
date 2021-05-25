@@ -1,15 +1,13 @@
-# startx
-
 if test -z "$DISPLAY"
     if test -n "$SSH_CONNECTION" -a ! -n "$TMUX"
-        exec tmux
+        if status --is-interactive
+            exec tmux
+        end
     else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
         export _JAVA_AWT_WM_NONREPARENTING=1
         exec startx
     end
 end
-
-# Paths
 
 if test (uname) = "Darwin"
     set -g fish_user_paths "/usr/local/opt/arm-gcc-bin@8/bin" $fish_user_paths
@@ -36,8 +34,6 @@ end
 if test -d /opt/android-sdk/cmdline-tools/latest/bin
     set -g fish_user_paths "/opt/android-sdk/cmdline-tools/latest/bin" $fish_user_paths
 end
-
-# Aliases and Functions
 
 abbr dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
 abbr dcd "docker-compose down --remove-orphans"
@@ -102,8 +98,6 @@ function sudo
     end
 end
 
-# Single Command Prompt
-
 function prompt
     while read cmd -S -c "$argv " -p fish_prompt -R fish_right_prompt
         eval $cmd
@@ -113,25 +107,16 @@ end
 abbr pg "prompt git"
 alias pg "prompt git"
 
-# Fish Settings
-
 fish_vi_key_bindings
 
 set fish_cursor_default block
 set fish_cursor_insert line
 set fish_cursor_replace_one underscore
 
-# Environment Variables
-
 export VISUAL=(which nvim)
 export EDITOR=(which nvim)
 
 if status --is-interactive
-
-    # Pretty Stuff
-
-    # LF Icons
-
     source $HOME/.config/lf/icons
 
     if test -n "$SSH_CONNECTION"

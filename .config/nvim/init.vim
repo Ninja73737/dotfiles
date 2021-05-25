@@ -42,6 +42,8 @@ nmap cF <Plug>(coc-codeaction)
 noremap cm <CMD>call CocAction('format')<CR>
 noremap cn <CMD>call CocAction('diagnosticNext')<CR>
 noremap cN <CMD>call CocAction('diagnosticPrevious')<CR>
+noremap cR <CMD>call CocActionAsync('rename')<CR>
+noremap gD <CMD>call CocActionAsync('jumpDefinition')<CR>
 noremap cpl :CocCommand latex.Build<CR>
 inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 

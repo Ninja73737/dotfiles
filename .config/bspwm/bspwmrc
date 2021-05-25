@@ -50,8 +50,6 @@ bspc rule -a Gimp state=floating follow=on
 bspc rule -a Zathura state=tiled
 bspc rule -a Bitwarden state=floating
 
-bspc config external_rules_command $HOME/.config/bspwm/external_rules
-
 # Autostart Services
 
 $HOME/.config/polybar/launch.sh
