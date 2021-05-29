@@ -7,11 +7,11 @@ clear mod4
 ! Originally Control_L
 keycode 37 = Caps_Lock NoSymbol Caps_Lock
 ! Originally Alt_L
-keycode 64 = Super_L NoSymbol Super_L
+keycode 64 = Alt_L Meta_L Alt_L Meta_L
 ! Originally Caps_Lock
-keycode 66 = Control_L NoSymbol Control_L
+keycode 66 = Super_L NoSymbol Super_L
 ! Originally Super_L
-keycode 133 = Alt_L Meta_L Alt_L Meta_L
+keycode 133 = Control_L NoSymbol Control_L
 
 ! Set modifiers
 add control = Control_L
