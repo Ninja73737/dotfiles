@@ -190,7 +190,9 @@ let g:pencil#cursorwrap = 0
 autocmd FileType markdown,rmd,tex call pencil#init()
 
 Plug 'dhruvasagar/vim-table-mode'
-" Plug 'thaerkh/vim-indentguides'
+
+noremap ct <CMD>TableModeToggle<CR>
+
 Plug 'dkarter/bullets.vim'
 
 let g:bullets_outline_levels = ['ABC', 'num', 'std-']
@@ -255,9 +257,9 @@ function! ZathuraCurrent ()
   call system('zth "' . expand('%:p:r') . '.pdf"')
 endfunction
 
-noremap Q :quit!<CR>
-noremap W :write<CR>
-noremap Z :wq<CR>
+noremap Q <CMD>quit!<CR>
+noremap W <CMD>write<CR>
+noremap Z <CMD>wq<CR>
 noremap E :edit 
 
 noremap! <C-BS> <C-w>

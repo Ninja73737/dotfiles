@@ -1,7 +1,7 @@
 geometry:
   - a4paper
   - margin=2cm
-mainfont: "SF Pro Text"
+mainfont: "IBM Plex Sans Text"
 monofont: "JetBrainsMono Nerd Font"
 indent: true
 colorlinks: true
