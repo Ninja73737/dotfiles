@@ -27,7 +27,7 @@ alias tm "taskmatter"
 
 set -x GOPATH "$HOME/.go"
 
-if test -d $HOME/.go
+if test -d $HOME/.go/bin
     set -g fish_user_paths "$HOME/.go/bin" $fish_user_paths
 end
 
