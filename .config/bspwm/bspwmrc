@@ -9,10 +9,6 @@ xinput --set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "libinput
 # Set display DPMS blanking time
 xset s 1800
 
-# Set mouse sensitivity, has some issues but I forgot what the issues are...
-# sensitivity_factor=1.25
-# xinput set-prop "Corsair CORSAIR HARPOON RGB WIRELESS Gaming Dongle" "Coordinate Transformation Matrix" $sensitivity_factor 0 0 0 $sensitivity_factor 0 0 0 1
-
 # BSPWM Settings
 
 case $HOSTNAME in
