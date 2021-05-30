@@ -71,8 +71,26 @@ end
 
 abbr zth "zathura --fork"
 alias zth "zathura --fork"
+
 alias R "R --quiet --no-save"
-alias python "python -q"
+
+function python
+    # Intelligently determines which startup silencing method to use by testing paths of python instances
+    if test (which python2) -a (realpath (which python)) = (realpath (which python2))
+        python2 $argv
+    else if test (which python3) -a (realpath (which python)) = (realpath (which python3))
+        python3 $argv
+    else
+        eval (which python) $argv
+    end
+end
+function python2
+    if test -z "$argv"
+        eval (which python2) -i -c "''"
+    else
+        eval (which python2) $argv
+    end
+end
 alias python3 "python3 -q"
 
 if test -d $HOME/.termux
@@ -85,14 +103,6 @@ else if not string match -rq ".*ish.*" (uname -r)
     alias lsd "exa -al --icons --group-directories-first"
     alias lst "exa -aT -L 5 --icons --group-directories-first"
     alias lsta "exa -aT --icons --group-directories-first"
-end
-
-function sudo
-    if test "$argv" = !!
-        eval command sudo $history[1]
-    else
-        command sudo $argv
-    end
 end
 
 function prompt

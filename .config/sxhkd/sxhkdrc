@@ -15,7 +15,7 @@ super + Tab
 super + c
     bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 
-super + s
+super + shift + s
     pkill -USR1 -x sxhkd
 
 super + o
@@ -36,8 +36,14 @@ super + shift + {Down,Up}
 {XF86MonBrightnessDown,XF86MonBrightnessUp}
     xbacklight -inc {-,+}10
 
-super + f
+super + s
     flameshot gui
+
+super + f
+    bspc node focused.tiled -t floating || bspc node focused.floating -t tiled
+
+super + shift + f
+    bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t tiled
 
 super + y
     $HOME/.scripts/random_bg -u

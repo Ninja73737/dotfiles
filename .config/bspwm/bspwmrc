@@ -38,15 +38,11 @@ bspc config pointer_action1         move
 bspc config pointer_action2         resize_side
 
 bspc config split_ratio             0.5
-bspc config borderless_monocle      false
+bspc config borderless_monocle      true
 bspc config gapless_monocle         false
 bspc config single_monocle          true
 
-source $HOME/.cache/wal/colors.sh
-
-bspc config focused_border_color    $foreground
-bspc config active_border_color     $color1
-bspc config normal_border_color     $color1
+$HOME/.config/bspwm/colours
 
 # BSPWM Rules
 
@@ -62,14 +58,12 @@ $HOME/.config/polybar/launch.sh
 
 pgrep sxhkd || sxhkd &
 pgrep picom || picom --experimental-backends &
-pgrep flashfocus || flashfocus &
 pgrep dunst || $HOME/.config/dunst/launch.sh
 pgrep blueberry-tray || blueberry-tray
 pgrep agent || /usr/lib/geoclue-2.0/demos/agent &
 pgrep redshift || redshift &
 pgrep mailspring || mailspring --background &
-which discord && (pgrep Discord || discord &) || which discord-canary && (pgrep DiscordCanary || discord-canary &)
-pgrep spotify || spotify &
+which discord && (pgrep Discord || discord --start-minimized &) || which discord-canary && (pgrep DiscordCanary || discord-canary --start-minimized &)
 pgrep redshift || redshift &
 pgrep steam || steam -silent &
 

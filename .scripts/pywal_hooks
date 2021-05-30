@@ -2,7 +2,7 @@
 
 $HOME/.scripts/update_spicetify
 xrdb $HOME/.Xresources
-which dunst && pkill dunst; $HOME/.config/dunst/launch.sh
+which dunst && pkill dunst && $HOME/.config/dunst/launch.sh
 ps aux | grep -P -o "(?<=\/run\/user\/1000\/qutebrowser\/).*\$" | xargs -t -I '{}' qutebrowser-profile --new '{}' ':config-source'
 # To install, run `cargo install --git https://github.com/chmln/nvim-ctrl`
 nvim-ctrl 'source ~/.config/nvim/init.vim'

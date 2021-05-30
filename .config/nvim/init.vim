@@ -265,7 +265,7 @@ noremap E :edit
 noremap! <C-BS> <C-w>
 " Necessary for the backspace remap above for some reason...
 noremap! <C-h> <C-w>
-noremap ch :noh<CR>
+noremap ch <CMD>noh<CR>
 " TODO: Implement universal preview function
 call timer_start(0, 'PreviewMap')
 function! PreviewMap (timer)
