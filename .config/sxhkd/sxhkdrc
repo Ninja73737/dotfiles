@@ -60,14 +60,17 @@ super + m
 super + b
     bspc node @/ --balance
 
+super + shift + n
+    pkill kmonad || fish -c "pgrep kmonad || kmonad $HOME/.config/kmonad/macbook.kbd" &
+
 super + {_,shift + }{h,j,k,l}
     bash -c "COMMAND="{f,s}" && DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -\$COMMAND \$DIR || bspc monitor -\$COMMAND \$DIR"
 
 super + {1-9,0}
-    bspc desktop -f '^{1-9,10}'
+    bspc desktop -f '{1-9,10}'
 
 super + shift + {1-9,0}
-    bspc node -d '^{1-9,10}' --follow
+    bspc node -d '{1-9,10}' --follow
 
 super + {p,u,g,n}
     qutebrowser-profile --new {personal,university,gaming,mod}
