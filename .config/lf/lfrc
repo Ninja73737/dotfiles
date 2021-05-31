@@ -3,7 +3,7 @@ set smartcase on
 set shell fish
 set previewer pistol
 set dirfirst!
-set scrolloff 3
+set scrolloff 7
 
 cmd trash %{{
     set IFS " "

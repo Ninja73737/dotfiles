@@ -153,7 +153,9 @@ if status --is-interactive
     set -U fish_pager_color_prefix        'white' '--bold' '--underline'
     set -U fish_pager_color_progress      'brwhite' '--background=cyan'
 
-    if test -z "$SSH_CONNECTION"
+    if test -z "$SSH_CONNECTION" -a "$TERM_PROGRAM" = "alacritty" -a (uname) = "Darwin"
+        $HOME/.scripts/alacritty-color-export/script.sh > /dev/null
+    else if test -z "$SSH_CONNECTION"
         cat ~/.cache/wal/sequences
     end
 

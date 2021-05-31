@@ -7,3 +7,6 @@
 [submodule ".config/spicetify/Themes"]
 	path = .config/spicetify/Themes
 	url = https://github.com/morpheusthewhite/spicetify-themes
+[submodule ".scripts/alacritty-color-export"]
+	path = .scripts/alacritty-color-export
+	url = https://github.com/mtoohey31/alacritty-color-export

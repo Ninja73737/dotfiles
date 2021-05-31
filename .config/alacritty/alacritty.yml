@@ -3,16 +3,6 @@ env:
   SHLVL: "0"
   WINIT_X11_SCALE_FACTOR: "1"
 
-window:
-  padding:
-    x: 7
-    y: 7
-  dynamic_padding: true
-  title: Alacritty
-  class:
-    instance: Alacritty
-    general: Alacritty
-  # decorations: buttonless
 
 scrolling:
   history: 5000
@@ -47,3 +37,12 @@ key_bindings:
   - { key: Plus, mods: Control|Shift, action: IncreaseFontSize }
   - { key: Return, mods: Shift, chars: "\x1b[13;2u" }
   - { key: Return, mods: Control, chars: "\x1b[13;5u" }
+window:
+  padding:
+    x: 7
+    y: 7
+  dynamic_padding: true
+  title: Alacritty
+  class:
+    instance: Alacritty
+    general: Alacritty
