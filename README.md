@@ -23,4 +23,4 @@ git clone --bare https://github.com/{YOUR_USERNAME}/dotfiles/ .dotfiles
 git --git-dir=$HOME/.dotfiles --work-tree=$HOME reset --hard
 ```
 
-...then whenever you need to push a change, use git as you normally would, except replace the `git` part of your commands with `dotfiles` and it will set the git directory and work tree options automatically with one of my fish aliases.
+...then whenever you need to push a change, use git as you normally would, except replace the `git` part of your commands with `dot` and it will set the git directory and work tree options automatically with one of my fish aliases.
