@@ -36,14 +36,14 @@ if test -d /opt/android-sdk/cmdline-tools/latest/bin
 end
 
 abbr dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
-abbr dcd "docker-compose down --remove-orphans"
+abbr dcd "docker-compose --env-file docker-compose.env down --remove-orphans"
 
 abbr pcp "rsync -r --info=progress2"
 alias pcp "rsync -r --info=progress2"
 
-if string match -rq ".*MANJARO-ARM.*" (uname -r)
-    abbr selfhosting "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
-    abbr lsh "lazygit --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
+if test $hostname = "rpimanjaro"
+    abbr self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
+    alias self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
 end
 
 abbr dot "git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
