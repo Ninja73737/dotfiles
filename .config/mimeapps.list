@@ -3,12 +3,12 @@ application/pdf=org.pwmt.zathura.desktop
 x-scheme-handler/mailspring=Mailspring.desktop
 image/png=sxiv.desktop
 image/jpeg=sxiv.desktop
-text/html=qutebrowser-profile.desktop
-x-scheme-handler/http=qutebrowser-profile.desktop
-x-scheme-handler/https=qutebrowser-profile.desktop
-x-scheme-handler/about=qutebrowser-profile.desktop
-x-scheme-handler/unknown=qutebrowser-profile.desktop
+text/html=qbpm.desktop
+x-scheme-handler/http=qbpm.desktop
+x-scheme-handler/https=qbpm.desktop
+x-scheme-handler/about=qbpm.desktop
+x-scheme-handler/unknown=qbpm.desktop
 
 [Added Associations]
 image/png=gimp.desktop;
-image/svg+xml=qutebrowser-profile.desktop;
+image/svg+xml=qbpm.desktop;

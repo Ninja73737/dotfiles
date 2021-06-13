@@ -13,9 +13,8 @@ xset s 1800
 
 case $HOSTNAME in
   horizon)
-    bspc monitor HDMI-0 -d 1 2 3 4 5
-    bspc monitor DVI-D-0 -d 6 7 8 9
-    bspc monitor HDMI-0 -s DVI-D-0
+    bspc monitor DP-4 -d 1 2 3 4 5
+    bspc monitor HDMI-0 -d 6 7 8 9
     ;;
   air)
     bspc monitor eDP1 -d 2 3 5 6 8 9
@@ -58,6 +57,7 @@ pgrep dunst || $HOME/.config/dunst/launch.sh
 pgrep blueberry-tray || blueberry-tray
 pgrep agent || /usr/lib/geoclue-2.0/demos/agent &
 pgrep redshift || redshift &
+pgrep plover || (sleep 5; plover) &
 pgrep mailspring || mailspring --background &
 which discord && (pgrep Discord || discord --start-minimized &) || which discord-canary && (pgrep DiscordCanary || discord-canary --start-minimized &)
 pgrep redshift || redshift &

@@ -111,8 +111,8 @@ function prompt
     end
 end
 
-abbr pg "prompt git"
-alias pg "prompt git"
+abbr pg "git status; prompt git"
+alias pg "git status; prompt git"
 
 fish_vi_key_bindings
 

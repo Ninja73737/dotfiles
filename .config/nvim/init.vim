@@ -1,4 +1,3 @@
-set wildmode=longest,list,full
 set shortmess+=c
 if empty($SSH_CONNECTION)
   set pumblend=20
@@ -45,7 +44,6 @@ noremap cN <CMD>call CocAction('diagnosticPrevious')<CR>
 noremap cR <CMD>call CocActionAsync('rename')<CR>
 noremap gD <CMD>call CocActionAsync('jumpDefinition')<CR>
 noremap cpl :CocCommand latex.Build<CR>
-inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 Plug 'sheerun/vim-polyglot'
 
@@ -211,8 +209,8 @@ noremap cg :Goyo<BAR>Limelight!!<CR>
 Plug 'mg979/vim-visual-multi'
 
 let g:VM_maps = {}
-let g:VM_maps["Find Under"] = "<C-m>"
-let g:VM_maps["Find Subword Under"] = "<C-m>"
+let g:VM_maps["Find Under"] = "<C-n>"
+let g:VM_maps["Find Subword Under"] = "<C-n>"
 
 Plug 'airblade/vim-gitgutter'
 Plug 'mtoohey31/tgc_wal.vim'

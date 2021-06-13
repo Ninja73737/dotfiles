@@ -24,11 +24,14 @@ super + o
 super + {Down,Up}
     pulsemixer --change-volume {-,+}2
 
-super + shift + {Left,Right,space}
-    playerctl --player=spotify {previous,next,play-pause}
+super + shift + {Left,Right}
+    playerctl --player=spotify {previous,next}
+
+super + shift + space
+    playerctl --player=spotify play-pause && fish -c 'test (playerctl --player=spotify status) = "Playing" && polybar-msg cmd show.spotify && polybar-msg cmd show.spotify-previous && polybar-msg cmd show.spotify-next || fish -c "polybar-msg cmd hide.spotify && polybar-msg cmd hide.spotify-previous && polybar-msg cmd hide.spotify-next"'
 
 super + shift + {Down,Up}
-    pulsemixer --id (pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g") --change-volume {-,+}2
+    pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g" | xargs -I \{\} pulsemixer --id \{\} --change-volume {-,+}2
 
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
     pulsemixer --change-volume {-,+}2
@@ -58,22 +61,25 @@ super + m
     bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
 
 super + b
-    bspc node @/ --balance
+    bspc node @/ --balance && bspc node -f (bspc query -N -n)
 
 super + shift + n
     pkill kmonad || fish -c "pgrep kmonad || kmonad $HOME/.config/kmonad/macbook.kbd" &
 
-super + {_,shift + }{h,j,k,l}
-    bash -c "COMMAND="{f,s}" && DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -\$COMMAND \$DIR || bspc monitor -\$COMMAND \$DIR"
+super + {h,j,k,l}
+    bash -c "DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -f \$DIR || bspc monitor -f \$DIR"
+
+super + shift + {h,j,k,l}
+    bspc node -s {west,south,north,east} && bspc node -f (bspc query -N -n)
 
 super + {1-9,0}
     bspc desktop -f '{1-9,10}'
 
 super + shift + {1-9,0}
-    bspc node -d '{1-9,10}' --follow
+    TARGET='{1-9,10}' bspc node -d $TARGET --follow && bspc desktop -f $TARGET
 
 super + {p,u,g,n}
-    qutebrowser-profile --new {personal,university,gaming,mod}
+    qbpm launch {personal,university,gaming,mod}
 
 super + shift + {p,u,g,n}
     brave --profile-directory="{Default,Profile 2,Profile 3,Profile 4}"
@@ -83,6 +89,9 @@ super + shift + {q,r}
 
 super + {w,q}
     bspc node -{c,k}
+
+super + z
+    zoom_slow
 
 super + backslash
     bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t tiled

@@ -430,6 +430,8 @@
 #
 # vim: ft=cfg
 
-[skip-display]
+[spotify]
     appname = "Spotify"
+    urgency = low
     skip_display = yes
+    script = update_now_playing
