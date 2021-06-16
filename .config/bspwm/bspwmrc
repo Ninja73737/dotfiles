@@ -25,19 +25,25 @@ esac
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   true
 bspc config pointer_follows_monitor true
-bspc config top_padding             0
-bspc config border_width            4
+
+bspc config top_padding             -16
+bspc config left_padding            -16
+bspc config right_padding           -16
+bspc config bottom_padding          -16
+bspc config border_width            0
 bspc config window_gap              16
+
 bspc config pointer_modifier        mod4
 bspc config pointer_action1         move
 bspc config pointer_action2         resize_side
 
 bspc config split_ratio             0.5
+
 bspc config borderless_monocle      true
 bspc config gapless_monocle         false
 bspc config single_monocle          true
 
-$HOME/.config/bspwm/colours
+bspc config ignore_ewmh_struts      true
 
 # BSPWM Rules
 
@@ -49,10 +55,12 @@ bspc rule -a Bitwarden state=floating
 
 # Autostart Services
 
-$HOME/.config/polybar/launch.sh
+fish -c "sleep 1; wal -R; \$HOME/.config/polybar/launch.sh" &
 
 pgrep sxhkd || sxhkd &
 pgrep picom || picom --experimental-backends &
+pgrep flashfocus || flashfocus &
+pgrep unclutter || unclutter --timeout 1 &
 pgrep dunst || $HOME/.config/dunst/launch.sh
 pgrep blueberry-tray || blueberry-tray
 pgrep agent || /usr/lib/geoclue-2.0/demos/agent &
@@ -62,7 +70,3 @@ pgrep mailspring || mailspring --background &
 which discord && (pgrep Discord || discord --start-minimized &) || which discord-canary && (pgrep DiscordCanary || discord-canary --start-minimized &)
 pgrep redshift || redshift &
 pgrep steam || steam -silent &
-
-# Recover Wallpaper and Theme
-
-fish -c "sleep 1; wal -R" &

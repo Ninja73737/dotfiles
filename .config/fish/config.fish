@@ -1,5 +1,5 @@
-if test -z "$DISPLAY"
-    if test -n "$SSH_CONNECTION" -a ! -n "$TMUX"
+if test -z "$DISPLAY" -a -z "$TMUX"
+    if test -n "$SSH_CONNECTION"
         if status --is-interactive
             exec tmux
         end

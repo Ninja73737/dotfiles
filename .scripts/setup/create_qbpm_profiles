@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
 qbpm new personal
-ln -s .config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/personal/config/greasemonkey
+ln -s ~/.config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/personal/config/greasemonkey
 qbpm new university
-ln -s .config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/university/config/greasemonkey
+ln -s ~/.config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/university/config/greasemonkey
 qbpm new gaming
-ln -s .config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/gaming/config/greasemonkey
+ln -s ~/.config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/gaming/config/greasemonkey
 qbpm new mod
-ln -s .config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/mod/config/greasemonkey
+ln -s ~/.config/qutebrowser/greasemonkey .local/share/qutebrowser-profiles/mod/config/greasemonkey
 qbpm desktop -c

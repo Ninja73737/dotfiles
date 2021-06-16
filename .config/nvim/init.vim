@@ -227,19 +227,15 @@ Plug 'mtoohey31/chafa.vim'
 call plug#end()
 
 
-if empty($SSH_CONNECTION)
-  colorscheme tgc_wal
+colorscheme tgc_wal
 
-  execute "hi Normal ctermbg=NONE guifg=" . color7 ." ctermfg=7"
-  set termguicolors
-  lua << EOF
+execute "hi Normal ctermbg=NONE guifg=" . color7 ." ctermfg=7"
+set termguicolors
+lua << EOF
 if jit ~= nil then
     require'colorizer'.setup()
 end
 EOF
-else
-  colorscheme nord
-endif
 
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd TermOpen * set nonumber norelativenumber

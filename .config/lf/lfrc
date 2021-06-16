@@ -5,11 +5,7 @@ set previewer pistol
 set dirfirst!
 set scrolloff 7
 
-cmd trash %{{
-    set IFS " "
-    trash "$fx" && set LF_TRASH_HISTORY $LF_TRASH_HISTORY "$fx" || set LF_TRASH_HISTORY "$fx"
-}}
-map D trash
+map D %echo "\"$fx\"" | string join '" "' | xargs trash
 cmd trash-undo %{{
     # Credit for this one-liner goes to @norcalli here: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
     echo '' | trash-restore 2>/dev/null | sed '$d' | sort -k2,3 -k1,1n | awk 'END {print $1}' | trash-restore >/dev/null 2>&1
