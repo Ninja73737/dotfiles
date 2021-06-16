@@ -1,4 +1,5 @@
 from os.path import expanduser, join
+from sys import platform
 import json
 
 with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
@@ -8,8 +9,12 @@ with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
 config.load_autoconfig(False)
 config.set('statusbar.show', 'in-mode')
 config.set('auto_save.session', True)
-c.editor.command = ['fish', '-c',
-                    'bspc rule -a Alacritty -o state=floating && alacritty -e fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
+if platform == "darwin":
+    c.editor.command = ['fish', '-c',
+                        'alacritty -t "qutebrowser Editor" -e fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
+else:
+    c.editor.command = ['fish', '-c',
+                        'bspc rule -a Alacritty -o state=floating && alacritty -e fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
 config.set('content.fullscreen.window', True)
 config.set('tabs.show', 'switching')
 config.set('tabs.show_switching_delay', 1500)

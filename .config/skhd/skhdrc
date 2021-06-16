@@ -10,12 +10,12 @@ cmd + shift - j : yabai -m window --swap south
 cmd + shift - k : yabai -m window --swap north
 cmd + shift - l : yabai -m window --swap east
 
-cmd - return : alacritty
-cmd - 0x2C : alacritty -e fish -C 'lf'
+cmd - return : open -na "Alacritty.app"
+cmd - 0x2C : open -na "Alacritty.app" --args -e fish -C 'lf'
 cmd - space : osascript -e 'tell application "Alfred" to search ""'
 
 cmd + shift - b : yabai -m space --balance
-cmd + shift - c : alacritty -t "Calculator" -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
+cmd + shift - c : open -na "Alacritty.app" --args -t "Calculator" -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 cmd + shift - y : $HOME/.scripts/restart_yabai
 cmd + shift - d : pmset sleepnow
 cmd + shift - 0x2A : yabai -m window --toggle float

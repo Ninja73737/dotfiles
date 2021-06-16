@@ -95,9 +95,9 @@ alias python3 "python3 -q"
 
 if test -d $HOME/.termux
     alias ls "exa -a --group-directories-first"
-    alias lsd "exa -al group-directories-first"
-    alias lst "exa -aT -L 5 group-directories-first"
-    alias lsta "exa -aT group-directories-first"
+    alias lsd "exa -al --group-directories-first"
+    alias lst "exa -aT -L 5 --group-directories-first"
+    alias lsta "exa -aT --group-directories-first"
 else if not string match -rq ".*ish.*" (uname -r)
     alias ls "exa -a --icons --group-directories-first"
     alias lsd "exa -al --icons --group-directories-first"
