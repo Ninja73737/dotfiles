@@ -17,7 +17,7 @@ case $HOSTNAME in
     hideIt.sh -N "^Polybar tray window\$" -d top -w -r 2560x0+3440+0 -i 0.25 -p 0 &
     hideIt.sh -C "^Polybar\$" -d top -w -r 2560x0+3440+0 -i 0.25 -p 0 &
 
-    fish -c 'sleep 2.5; xdotool search --name Polybar windowraise; xdotool search --name "Polybar tray window" windowraise' &
+    fish -c 'sleep 10; xdotool search --name Polybar windowraise; xdotool search --name "Polybar tray window" windowraise' &
     ;;
   air)
     polybar -c $HOME/.config/polybar/config.ini laptop &

@@ -114,14 +114,19 @@ end
 abbr pg "git status; prompt git"
 alias pg "git status; prompt git"
 
+abbr copy "xclip -selection clipboard -in"
+alias copy "xclip -selection clipboard -in"
+abbr paste "xclip -selection clipboard -out"
+alias paste "xclip -selection clipboard -out"
+
 fish_vi_key_bindings
 
 set fish_cursor_default block
 set fish_cursor_insert line
 set fish_cursor_replace_one underscore
 
-export VISUAL=(which nvim)
-export EDITOR=(which nvim)
+export VISUAL=nvim
+export EDITOR=nvim
 
 if status --is-interactive
     source $HOME/.config/lf/icons
@@ -161,5 +166,10 @@ if status --is-interactive
 
     if which starship &> /dev/null
         starship init fish | source
+    end
+
+    if which pfetch &> /dev/null
+        set -gx PF_INFO "ascii title pkgs shell editor wm palette"
+        pfetch
     end
 end

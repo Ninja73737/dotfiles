@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 super + Return
-    alacritty
+    st -e sh -c 'SHLVL=0; fish'
 
 super + slash
-    alacritty -e fish -C 'lf'
+    st -e sh -c 'SHLVL=0; fish -C "lf"'
 
 super + space
     rofi -show drun
@@ -13,7 +13,7 @@ super + Tab
     rofi -show window
 
 super + c
-    bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
+    bspc rule -a st-256color -o state=floating && st -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 
 super + shift + s
     pkill -USR1 -x sxhkd
@@ -58,7 +58,7 @@ super + i
     $HOME/.scripts/linein_listen_linux
 
 super + m
-    bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
+    bspc rule -a st-256color -o state=floating && st -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
 
 super + b
     bspc node @/ --balance && bspc node -f (bspc query -N -n)

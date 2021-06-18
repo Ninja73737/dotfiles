@@ -26,7 +26,6 @@ config.set('downloads.location.remember', False)
 config.set('hints.chars', 'asdfghjkl;qwertyuiopzxcvbnm')
 config.set('tabs.title.format', '{current_title}')
 config.set('url.start_pages', ['about:blank'])
-config.set('scrolling.smooth', True)
 
 # Keybinds
 config.bind('<Ctrl-o>', 'set-cmd-text -s :open --window')
