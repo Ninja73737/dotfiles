@@ -1,20 +1,17 @@
 #!/bin/sh
 
-set -e
+# For testing in a docker container, use: `docker run --rm -it -v $HOME/.scripts/setup:/setup archlinux /bin/sh /setup/docker_user_setup`
 
 run_root() {
   if [ -x "$(command -v sudo)" ]; then
     sudo /bin/sh -c "$@"
   else
     echo -n "Root "
-    su -c $@
+    su -c "$@"
   fi
 }
 
 detect_pm_install() {
-  if [ -z "$updated" ]; then
-    detect_pm_update
-  fi
   (if [ -x "$(command -v apk)" ]; then run_root "apk update && apk add --no-cache $@"
   elif [ -x "$(command -v apt-get)" ]; then run_root "apt-get update && apt-get install $@"
   elif [ -x "$(command -v paru)" ]; then paru -Sy && paru -S $@
@@ -34,7 +31,6 @@ detect_pm_update() {
   elif [ -x "$(command -v zypper)" ]; then run_root "zypper refresh"
   elif [ -n "$macos" ] && [ -x "$(command -v brew)" ]; then brew update
   else echo "> could not detect package manager">&2; return 1; fi) || (echo "> failed to update $@">&2; return 1)
-  updated=1
 }
 
 detect_pm_upgrade() {
@@ -50,7 +46,7 @@ detect_pm_upgrade() {
 
 choose() {
   echo -n " [Y/n] "
-  read
+  read REPLY
   case "$REPLY" in
     ""|"y"|"Y"|"yes"|"Yes"|"YES")
       return 0
@@ -89,7 +85,17 @@ ensure_sudo() {
   fi
 }
 
-function join_by { local d=${1-} f=${2-}; if shift 2; then printf %s "$f" "${@/#/$d}"; fi; }
+install_pip() {
+  if [ ! -x "$(command -v pip3)" ]; then
+    if [ ! -x "$(command -v python3)" ]; then
+      detect_pm_install python3 
+    fi
+    python3 -m ensurepip || detect_pm_install python3-pip
+  fi
+  if [ ! -x "$(command -v pip3)" ]; then
+    PATH=$PATH:$HOME/.local/bin
+  fi
+}
 
 if [ "$(uname)" = "Darwin" ]; then
   macos=1
@@ -99,6 +105,9 @@ if [ -x "$(command -v pacman)" ]; then
   arch_based=1
 fi
 
+echo "> updating package lists"
+detect_pm_update
+
 [ -d "$HOME/.dotfiles" ] || (echo -n "> fetch dotfiles?"
 choose && (
 if [ -z "$macos" ] && [ ! -x "$(command -v git)" ]; then
@@ -107,8 +116,8 @@ if [ -z "$macos" ] && [ ! -x "$(command -v git)" ]; then
 fi
 git clone --bare https://github.com/mtoohey31/dotfiles $HOME/.dotfiles
 git --git-dir=$HOME/.dotfiles --work-tree=$HOME reset --hard
+$HOME/.scripts/setup/dotfiles_hide_untracked
 echo -n "> update submodules?"
-# TODO: Fix this exiting when declined
 choose && cd $HOME && git --git-dir=$HOME/.dotfiles --work-tree=$HOME submodule update --init --recursive && submodules=1
 )
 )
@@ -146,15 +155,16 @@ if [ -n "$arch_based" ]; then
 fi
 
 # TODO: don't run this if it's not installed
-base=(fish which starship alacritty exa)
-for target in ${base[@]}; do
+base="fish starship alacritty exa"
+for target in $base; do
   if [ -x "$(command -v $target)" ]; then
-    base=($(echo "${base[@]/$target}" | sed 's/ $//'))
+    echo $target
+    base=$(echo $base | sed "s/ $target//")
   fi
 done
 
 if [ "${#base[@]}" -ne 0 ]; then
-  echo -n "> install ${base[@]} and chsh to fish?"
+  echo -n "> install $base and chsh to fish?"
   choose && detect_pm_install "$base"
 fi
 
@@ -166,26 +176,20 @@ if grep fish /etc/shells &> /dev/null; then
   elif getent passwd | grep $(whoami) | awk -F : '{ print $7 }' | grep fish &> /dev/null; then
     already_fish=1
   fi
+  echo $already_fish
   if [ -z "$already_fish" ]; then
     eval "chsh -s $(grep fish /etc/shells | head -n1)"
     changed_to_fish=1
   fi
-else
+elif [ ! -x "$(command -v fish)"]; then
+  echo "adding and eching"
   run_root "echo /bin/fish >> /etc/shells" && chsh -s /bin/fish
 fi
 
-if [ ! -x "$(command -v wal)" ] && [ ! -x "$(command -v lf)" ]; then
+if [ ! -x "$(command -v wal)" ] || [ ! -x "$(command -v lf)" ]; then
   echo -n "> install pywal and lf?"
   choose && (
-  if [ ! -x "$(command -v pip3)" ]; then
-    if [ ! -x "$(command -v python3)" ]; then
-      detect_pm_install python3 
-    fi
-    python3 -m ensurepip
-  fi
-  if [ ! -x "$(command -v pip3)" ]; then
-    PATH=$PATH:$HOME/.local/bin
-  fi
+  install_pip
   pip3 install pywal
   wal --theme base16-nord
   GOPATH=$HOME/.go
@@ -215,7 +219,56 @@ if [ -n "$macos" ]; then
   fi
 fi
 
-echo -n "> update system?"
+if [ ! -x "$(command -v nvim)" ]; then
+  echo -n "> install neovim"
+  choose && (
+  detect_pm_install neovim
+  if [ ! -x "$(command -v curl)" ]; then
+    detect_pm_install curl
+  fi
+  if [ ! -x "$(command -v npm)" ]; then
+    detect_pm_install npm
+  fi
+  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  $HOME/.scripts/setup/get_mthesaur
+  nvim -e --headless +silent! colorscheme solarized +PlugInstall +qall
+)
+fi
+
+echo -n "> install fonts?"
+choose && detect_pm_install ttf-ibm-plex ttf-mac-fonts ttf-apple-emoji aur/nerd-fonts-jetbrains-mono
+
+if [ ! -x "$(command -v qutebrowser)" ] && ([ -z "$macos" ] || [ -x "$(open -Ra "qutebrowser.app")" ]); then
+  echo -n "> install qutebrowser"
+  choose && (
+  detect_pm_install qutebrowser
+  install_pip
+  pip3 install git+https://github.com/mtoohey31/qbpm.git\#egg=qbpm # TODO: switch this to psvr/qbpm once my PR is merged
+  $HOME/.scripts/setup/create_qbpm_profiles
+  if [ -n "$macos" ]; then
+    git clone https://github.com/mtoohey31/qbpm $HOME/qbpm # TODO: same here
+    cd $HOME/qbpm
+    brew install platypus
+    platypus -P qbpm.platypus /Applications/qbpm.app
+    # TODO: set qbpm as the default browser here
+  fi
+)
+fi
+
+if [ -z "$macos" ]; then
+  if [ ! -x "$(command -v bspwm)" ]; then
+    echo -n "> install bspwm and enable autologin?"
+    echo "> creating autologin service"
+    run_root "mkdir -p /etc/systemd/system/getty@tty1.service.d/ && echo '[Service]' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=-/usr/bin/agetty --autologin $(whoami) --noclear %I \$TERM' > /etc/systemd/system/getty@tty1.service.d/override.conf"
+  )
+  fi
+  if [ ! -x "$(command -v sxhkd)" ]; then
+    echo -n "> install sxhkd?"
+    choose && detect_pm_install sxhkd
+  fi
+fi
+
+echo -n "> upgrade system?"
 choose && detect_pm_upgrade
 
 if [ -n "$changed_to_fish" ]; then

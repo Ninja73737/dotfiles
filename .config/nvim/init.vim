@@ -41,8 +41,10 @@ nmap cF <Plug>(coc-codeaction)
 noremap cm <CMD>call CocAction('format')<CR>
 noremap cn <CMD>call CocAction('diagnosticNext')<CR>
 noremap cN <CMD>call CocAction('diagnosticPrevious')<CR>
+noremap cv <CMD>call CocActionAsync('doHover')<CR>
 noremap cR <CMD>call CocActionAsync('rename')<CR>
 noremap gD <CMD>call CocActionAsync('jumpDefinition')<CR>
+noremap gr <CMD>call CocActionAsync('jumpReferences')<CR>
 noremap cpl :CocCommand latex.Build<CR>
 
 Plug 'sheerun/vim-polyglot'
@@ -60,7 +62,6 @@ let g:mkdp_page_title = '${name}.md'
 let g:mkdp_filetypes = ['markdown', 'pandoc', 'pmd', 'rmd']
 let g:mkdp_command_for_global = 1
 
-Plug 'inkarkat/vim-ingo-library'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
 

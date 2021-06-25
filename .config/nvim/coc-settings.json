@@ -11,6 +11,7 @@
     "svelte",
     "typescript"
   ],
+  "coc.preferences.jumpCommand":"tab drop",
   "cSpell.language": "en-GB",
   "cSpell.ignoreRegExpList": [
     "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",
@@ -36,6 +37,7 @@
     "yaml",
     "yml"
   ],
+  "rust.show_hover_context": true,
   "cSpell.userWords": [
     "CERB",
     "L'Hôpital's",

@@ -7,7 +7,7 @@ with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
 
 # Misc
 config.load_autoconfig(False)
-config.set('statusbar.show', 'in-mode')
+config.set('statusbar.show', 'never')
 config.set('auto_save.session', True)
 if platform == "darwin":
     c.editor.command = ['fish', '-c',
@@ -43,18 +43,8 @@ config.bind(
 config.bind(
     '<Ctrl-p>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
 config.bind('wp', 'hint links spawn --detach random_bg -l {hint-url}')
-
-# For Fixing: https://github.com/qutebrowser/qutebrowser/issues/2236
-config.bind('o', 'set statusbar.show always;; set-cmd-text -s :open')
-config.bind('O', 'set statusbar.show always;; set-cmd-text -s :open -t')
-config.bind(':', 'set statusbar.show always;; set-cmd-text :')
-config.bind('/', 'set-cmd-text /')
-config.bind('<Escape>', 'mode-enter normal;; set statusbar.show in-mode',
-            mode='command')
-config.bind('<Return>', 'command-accept;; set statusbar.show in-mode',
-            mode='command')
 config.bind('<ESC>', 'fake-key <ESC>')
-
+config.unbind('<Ctrl-V>')
 
 # Theming
 c.fonts.default_size = '12pt'

@@ -46,8 +46,8 @@ if test $hostname = "rpimanjaro"
     alias self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
 end
 
-abbr dot "git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
-alias dot "git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
+abbr dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
+alias dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
 
 if which trash &> /dev/null
     abbr rm "trash"
