@@ -1,0 +1,223 @@
+#!/bin/sh
+
+set -e
+
+run_root() {
+  if [ -x "$(command -v sudo)" ]; then
+    sudo /bin/sh -c "$@"
+  else
+    echo -n "Root "
+    su -c $@
+  fi
+}
+
+detect_pm_install() {
+  if [ -z "$updated" ]; then
+    detect_pm_update
+  fi
+  (if [ -x "$(command -v apk)" ]; then run_root "apk update && apk add --no-cache $@"
+  elif [ -x "$(command -v apt-get)" ]; then run_root "apt-get update && apt-get install $@"
+  elif [ -x "$(command -v paru)" ]; then paru -Sy && paru -S $@
+  elif [ -x "$(command -v pacman)" ]; then run_root "pacman -Sy && pacman -S $@"
+  elif [ -x "$(command -v dnf)" ]; then run_root "dnf check-update && dnf install $@"
+  elif [ -x "$(command -v zypper)" ]; then run_root "zypper refresh && zypper install $@"
+  elif [ -n "$macos" ] && [ -x "$(command -v brew)" ]; then brew install "$@"
+  else echo "> could not detect package manager">&2; return 1; fi) || (echo "> failed to install $@">&2; return 1)
+}
+
+detect_pm_update() {
+  (if [ -x "$(command -v apk)" ]; then run_root "apk update"
+  elif [ -x "$(command -v apt-get)" ]; then run_root "apt-get update"
+  # paru doesn't need to be an option because updates must already have been fetched for it to be installed
+  elif [ -x "$(command -v pacman)" ]; then run_root "pacman -Sy"
+  elif [ -x "$(command -v dnf)" ]; then run_root "dnf check-update"
+  elif [ -x "$(command -v zypper)" ]; then run_root "zypper refresh"
+  elif [ -n "$macos" ] && [ -x "$(command -v brew)" ]; then brew update
+  else echo "> could not detect package manager">&2; return 1; fi) || (echo "> failed to update $@">&2; return 1)
+  updated=1
+}
+
+detect_pm_upgrade() {
+  (if [ -x "$(command -v apk)" ]; then run_root "apk update && apk upgrade"
+  elif [ -x "$(command -v apt-get)" ]; then run_root "apt-get update && apt-get upgrade"
+  elif [ -x "$(command -v paru)" ]; then paru -Syyu
+  elif [ -x "$(command -v pacman)" ]; then run_root "pacman -Syyu"
+  elif [ -x "$(command -v dnf)" ]; then run_root "dnf update"
+  elif [ -x "$(command -v zypper)" ]; then run_root "zypper update"
+  elif [ -n "$macos" ] && [ -x "$(command -v brew)" ]; then brew update && brew upgrade
+  else echo "> could not detect package manager">&2; return 1; fi) || (echo "> failed to upgrade">&2; return 1)
+}
+
+choose() {
+  echo -n " [Y/n] "
+  read
+  case "$REPLY" in
+    ""|"y"|"Y"|"yes"|"Yes"|"YES")
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+ensure_sudo() {
+  echo "> testing for sudo permisison"
+  if sudo -l -U $(whoami) &> /dev/null; then
+    return 0
+  fi
+
+  if groups | grep wheel &> /dev/null; then
+    echo "> $(whoami) is already in the wheel group"
+  else
+    echo -n "> no sudo permission, attempt to resolve by adding to wheel group?"
+    choose && (run_root "usermod -a -G wheel $(whoami)"
+    echo "> added $(whoami) to wheel group, please logout before re-running this script"
+    exit 1
+  )
+  fi
+
+  echo "> checking if the wheel group is in /etc/sudoers"
+  if run_root "grep '^%wheel ALL=(ALL) ALL$' /etc/sudoers" > /dev/null; then
+    echo "> the wheel group been already added to /etc/sudoers, please resolve sudo permission issues manually"
+  else
+    echo -n "> the wheel group is not present in /etc/sudoers, attempt to resolve by adding wheel group to /etc/sudoers?"
+    choose && (run_root "echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers"
+    echo "> wheel group added to /etc/sudoers, please reboot before re-running this script"
+    exit 1
+  )
+  fi
+}
+
+function join_by { local d=${1-} f=${2-}; if shift 2; then printf %s "$f" "${@/#/$d}"; fi; }
+
+if [ "$(uname)" = "Darwin" ]; then
+  macos=1
+fi
+
+if [ -x "$(command -v pacman)" ]; then
+  arch_based=1
+fi
+
+[ -d "$HOME/.dotfiles" ] || (echo -n "> fetch dotfiles?"
+choose && (
+if [ -z "$macos" ] && [ ! -x "$(command -v git)" ]; then
+  echo "> installing git"
+  detect_pm_install git
+fi
+git clone --bare https://github.com/mtoohey31/dotfiles $HOME/.dotfiles
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME reset --hard
+echo -n "> update submodules?"
+# TODO: Fix this exiting when declined
+choose && cd $HOME && git --git-dir=$HOME/.dotfiles --work-tree=$HOME submodule update --init --recursive && submodules=1
+)
+)
+
+if [ -n "$macos" ] && [ ! -x "$(command -v brew)" ]; then
+  echo -n "> install brew?"
+  choose && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+if [ -n "$arch_based" ]; then
+  if [ ! -x "$(command -v paru)" ]; then
+    echo -n "> install paru?"
+    choose && (
+    if [ -z "$updated" ]; then
+      run_root "pacman -Sy"
+      updated=1
+    fi
+    if [ ! -x "$(command -v git)" ]; then
+      run_root "pacman -S git"
+    fi
+    run_root "pacman -S --needed base-devel cargo"
+    if [ ! -d "/tmp/paru" ]; then
+      git clone https://aur.archlinux.org/paru /tmp/paru
+    fi
+    ensure_sudo
+    cd /tmp/paru
+    makepkg -si
+)
+  fi
+
+  grep "^Color$" /etc/pacman.conf &> /dev/null || (
+  echo -n "> enable pacman colour?"
+  choose && run_root "echo '[options]' >> /etc/pacman.conf && echo 'Color' >> /etc/pacman.conf"
+)
+fi
+
+# TODO: don't run this if it's not installed
+base=(fish which starship alacritty exa)
+for target in ${base[@]}; do
+  if [ -x "$(command -v $target)" ]; then
+    base=($(echo "${base[@]/$target}" | sed 's/ $//'))
+  fi
+done
+
+if [ "${#base[@]}" -ne 0 ]; then
+  echo -n "> install ${base[@]} and chsh to fish?"
+  choose && detect_pm_install "$base"
+fi
+
+if grep fish /etc/shells &> /dev/null; then
+  if [ -n "$macos" ]; then
+    if dscl . -read ~ UserShell | sed 's/^UserShell: //' | grep fish &> /dev/null; then
+      already_fish=1
+    fi
+  elif getent passwd | grep $(whoami) | awk -F : '{ print $7 }' | grep fish &> /dev/null; then
+    already_fish=1
+  fi
+  if [ -z "$already_fish" ]; then
+    eval "chsh -s $(grep fish /etc/shells | head -n1)"
+    changed_to_fish=1
+  fi
+else
+  run_root "echo /bin/fish >> /etc/shells" && chsh -s /bin/fish
+fi
+
+if [ ! -x "$(command -v wal)" ] && [ ! -x "$(command -v lf)" ]; then
+  echo -n "> install pywal and lf?"
+  choose && (
+  if [ ! -x "$(command -v pip3)" ]; then
+    if [ ! -x "$(command -v python3)" ]; then
+      detect_pm_install python3 
+    fi
+    python3 -m ensurepip
+  fi
+  if [ ! -x "$(command -v pip3)" ]; then
+    PATH=$PATH:$HOME/.local/bin
+  fi
+  pip3 install pywal
+  wal --theme base16-nord
+  GOPATH=$HOME/.go
+  detect_pm_install lf
+  cd $HOME/.scripts/lf-exa-icons
+  pip3 install -r requirements.txt
+  python3 lf_exa_icons.py > $HOME/.config/lf/icons
+)
+fi
+
+if [ -n "$macos" ]; then
+  if [ ! -x "$(command -v yabai)" ]; then
+  echo -n "> install and enable yabai?"
+  choose && (
+  brew install koekeishiya/formulae/yabai 
+  sudo yabai --install-sa
+  brew services start yabai 
+)
+  fi
+
+  if [ ! -x "$(command -v skhd)" ]; then
+  echo -n "> install and enable skhd?"
+  choose && (
+  brew install koekeishiya/formulae/skhd 
+  brew services start skhd 
+)
+  fi
+fi
+
+echo -n "> update system?"
+choose && detect_pm_upgrade
+
+if [ -n "$changed_to_fish" ]; then
+  exec fish
+fi
