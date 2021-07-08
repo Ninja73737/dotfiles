@@ -114,10 +114,17 @@ end
 abbr pg "git status; prompt git"
 alias pg "git status; prompt git"
 
-abbr copy "xclip -selection clipboard -in"
-alias copy "xclip -selection clipboard -in"
-abbr paste "xclip -selection clipboard -out"
-alias paste "xclip -selection clipboard -out"
+if test (uname) = "Darwin"
+    abbr copy "pbcopy"
+    alias copy "pbcopy"
+    abbr paste "pbpaste"
+    alias paste "pbpaste"
+else
+    abbr copy "xclip -selection clipboard -in"
+    alias copy "xclip -selection clipboard -in"
+    abbr paste "xclip -selection clipboard -out"
+    alias paste "xclip -selection clipboard -out"
+end
 
 fish_vi_key_bindings
 

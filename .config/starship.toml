@@ -100,6 +100,12 @@ disabled = false
 format = "at depth [$shlvl]($style) "
 disabled = false
 
+[custom.updates]
+command = "cat /tmp/numupdates"
+shell = "/bin/sh"
+format = "with [$output]($style) updates "
+when = "test $(cat /tmp/numupdates) -ge 25"
+
 # Nerd Fonts Symbols
 
 [aws]
@@ -154,6 +160,7 @@ symbol = " "
 
 [package]
 symbol = " "
+style = "bold blue"
 
 [perl]
 symbol = " "
