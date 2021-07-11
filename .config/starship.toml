@@ -46,10 +46,10 @@ $env_var\
 $crystal\
 $custom\
 $cmd_duration\
-$line_break\
 $lua\
-$jobs\
 $battery\
+$line_break\
+$jobs\
 $time\
 $status\
 $shell\
@@ -58,6 +58,9 @@ $character"""
 [username]
 show_always = true
 format = "[$user]($style) "
+
+[[battery.display]]
+threshold = 100
 
 [directory]
 format = "in [$path]($style) "
@@ -112,6 +115,7 @@ when = "test $(cat /tmp/numupdates) -ge 25"
 symbol = " "
 
 [battery]
+format = "with [$symbol $percentage]($style) battery "
 full_symbol = ""
 charging_symbol = ""
 discharging_symbol = ""

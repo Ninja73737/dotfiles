@@ -15,7 +15,7 @@ cmd - 0x2C : open -na "Alacritty.app" --args -e fish -C 'lf'
 cmd - space : osascript -e 'tell application "Alfred" to search ""'
 
 cmd + shift - b : yabai -m space --balance
-cmd + shift - c : open -na "Alacritty.app" --args -t "Calculator" -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
+cmd + shift - c : open -na "Alacritty.app" --args -o background_opacity=0.8 -t "Calculator" -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 cmd + shift - y : $HOME/.scripts/restart_yabai
 cmd + shift - d : pmset sleepnow
 cmd + shift - 0x2A : yabai -m window --toggle float
