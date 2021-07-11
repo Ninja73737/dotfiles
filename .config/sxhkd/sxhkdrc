@@ -13,10 +13,10 @@ super + Tab
     rofi -show window
 
 super + c
-    bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
+    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 
-super + shift + s
-    pkill -USR1 -x sxhkd
+# super + shift + s
+#     pkill -USR1 -x sxhkd
 
 super + o
     $HOME/.scripts/switch_output_linux
@@ -39,7 +39,7 @@ super + shift + {Down,Up}
 {XF86MonBrightnessDown,XF86MonBrightnessUp}
     xbacklight -inc {-,+}10
 
-super + s
+super + shift + s
     flameshot gui
 
 super + f
@@ -58,7 +58,7 @@ super + i
     $HOME/.scripts/linein_listen_linux
 
 super + m
-    bspc rule -a Alacritty -o state=floating && alacritty -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
+    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
 
 super + b
     bspc node @/ --balance && bspc node -f (bspc query -N -n)

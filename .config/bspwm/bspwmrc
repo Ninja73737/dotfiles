@@ -55,9 +55,11 @@ bspc rule -a Bitwarden state=floating
 
 # Autostart Services
 
-fish -c "sleep 1; wal -R; \$HOME/.config/polybar/launch.sh" &
+wal -R &
 
-pgrep sxhkd || sxhkd &
+$HOME/.config/polybar/launch-tray.sh &
+
+pgrep sxhkd && pkill -USR1 -x sxhkd || sxhkd &
 pgrep picom || picom --experimental-backends &
 pgrep flashfocus || flashfocus &
 pgrep unclutter || unclutter --timeout 1 &

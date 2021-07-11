@@ -28,7 +28,6 @@ config.set('tabs.title.format', '{current_title}')
 config.set('url.start_pages', ['about:blank'])
 
 # Keybinds
-config.bind('<Ctrl-o>', 'set-cmd-text -s :open --window')
 config.bind('<Ctrl-Shift-y>',
             'hint links spawn --detach mpv --force-window yes {hint-url}')
 config.bind('D', 'close')
@@ -44,7 +43,7 @@ config.bind(
     '<Ctrl-p>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
 config.bind('wp', 'hint links spawn --detach random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
-config.unbind('<Ctrl-V>')
+config.unbind('<Ctrl-v>')
 
 # Theming
 c.fonts.default_size = '12pt'
