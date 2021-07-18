@@ -65,4 +65,12 @@ config.set('url.searchengines',
             pywal['special']['foreground'] + '&k9' +
             pywal['colors']['color2'] + '&kaa' + pywal['colors']['color2'] + '&kae=d'})
 
-# TODO: Set up fileselect configuration options
+# Fileselect
+config.set('fileselect.handler', "external")
+# TODO: Force these to validate selections and only show valid options, requires the resolution of gokcehan/lf/issues/642
+config.set('fileselect.single_file.command', ['fish', '-c',
+                                              'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
+config.set('fileselect.multiple_files.command', ['fish', '-c',
+                                                 'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$fx\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
+config.set('fileselect.folder.command', ['fish', '-c',
+                                         'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c \'cat ".cache/wal/sequences" && lf -command "set dironly; map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])

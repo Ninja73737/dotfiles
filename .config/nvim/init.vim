@@ -33,7 +33,7 @@ call plug#begin()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " For coc-r-lsp: install.packages("languageserver")
-let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-dictionary", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-go", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-word", "coc-vimlsp",  "coc-xml", "coc-yaml"]
+let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-dictionary", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-go", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-kotlin", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-word", "coc-vimlsp",  "coc-xml", "coc-yaml"]
 autocmd FileType markdown,rmd,tex let b:coc_pairs_disabled = ['<']
 autocmd FileType markdown,rmd,tex let b:coc_pairs = [["$", "$"]]
 noremap cf :CocFix<CR>

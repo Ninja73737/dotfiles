@@ -148,9 +148,14 @@ if [ -n "$arch_based" ]; then
 )
   fi
 
-  grep "^Color$" /etc/pacman.conf &> /dev/null || (
+  grep '^Color$' /etc/pacman.conf &> /dev/null || (
   echo -n "> enable pacman colour?"
   choose && run_root "echo '[options]' >> /etc/pacman.conf && echo 'Color' >> /etc/pacman.conf"
+)
+
+  grep -P '^ParallelDownloads = \d+$' /etc/pacman.conf &> /dev/null || (
+  echo -n "> enable pacman parallel downloads?"
+  choose && run_root "echo ['options'] >> /etc/pacman.conf && echo 'ParallelDownloads = $(lscpu | grep -Po '(?<=^CPU\(s\):)\s+\d' | tr -d ' ')'"
 )
 fi
 
@@ -260,7 +265,6 @@ if [ -z "$macos" ]; then
     echo -n "> install bspwm and enable autologin?"
     echo "> creating autologin service"
     run_root "mkdir -p /etc/systemd/system/getty@tty1.service.d/ && echo '[Service]' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=-/usr/bin/agetty --autologin $(whoami) --noclear %I \$TERM' > /etc/systemd/system/getty@tty1.service.d/override.conf"
-  )
   fi
   if [ ! -x "$(command -v sxhkd)" ]; then
     echo -n "> install sxhkd?"
