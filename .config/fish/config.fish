@@ -174,9 +174,4 @@ if status --is-interactive
     if which starship &> /dev/null
         starship init fish | source
     end
-
-    if which pfetch &> /dev/null
-        set -gx PF_INFO "ascii title pkgs shell editor wm palette"
-        pfetch
-    end
 end
