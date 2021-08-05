@@ -1,6 +1,18 @@
 from os.path import expanduser, join
+from os import environ
 from sys import platform
+from subprocess import run
 import json
+
+command_prefix_list = ['fish', '-c']
+if platform == 'darwin':
+    command_prefix_string = 'alacritty -t "floatme" -o background_opacity=0.8 -e '
+elif 'SWAYSOCK' in environ:
+    command_prefix_string = 'alacritty -t "floatme" -o background_opacity=0.8 -e '
+elif run(['bspc wm -g']).returncode == 0:
+    command_prefix_string = 'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e '
+else:
+    command_prefix_string = ''
 
 with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
     pywal = json.load(file)
@@ -9,12 +21,7 @@ with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
 config.load_autoconfig(False)
 config.set('statusbar.show', 'never')
 config.set('auto_save.session', True)
-if platform == "darwin":
-    c.editor.command = ['fish', '-c',
-                        'alacritty -t "qutebrowser Editor" -e fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
-else:
-    c.editor.command = ['fish', '-c',
-                        'bspc rule -a Alacritty -o state=floating && alacritty -e fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
+c.editor.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
 config.set('content.fullscreen.window', True)
 config.set('tabs.show', 'switching')
 config.set('tabs.show_switching_delay', 1500)
@@ -68,9 +75,6 @@ config.set('url.searchengines',
 # Fileselect
 config.set('fileselect.handler', "external")
 # TODO: Force these to validate selections and only show valid options, requires the resolution of gokcehan/lf/issues/642
-config.set('fileselect.single_file.command', ['fish', '-c',
-                                              'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
-config.set('fileselect.multiple_files.command', ['fish', '-c',
-                                                 'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$fx\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
-config.set('fileselect.folder.command', ['fish', '-c',
-                                         'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c \'cat ".cache/wal/sequences" && lf -command "set dironly; map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
+config.set('fileselect.single_file.command', command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
+config.set('fileselect.multiple_files.command', command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$fx\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
+config.set('fileselect.folder.command', command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "set dironly; map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])

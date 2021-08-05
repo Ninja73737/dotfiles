@@ -37,5 +37,4 @@ yabai -m config window_gap                   16
 
 yabai -m rule --add app="^Bitwarden$" manage=off
 yabai -m rule --add app="^Calculator$" manage=off # For actual calculator app
-yabai -m rule --add title="^Calculator$" manage=off # For alacritty R calculator app
-yabai -m rule --add title="^qutebrowser Editor$" manage=off # For qutebrowser editor
+yabai -m rule --add title="^floatme$" manage=off

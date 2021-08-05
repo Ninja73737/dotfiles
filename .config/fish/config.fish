@@ -3,9 +3,11 @@ if test -z "$DISPLAY" -a -z "$TMUX"
         if status --is-interactive
             exec tmux
         end
-    else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
-        export _JAVA_AWT_WM_NONREPARENTING=1
-        exec startx
+    # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
+    #     export _JAVA_AWT_WM_NONREPARENTING=1
+    #     exec startx
+    else if test -z "$WAYLAND_DISPLAY"
+        exec sway --my-next-gpu-wont-be-nvidia
     end
 end
 
@@ -119,6 +121,11 @@ if test (uname) = "Darwin"
     alias copy "pbcopy"
     abbr paste "pbpaste"
     alias paste "pbpaste"
+else if test -n "$WAYLAND_DISPLAY"
+    abbr copy "wl-copy"
+    alias copy "wl-copy"
+    abbr paste "wl-paste"
+    alias paste "wl-paste"
 else
     abbr copy "xclip -selection clipboard -in"
     alias copy "xclip -selection clipboard -in"

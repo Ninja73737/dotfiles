@@ -224,6 +224,7 @@ Plug 'nvim-telescope/telescope.nvim'
 noremap cr <CMD>Telescope live_grep<CR>
 
 Plug 'mtoohey31/chafa.vim'
+Plug 'soywod/himalaya', {'rtp': 'vim'}
 
 call plug#end()
 
@@ -301,3 +302,22 @@ endfunction
 noremap cH :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap ! !<C-g>u
+inoremap ? ?<C-g>u
+inoremap " "<C-g>u
+inoremap ' '<C-g>u
+inoremap ( (<C-g>u
+inoremap [ [<C-g>u
+inoremap { {<C-g>u
+inoremap } }<C-g>u
+inoremap ] ]<C-g>u
+inoremap ) )<C-g>u
+
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '>-2<CR>gv=gv

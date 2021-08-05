@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 super + Return
     alacritty
 
@@ -12,14 +10,14 @@ super + space
 super + Tab
     rofi -show window
 
+super + backslash
+    bspc rule -a Alacritty -o state=floating && node=(bspc query -N -n focused) alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && bspc node '$node' -t (echo "floating"\n"tiled"\n"pseudo_tiled"\n"fullscreen" | fzf)'
+
+super + semicolon
+    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer" | fzf)'
+
 super + c
     bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
-
-# super + shift + s
-#     pkill -USR1 -x sxhkd
-
-super + o
-    $HOME/.scripts/switch_output_linux
 
 super + {Down,Up}
     pulsemixer --change-volume {-,+}2
@@ -28,7 +26,7 @@ super + shift + {Left,Right}
     playerctl --player=spotify {previous,next}
 
 super + shift + space
-    playerctl --player=spotify play-pause && fish -c 'test (playerctl --player=spotify status) = "Playing" && polybar-msg cmd show.spotify && polybar-msg cmd show.spotify-previous && polybar-msg cmd show.spotify-next || fish -c "polybar-msg cmd hide.spotify && polybar-msg cmd hide.spotify-previous && polybar-msg cmd hide.spotify-next"'
+    playerctl --player=spotify play-pause
 
 super + shift + {Down,Up}
     pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g" | xargs -I \{\} pulsemixer --id \{\} --change-volume {-,+}2
@@ -42,29 +40,14 @@ super + shift + {Down,Up}
 super + shift + s
     flameshot gui
 
-super + f
-    bspc node focused.tiled -t floating || bspc node focused.floating -t tiled
-
-super + shift + f
-    bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t tiled
-
-super + y
-    $HOME/.scripts/random_bg -u
-
 super + d
     sleep 1; xset dpms force off
-
-super + i
-    $HOME/.scripts/linein_listen_linux
 
 super + m
     bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
 
 super + b
     bspc node @/ --balance && bspc node -f (bspc query -N -n)
-
-super + shift + n
-    pkill kmonad || fish -c "pgrep kmonad || kmonad $HOME/.config/kmonad/macbook.kbd" &
 
 super + {h,j,k,l}
     bash -c "DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -f \$DIR || bspc monitor -f \$DIR"
@@ -85,7 +68,7 @@ super + shift + {p,u,g,n}
     brave --profile-directory="{Default,Profile 2,Profile 3,Profile 4}"
 
 super + shift + {q,r}
-    bspc {quit,wm -r}
+    bspc {quit,wm -r; pkill -USR1 -x sxhkd}
 
 super + {w,q}
     bspc node -{c,k}
@@ -93,8 +76,5 @@ super + {w,q}
 super + z
     zoom_slow
 
-super + backslash
-    bspc node focused.tiled -t fullscreen || bspc node focused.fullscreen -t floating || bspc node focused.floating -t tiled
-
-super + shift + backslash
-    bspc node focused.tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled
+super + s
+    $HOME/.scripts/polybar_toggle

@@ -114,7 +114,7 @@ if [ -z "$macos" ] && [ ! -x "$(command -v git)" ]; then
   echo "> installing git"
   detect_pm_install git
 fi
-git clone --bare https://github.com/mtoohey31/dotfiles $HOME/.dotfiles
+git clone --depth=1 --bare https://github.com/mtoohey31/dotfiles $HOME/.dotfiles
 git --git-dir=$HOME/.dotfiles --work-tree=$HOME reset --hard
 $HOME/.scripts/setup/dotfiles_hide_untracked
 echo -n "> update submodules?"
@@ -140,7 +140,7 @@ if [ -n "$arch_based" ]; then
     fi
     run_root "pacman -S --needed base-devel cargo"
     if [ ! -d "/tmp/paru" ]; then
-      git clone https://aur.archlinux.org/paru /tmp/paru
+      git clone --depth=1 https://aur.archlinux.org/paru /tmp/paru
     fi
     ensure_sudo
     cd /tmp/paru
@@ -241,17 +241,17 @@ if [ ! -x "$(command -v nvim)" ]; then
 fi
 
 echo -n "> install fonts?"
-choose && detect_pm_install ttf-ibm-plex ttf-mac-fonts ttf-apple-emoji aur/nerd-fonts-jetbrains-mono
+choose && detect_pm_install ttf-ibm-plex ttf-dejavu noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-liberation ttf-mac-fonts aur/nerd-fonts-jetbrains-mono
 
 if [ ! -x "$(command -v qutebrowser)" ] && ([ -z "$macos" ] || [ -x "$(open -Ra "qutebrowser.app")" ]); then
   echo -n "> install qutebrowser"
   choose && (
   detect_pm_install qutebrowser
   install_pip
-  pip3 install git+https://github.com/mtoohey31/qbpm.git\#egg=qbpm # TODO: switch this to psvr/qbpm once my PR is merged
+  pip3 install git+https://github.com/psvr/qbpm.git\#egg=qbpm # TODO: switch this to psvr/qbpm once my PR is merged
   $HOME/.scripts/setup/create_qbpm_profiles
   if [ -n "$macos" ]; then
-    git clone https://github.com/mtoohey31/qbpm $HOME/qbpm # TODO: same here
+    git clone --depth=1 https://github.com/psvr/qbpm $HOME/qbpm # TODO: same here
     cd $HOME/qbpm
     brew install platypus
     platypus -P qbpm.platypus /Applications/qbpm.app
@@ -261,15 +261,12 @@ if [ ! -x "$(command -v qutebrowser)" ] && ([ -z "$macos" ] || [ -x "$(open -Ra 
 fi
 
 if [ -z "$macos" ]; then
-  if [ ! -x "$(command -v bspwm)" ]; then
-    echo -n "> install bspwm and enable autologin?"
-    echo "> creating autologin service"
-    run_root "mkdir -p /etc/systemd/system/getty@tty1.service.d/ && echo '[Service]' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=-/usr/bin/agetty --autologin $(whoami) --noclear %I \$TERM' > /etc/systemd/system/getty@tty1.service.d/override.conf"
-  fi
-  if [ ! -x "$(command -v sxhkd)" ]; then
-    echo -n "> install sxhkd?"
-    choose && detect_pm_install sxhkd
-  fi
+  echo "> don't forget to add yourself to important groups, including: `wireshark, libvirt, docker, video, uinput`"
+  echo -n "> enable autologin?"
+  echo "> creating autologin service"
+  run_root "mkdir -p /etc/systemd/system/getty@tty1.service.d/ && echo '[Service]' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=-/usr/bin/agetty --autologin $(whoami) --noclear %I \$TERM' > /etc/systemd/system/getty@tty1.service.d/override.conf"
+  echo -n "> stow global config files?"
+  choose && detect_pm_install stow && run_root "stow -d $HOME/.scripts/setup/stow -t / $(command ls $HOME/.scripts/setup/stow)"
 fi
 
 echo -n "> upgrade system?"

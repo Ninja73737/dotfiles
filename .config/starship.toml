@@ -59,9 +59,6 @@ $character"""
 show_always = true
 format = "[$user]($style) "
 
-[[battery.display]]
-threshold = 100
-
 [directory]
 format = "in [$path]($style) "
 
@@ -115,10 +112,10 @@ when = "test $(cat /tmp/numupdates) -ge 25"
 symbol = " "
 
 [battery]
-format = "with [$symbol $percentage]($style) battery "
+format = "with [$symbol$percentage]($style) battery "
 full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
+charging_symbol = ""
+discharging_symbol = ""
 
 [conda]
 symbol = " "

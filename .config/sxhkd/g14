@@ -1,0 +1,7 @@
+# vi: ft=sxhkdrc
+
+XF86KbdBrightnessDown
+    switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end
+
+XF86KbdBrightnessUp
+    switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end

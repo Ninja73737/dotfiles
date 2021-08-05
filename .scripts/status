@@ -1,0 +1,38 @@
+#!/bin/fish
+
+## TODO: Add wireguard, wifi, and bluetooth status display
+
+while true
+  set output
+
+  set output $output  (df -h | grep '\s/$' | awk '{ print $4 }')" |"
+
+  set num_updates (cat /tmp/numupdates)
+  if test "$num_updates" -ge 25
+    set output $output  $num_updates" |"
+  end
+
+  set raw_hs_bat (headsetcontrol -b 2> /dev/null)
+  if test "$status" -eq 0
+    set hs_bat (echo $raw_hs_bat | grep Battery | awk -F: '{ print $2 }' | tr -d '\\n\\r ')
+    set output $output  $hs_bat" |"
+  end
+
+  if test (cat /sys/class/power_supply/BAT0/status) != "Discharging"
+    set output $output 
+  else
+    set output $output 
+  end
+  set output $output (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)"% |"
+
+  if test (pulsemixer --get-mute) -eq 1
+    set output $output 婢" |"
+  else
+    set output $output 墳 (pulsemixer --get-volume | awk '{ print $1 }')"% |"
+  end
+
+  set output $output (date +' %a. %b %-d  %-I:%M:%S %p')" |"
+
+  echo $output
+  sleep 1
+end

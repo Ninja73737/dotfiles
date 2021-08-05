@@ -1,15 +1,19 @@
 #!/usr/bin/env sh
 
 qbpm new personal
-mkdir -p .local/share/qutebrowser-profiles/personal/config/
+mkdir -p ~/.local/share/qutebrowser-profiles/personal/config
+mkdir -p ~/.local/share/qutebrowser-profiles/personal/data/greasemonkey
 ln -s ~/.config/qutebrowser/greasemonkey ~/.local/share/qutebrowser-profiles/personal/config/greasemonkey
 qbpm new university
-mkdir -p .local/share/qutebrowser-profiles/university/config/
+mkdir -p ~/.local/share/qutebrowser-profiles/university/config
+mkdir -p ~/.local/share/qutebrowser-profiles/university/data/greasemonkey
 ln -s ~/.config/qutebrowser/greasemonkey ~/.local/share/qutebrowser-profiles/university/config/greasemonkey
 qbpm new gaming
-mkdir -p .local/share/qutebrowser-profiles/gaming/config/
+mkdir -p ~/.local/share/qutebrowser-profiles/gaming/config
+mkdir -p ~/.local/share/qutebrowser-profiles/gaming/data/greasemonkey
 ln -s ~/.config/qutebrowser/greasemonkey ~/.local/share/qutebrowser-profiles/gaming/config/greasemonkey
 qbpm new mod
-mkdir -p .local/share/qutebrowser-profiles/mod/config/
+mkdir -p ~/.local/share/qutebrowser-profiles/mod/config
+mkdir -p ~/.local/share/qutebrowser-profiles/mod/data/greasemonkey
 ln -s ~/.config/qutebrowser/greasemonkey ~/.local/share/qutebrowser-profiles/mod/config/greasemonkey
 qbpm desktop -c
