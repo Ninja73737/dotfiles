@@ -8,7 +8,7 @@ output "Unknown TL140BDXP01-0 0x00000000" {
     position 0 1440
 }
 
-exec_always fish -c 'if test (cat /sys/class/power_supply/BAT0/status) = "Discharging"; swaymsg output \\'"Unknown TL140BDXP01-0 0x00000000"\\' resolution 2560x1440@60.001Hz; else; swaymsg output \\'"Unknown TL140BDXP01-0 0x00000000"\\' resolution 2560x1440@120Hz; end &>> ~/bro' &>> ~/bro
+exec_always $HOME/.scripts/screenlayout/auto_g14_hz
 
 output "Acer Technologies XV340CK P THQAA0013P00" {
     resolution 3440x1440
@@ -142,7 +142,7 @@ bar {
 
     position top
 
-    status_command $HOME/.scripts/statusline
+    status_command $HOME/.scripts/status
 
     colors {
         background $background

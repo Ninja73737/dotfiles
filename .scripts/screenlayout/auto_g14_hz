@@ -1,0 +1,7 @@
+#!/usr/bin/env fish
+
+if test (cat -A /sys/class/power_supply/BAT0/status) = 'Discharging$'
+  swaymsg output '"Unknown TL140BDXP01-0 0x00000000"' resolution 2560x1440@60.001Hz
+else
+  swaymsg output '"Unknown TL140BDXP01-0 0x00000000"' resolution 2560x1440@120Hz
+end
