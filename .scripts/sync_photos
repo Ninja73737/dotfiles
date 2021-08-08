@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rsync -a storage/dcim/Camera/ tooheys@192.168.86.112:/mnt/main-storage/media/Pictures/rsync/{} && curl "{}"
