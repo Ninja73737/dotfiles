@@ -1,3 +1,5 @@
+# vi: ft=conf
+
 # https://github.com/NomisIV/swayhide
 
 include "$HOME/.cache/wal/colors-sway"
@@ -18,7 +20,7 @@ output "Acer Technologies XV340CK P THQAA0013P00" {
 
 output * background #000000 solid_color
 
-exec_always pkill swayidle; swayidle -w timeout 60 "swaylock -f --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 16 --font \\"JetBrainsMono Nerd Font\\" --effect-blur 16x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000 --grace 10 --fade-in 10" timeout 180 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep "swaylock -f --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 16 --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
+exec_always pkill swayidle; swayidle -w timeout 60 "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 16x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000 --grace 10 --fade-in 10" timeout 180 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
 
 input "1267:12440:ELAN1201:00_04F3:3098_Touchpad" {
     tap enabled
@@ -29,11 +31,8 @@ input "6940:7013:Corsair_CORSAIR_HARPOON_RGB_WIRELESS_Gaming_Dongle" {
     accel_profile flat
 }
 
-exec_always pgrep kmonad || kmonad $HOME/.config/kmonad/laptop_mods.kbd
-exec_always pgrep flashfocus || flashfocus
-exec_always pgrep plover || plover
-exec_always pgrep steam || steam -silent
-exec_always pgrep Discord || discord --start-minimized
+exec_always $HOME/.scripts/start_apps
+exec_always fish -c 'if test -e /usr/share/dbus-1/services/fr.emersion.mako.service; swaynag -m "mako exists as a dbus service, remove to avoid incorrect colours"; end'
 exec_always pkill mako; mako --background-color "$backgroundCC" --text-color "$foreground"
 exec_always pgrep autotiling || autotiling
 
@@ -45,6 +44,7 @@ focus_follows_mouse yes
 mouse_warping container
 default_orientation horizontal
 seat * hide_cursor 1000
+focus_wrapping no
 
 for_window [title="floatme"] floating enable
 for_window [class="Bitwarden"] floating enable
@@ -103,26 +103,26 @@ bindsym Mod4+Shift+u exec brave --profile-directory="Profile 2"
 bindsym Mod4+Shift+g exec brave --profile-directory="Profile 3"
 bindsym Mod4+Shift+m exec brave --profile-directory="Profile 4"
 
-bindsym Mod4+Up exec pulsemixer --change-volume +2
-bindsym XF86AudioRaiseVolume exec pulsemixer --change-volume +2
-bindsym Mod4+Down exec pulsemixer --change-volume -2
-bindsym XF86AudioLowerVolume exec pulsemixer --change-volume -2
-bindsym Mod4+Shift+Up exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume +2
-bindsym Mod4+Shift+Down exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume -2
-bindsym Mod4+Shift+Left exec playerctl --player=spotify previous
-bindsym Mod4+Shift+Right exec playerctl --player=spotify next
-bindsym Mod4+Shift+Space exec playerctl --player=spotify play-pause
+bindsym --locked Mod4+Up exec pulsemixer --change-volume +2
+bindsym --locked XF86AudioRaiseVolume exec pulsemixer --change-volume +2
+bindsym --locked Mod4+Down exec pulsemixer --change-volume -2
+bindsym --locked XF86AudioLowerVolume exec pulsemixer --change-volume -2
+bindsym --locked Mod4+Shift+Up exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume +2
+bindsym --locked Mod4+Shift+Down exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume -2
+bindsym --locked Mod4+Shift+Left exec playerctl --player=spotify previous
+bindsym --locked Mod4+Shift+Right exec playerctl --player=spotify next
+bindsym --locked Mod4+Shift+Space exec playerctl --player=spotify play-pause
 
-bindsym XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'+15,255)') > /sys/class/backlight/amdgpu_bl0/brightness"
-bindsym XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl0/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl0/brightness"
+bindsym --locked XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'+15,255)') > /sys/class/backlight/amdgpu_bl0/brightness"
+bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl0/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl0/brightness"
 
-bindsym XF86KbdBrightnessUp exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end"
-bindsym XF86KbdBrightnessDown exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end"
+bindsym --locked XF86KbdBrightnessUp exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end"
+bindsym --locked XF86KbdBrightnessDown exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end"
 
 bindsym Mod4+Shift+S exec grimshot copy area
 bindsym Mod1+Shift+S exec grimshot copy area
 
-bindsym XF86Launch1 exec /bin/sh -c 'ps aux | grep "kmonad $HOME/.config/kmonad/laptop_mods.kbd" | grep -v "grep" > /dev/null && (pkill kmonad; kmonad $HOME/.config/kmonad/laptop.kbd & disown)|| (pkill kmonad; kmonad $HOME/.config/kmonad/laptop_mods.kbd & disown)'
+bindsym --locked XF86Launch1 exec /bin/sh -c 'ps aux | grep "kmonad $HOME/.config/kmonad/laptop_mods.kbd" | grep -v "grep" > /dev/null && (pkill kmonad; kmonad $HOME/.config/kmonad/laptop.kbd & disown)|| (pkill kmonad; kmonad $HOME/.config/kmonad/laptop_mods.kbd & disown)'
 
 mode "resize" {
     bindsym h resize shrink width 10px

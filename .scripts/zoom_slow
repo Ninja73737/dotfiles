@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-$HOME/.scripts/display_setup_slow
-zoom
-$HOME/.scripts/display_setup

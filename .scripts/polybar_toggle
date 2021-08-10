@@ -17,11 +17,11 @@ elif xrandr | grep "DP-1-0.1" && xrandr | grep "DP-1-0.2"; then
     bspc config -m %DP-1-0.1 top_padding 32
   fi
 else
-  if [ "$(bspc config -m eDP-1 top_padding)" != "-16" ]; then
-    bspc config -m eDP-1 top_padding -16
+  if [ "$(bspc config -m eDP top_padding)" != "-16" ]; then
+    bspc config -m eDP top_padding -16
     polybar-msg cmd hide
   else
     polybar-msg cmd show
-    bspc config -m eDP-1 top_padding 32
+    bspc config -m eDP top_padding 32
   fi
 fi

@@ -21,20 +21,22 @@
   dctl (tap-hold-next-release 200 del lctl)
   enav (tap-hold-next-release 200 ent (layer-toggle nav))
   tnum (tap-hold-next-release 200 tab (layer-toggle num))
+  bset (tap-hold-next-release 200 \ (layer-toggle settings))
+  tgplv #(e r f v o l)
 )
 
 (deflayer qwerty
   \(    q w e     r     t     y    u   i o p \)
-  \     a s d     f     g     h    j   k l ; '
+  @bset a s d     f     g     h    j   k l ; '
   lsft  z x c     v     b     n    m   , . / rsft
            @ealt @bmet @dctl @enav spc @tnum
 )
 
 (deflayer nav
-  _ _ home pgup     pgdn       end _   _    _  _    _ _
-  _ _ _    ScrollUp ScrollDown _   lft down up rght _ _
-  _ _ _    _        _          _   _   _    _  _    _ _
-           _        _          _   _   _    _
+  _ _ home pgup pgdn end _   _    _  _    _ _
+  _ _ _    _    _    _   lft down up rght _ _
+  _ _ _    _    _    _   _   _    _  _    _ _
+           _    _    _   _   _    _
 )
 
 ;; TODO: Fix scroll
@@ -44,4 +46,18 @@
   < F5 F6  F7  F8  # * 4 5 6 + >
   _ F9 F10 F11 F12 % ^ 1 2 3 = _
            _   _   _ _ 0 _
+)
+
+(deflayer settings
+  XX XX XX XX XX XX XX XX XX XX XX XX
+  XX XX XX XX XX XX XX XX XX XX XX XX
+  XX XX XX XX #(@tgplv (layer-add plover)) XX XX XX XX XX XX XX
+           XX XX XX XX XX XX
+)
+
+(deflayer plover
+  XX q w e r t y u i o p [
+  #(@tgplv (layer-rem plover)) a s d f g h j k l ; '
+  1 1 1 1 1 1 1 1 1 1 1 1
+        XX c v n m XX
 )

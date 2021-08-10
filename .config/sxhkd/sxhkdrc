@@ -40,12 +40,6 @@ super + shift + {Down,Up}
 super + shift + s
     flameshot gui
 
-super + d
-    sleep 1; xset dpms force off
-
-super + m
-    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && pulsemixer'
-
 super + b
     bspc node @/ --balance && bspc node -f (bspc query -N -n)
 
@@ -61,10 +55,10 @@ super + {1-9,0}
 super + shift + {1-9,0}
     TARGET='{1-9,10}' bspc node -d $TARGET --follow && bspc desktop -f $TARGET
 
-super + {p,u,g,n}
+super + {p,u,g,m}
     qbpm launch {personal,university,gaming,mod}
 
-super + shift + {p,u,g,n}
+super + shift + {p,u,g,m}
     brave --profile-directory="{Default,Profile 2,Profile 3,Profile 4}"
 
 super + shift + {q,r}
@@ -72,9 +66,6 @@ super + shift + {q,r}
 
 super + {w,q}
     bspc node -{c,k}
-
-super + z
-    zoom_slow
 
 super + s
     $HOME/.scripts/polybar_toggle

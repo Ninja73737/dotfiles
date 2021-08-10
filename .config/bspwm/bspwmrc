@@ -9,37 +9,6 @@ xset s 1800
 
 # BSPWM Settings
 
-switch (cat /etc/hostname)
-  case horizon
-    $HOME/.scripts/screenlayout/desktop_dual_ultrawide
-    bspc monitor DP-4 -d 1 2 3 4 5
-    bspc monitor HDMI-0 -d 6 7 8 9
-  case air
-    bspc monitor eDP1 -d 2 3 5 6 8 9
-    fish -c "pgrep kmonad || kmonad $HOME/.config/kmonad/macbook.kbd" &
-    libinput-gestures-setup start
-  case zephyrus
-    if xrandr | grep "HDMI-1 connected"
-      $HOME/.scripts/screenlayout/hdmi_ultrawide_laptop
-      bspc monitor -o HDMI-1 eDP-1
-      bspc monitor HDMI-1 -d 1 2 3 4 5
-      bspc monitor eDP-1 -d 6 7 8 9
-      bspc config -m HDMI-1 top_padding 32
-    else if xrandr | grep "DP-1-0.1" && xrandr | grep "DP-1-0.2"
-      $HOME/.scripts/screenlayout/usbc_dual_ultrawide_laptop
-      bspc monitor -o %DP-1-0.1 %DP-1-0.2 %eDP
-      bspc monitor %DP-1-0.1 -d 1 2 3
-      bspc monitor %DP-1-0.2 -d 4 5 6
-      bspc monitor %eDP -d 7 8 9
-      bspc config -m %DP-1-0.1 top_padding 32
-    else
-      bspc monitor eDP-1 -d 1 2 3 4 5 6 7 8 9
-      bspc config -m eDP-1 top_padding 32
-    end
-    fish -c "pgrep kmonad || kmonad $HOME/.config/kmonad/zephyrus-mods.kbd" &
-    libinput-gestures-setup start
-end
-
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   true
 bspc config pointer_follows_monitor true
@@ -64,6 +33,36 @@ bspc config single_monocle          true
 bspc config ignore_ewmh_struts      true
 bspc config honor_size_hints        true
 
+switch (cat /etc/hostname)
+  case horizon
+    $HOME/.scripts/screenlayout/desktop_dual_ultrawide
+    bspc monitor DP-4 -d 1 2 3 4 5
+    bspc monitor HDMI-0 -d 6 7 8 9
+  case air
+    bspc monitor eDP1 -d 2 3 5 6 8 9
+    fish -c "pgrep kmonad || kmonad $HOME/.config/kmonad/laptop_mods.kbd" &
+    libinput-gestures-setup start
+  case zephyrus
+    if xrandr | grep "HDMI-1 connected"
+      $HOME/.scripts/screenlayout/hdmi_ultrawide_laptop
+      bspc monitor -o HDMI-1 eDP-1
+      bspc monitor HDMI-1 -d 1 2 3 4 5
+      bspc monitor eDP-1 -d 6 7 8 9
+      bspc config -m HDMI-1 top_padding 32
+    else if xrandr | grep "DP-1-0.1" && xrandr | grep "DP-1-0.2"
+      $HOME/.scripts/screenlayout/usbc_dual_ultrawide_laptop
+      bspc monitor -o %DP-1-0.1 %DP-1-0.2 %eDP
+      bspc monitor %DP-1-0.1 -d 1 2 3
+      bspc monitor %DP-1-0.2 -d 4 5 6
+      bspc monitor %eDP -d 7 8 9
+      bspc config -m %DP-1-0.1 top_padding 32
+    else
+      bspc monitor eDP -d 1 2 3 4 5 6 7 8 9
+      bspc config -m eDP top_padding 32
+    end
+    fish -c "pgrep kmonad || kmonad $HOME/.config/kmonad/laptop_mods.kbd" &
+end
+
 # BSPWM Rules
 
 bspc rule -r "*"
@@ -86,14 +85,5 @@ switch (cat /etc/hostname)
   case zephyrus
     pgrep sxhkd && pkill -USR1 -x sxhkd || sxhkd -c $HOME/.config/sxhkd/sxhkdrc $HOME/.config/sxhkd/g14 &
 end
-pgrep picom || picom --experimental-backends &
-pgrep flashfocus || flashfocus &
-pgrep unclutter || unclutter --timeout 1 &
 pgrep dunst || $HOME/.config/dunst/launch.sh
-pgrep agent || /usr/lib/geoclue-2.0/demos/agent &
-pgrep redshift || redshift &
-pgrep plover || fish -c "sleep 5; plover" &
-pgrep mailspring || mailspring --background &
-which discord && fish -c "pgrep Discord || discord --start-minimized &" || which discord-canary && fish -c "pgrep DiscordCanary || discord-canary --start-minimized &"
-pgrep redshift || redshift &
-pgrep steam || steam -silent &
+$HOME/.scripts/start_apps

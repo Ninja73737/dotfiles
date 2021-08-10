@@ -1,0 +1,10 @@
+[org.kde.krunner.desktop]
+_k_friendly_name=KRunner
+_launch=Meta+Space,Alt+Space\tAlt+F2\tSearch,KRunner
+
+[ksmserver]
+Log Out Without Confirmation=Meta+Shift+Q,none,Log Out Without Confirmation
+_k_friendly_name=Session Management
+
+[kwin]
+Window Close=Meta+W,Alt+F4,Close Window

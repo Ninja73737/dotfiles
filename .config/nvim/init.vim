@@ -225,6 +225,7 @@ noremap cr <CMD>Telescope live_grep<CR>
 
 Plug 'mtoohey31/chafa.vim'
 Plug 'soywod/himalaya', {'rtp': 'vim'}
+Plug 'kmonad/kmonad-vim'
 
 call plug#end()
 

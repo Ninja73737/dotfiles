@@ -1,7 +1,7 @@
 from os.path import expanduser, join
 from os import environ
 from sys import platform
-from subprocess import run
+from subprocess import Popen
 import json
 
 command_prefix_list = ['fish', '-c']
@@ -9,7 +9,7 @@ if platform == 'darwin':
     command_prefix_string = 'alacritty -t "floatme" -o background_opacity=0.8 -e '
 elif 'SWAYSOCK' in environ:
     command_prefix_string = 'alacritty -t "floatme" -o background_opacity=0.8 -e '
-elif run(['bspc wm -g']).returncode == 0:
+elif Popen(['bspc wm -g'], shell=True).wait() == 0:
     command_prefix_string = 'bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e '
 else:
     command_prefix_string = ''
