@@ -1,13 +1,13 @@
 if test -z "$DISPLAY" -a -z "$TMUX"
-    if test -n "$SSH_CONNECTION"
+    if test -n "$SSH_CONNECTION" -o -n "$TERMUX_VERSION"
         if status --is-interactive
             exec tmux
         end
-    # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
-    #     export _JAVA_AWT_WM_NONREPARENTING=1
-    #     exec startx
-    else if test -z "$WAYLAND_DISPLAY"
-        exec sway --my-next-gpu-wont-be-nvidia
+    else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
+        export _JAVA_AWT_WM_NONREPARENTING=1
+        exec startx
+    # else if test -z "$WAYLAND_DISPLAY"
+    #     exec sway --my-next-gpu-wont-be-nvidia
     end
 end
 

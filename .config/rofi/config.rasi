@@ -3,8 +3,8 @@ configuration {
   show-icons:            true;
   drun-display-format:   "{icon}{name}";
   display-run:           ">";
-  display-drun:          "􀊫";
-  display-window:        "􀇴";
+  display-drun:          "";
+  display-window:        "";
   modi:                  "window,run,drun";
   lines:                 7;
   width:                 30;

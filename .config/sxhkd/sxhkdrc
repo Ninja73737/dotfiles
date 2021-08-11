@@ -1,23 +1,31 @@
-super + Return
-    alacritty
+# window management
 
-super + slash
-    alacritty -e fish -C lf
+super + {h,j,k,l}
+    bash -c "DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -f \$DIR || bspc monitor -f \$DIR"
 
-super + space
-    rofi -show drun
+super + shift + {h,j,k,l}
+    bspc node -s {west,south,north,east} && bspc node -f (bspc query -N -n)
 
-super + Tab
-    rofi -show window
+super + {1-9,0}
+    bspc desktop -f '{1-9,10}'
 
-super + backslash
-    bspc rule -a Alacritty -o state=floating && node=(bspc query -N -n focused) alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && bspc node '$node' -t (echo "floating"\n"tiled"\n"pseudo_tiled"\n"fullscreen" | fzf)'
+super + shift + {1-9,0}
+    TARGET='{1-9,10}' bspc node -d $TARGET --follow && bspc desktop -f $TARGET
 
-super + semicolon
-    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer" | fzf)'
+super + b
+    bspc node @/ --balance && bspc node -f (bspc query -N -n)
 
-super + c
-    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
+super + shift + f
+    bspc node focused.tiled -t floating || bspc node focused.floating -t fullscreen || bspc node focused.fullscreen -t tiled
+
+super + {w,q}
+    bspc node -{c,k}
+
+super + shift + {q,r}
+    bspc {quit,wm -r; pkill -USR1 -x sxhkd}
+
+
+# media and config
 
 super + {Down,Up}
     pulsemixer --change-volume {-,+}2
@@ -34,38 +42,37 @@ super + shift + {Down,Up}
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
     pulsemixer --change-volume {-,+}2
 
-{XF86MonBrightnessDown,XF86MonBrightnessUp}
-    xbacklight -inc {-,+}10
+# apps and utilities
+
+super + Return
+    alacritty
+
+super + slash
+    alacritty -e fish -C lf
+
+super + space
+    rofi -show drun
+
+super + Tab
+    rofi -show window
+
+super + semicolon
+    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer" | fzf)'
+
+super + c
+    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
 
 super + shift + s
     flameshot gui
 
-super + b
-    bspc node @/ --balance && bspc node -f (bspc query -N -n)
-
-super + {h,j,k,l}
-    bash -c "DIR="{west,south,north,east}" && bspc query -N -n \$DIR && bspc node -f \$DIR || bspc monitor -f \$DIR"
-
-super + shift + {h,j,k,l}
-    bspc node -s {west,south,north,east} && bspc node -f (bspc query -N -n)
-
-super + {1-9,0}
-    bspc desktop -f '{1-9,10}'
-
-super + shift + {1-9,0}
-    TARGET='{1-9,10}' bspc node -d $TARGET --follow && bspc desktop -f $TARGET
+alt + shift + s
+    flameshot gui
 
 super + {p,u,g,m}
     qbpm launch {personal,university,gaming,mod}
 
 super + shift + {p,u,g,m}
     brave --profile-directory="{Default,Profile 2,Profile 3,Profile 4}"
-
-super + shift + {q,r}
-    bspc {quit,wm -r; pkill -USR1 -x sxhkd}
-
-super + {w,q}
-    bspc node -{c,k}
 
 super + s
     $HOME/.scripts/polybar_toggle

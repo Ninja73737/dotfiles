@@ -1,7 +1,13 @@
 # vi: ft=sxhkdrc
 
-XF86KbdBrightnessDown
-    switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end
+{XF86MonBrightnessUp,XF86MonBrightnessDown}
+    echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'{+,-}15,255)') > /sys/class/backlight/amdgpu_bl0/brightness
 
 XF86KbdBrightnessUp
     switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end
+
+XF86KbdBrightnessDown
+    switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end
+
+XF86Launch1
+    /bin/sh -c 'ps aux | grep "kmonad $HOME/.config/kmonad/laptop_mods.kbd" | grep -v "grep" > /dev/null && (pkill kmonad; kmonad $HOME/.config/kmonad/laptop.kbd & disown)|| (pkill kmonad; kmonad $HOME/.config/kmonad/laptop_mods.kbd & disown)'

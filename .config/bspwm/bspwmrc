@@ -49,13 +49,13 @@ switch (cat /etc/hostname)
       bspc monitor HDMI-1 -d 1 2 3 4 5
       bspc monitor eDP-1 -d 6 7 8 9
       bspc config -m HDMI-1 top_padding 32
-    else if xrandr | grep "DP-1-0.1" && xrandr | grep "DP-1-0.2"
+    else if xrandr | grep "DP-0.2" && xrandr | grep "DP-0.3"
       $HOME/.scripts/screenlayout/usbc_dual_ultrawide_laptop
-      bspc monitor -o %DP-1-0.1 %DP-1-0.2 %eDP
-      bspc monitor %DP-1-0.1 -d 1 2 3
-      bspc monitor %DP-1-0.2 -d 4 5 6
-      bspc monitor %eDP -d 7 8 9
-      bspc config -m %DP-1-0.1 top_padding 32
+      bspc monitor -o %DP-0.3 %DP-0.2 %eDP-1-1
+      bspc monitor %DP-0.3 -d 1 2 3
+      bspc monitor %DP-0.2 -d 4 5 6
+      bspc monitor %eDP-1-1 -d 7 8 9
+      bspc config -m %DP-0.3 top_padding 32
     else
       bspc monitor eDP -d 1 2 3 4 5 6 7 8 9
       bspc config -m eDP top_padding 32

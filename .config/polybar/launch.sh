@@ -18,7 +18,7 @@ case $HOSTNAME in
   zephyrus)
     if xrandr | grep "HDMI-1 connected"; then
       polybar -c $HOME/.config/polybar/config.ini ultrawide &
-    elif xrandr | grep "DP-1-0.1" && xrandr | grep "DP-1-0.2"; then
+    elif xrandr | grep "DP-0.2" && xrandr | grep "DP-0.3"; then
       polybar -c $HOME/.config/polybar/config.ini ultrawide &
     else
       polybar -c $HOME/.config/polybar/config.ini laptop &

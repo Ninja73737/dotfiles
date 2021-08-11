@@ -50,9 +50,7 @@ for_window [title="floatme"] floating enable
 for_window [class="Bitwarden"] floating enable
 for_window [title=".*YouTube.*"] inhibit_idle visible
 
-bindsym Mod4+w kill
-bindsym Mod4+Shift+r reload
-bindsym Mod4+Shift+q exec swaymsg exit
+# window management
 
 bindsym Mod4+h focus left
 bindsym Mod4+j focus down
@@ -88,6 +86,22 @@ bindsym Mod4+Shift+0 exec swaymsg move container to workspace number 10 && swaym
 
 bindsym Mod4+backslash floating toggle
 
+bindsym Mod4+r mode "resize"
+mode "resize" {
+    bindsym h resize shrink width 10px
+    bindsym j resize grow height 10px
+    bindsym k resize shrink height 10px
+    bindsym l resize grow width 10px
+
+    bindsym Escape mode "default"
+}
+
+bindsym Mod4+w kill
+bindsym Mod4+Shift+r reload
+bindsym Mod4+Shift+q exec swaymsg exit
+
+# apps
+
 bindsym Mod4+Return exec alacritty
 bindsym Mod4+slash exec alacritty -e fish -C lf
 bindsym Mod4+C exec alacritty -t "floatme" -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
@@ -102,6 +116,11 @@ bindsym Mod4+Shift+p exec brave --profile-directory="Default"
 bindsym Mod4+Shift+u exec brave --profile-directory="Profile 2"
 bindsym Mod4+Shift+g exec brave --profile-directory="Profile 3"
 bindsym Mod4+Shift+m exec brave --profile-directory="Profile 4"
+
+bindsym Mod4+Shift+S exec grimshot copy area
+bindsym Mod1+Shift+S exec grimshot copy area
+
+# media and config
 
 bindsym --locked Mod4+Up exec pulsemixer --change-volume +2
 bindsym --locked XF86AudioRaiseVolume exec pulsemixer --change-volume +2
@@ -119,21 +138,7 @@ bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/
 bindsym --locked XF86KbdBrightnessUp exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end"
 bindsym --locked XF86KbdBrightnessDown exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end"
 
-bindsym Mod4+Shift+S exec grimshot copy area
-bindsym Mod1+Shift+S exec grimshot copy area
-
 bindsym --locked XF86Launch1 exec /bin/sh -c 'ps aux | grep "kmonad $HOME/.config/kmonad/laptop_mods.kbd" | grep -v "grep" > /dev/null && (pkill kmonad; kmonad $HOME/.config/kmonad/laptop.kbd & disown)|| (pkill kmonad; kmonad $HOME/.config/kmonad/laptop_mods.kbd & disown)'
-
-mode "resize" {
-    bindsym h resize shrink width 10px
-    bindsym j resize grow height 10px
-    bindsym k resize shrink height 10px
-    bindsym l resize grow width 10px
-
-    bindsym Escape mode "default"
-}
-
-bindsym Mod4+r mode "resize"
 
 font "pango:JetBrainsMono Nerd Font Regular 16px"
 
