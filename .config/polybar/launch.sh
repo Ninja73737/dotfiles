@@ -25,3 +25,7 @@ case $HOSTNAME in
     fi
     ;;
 esac
+
+while ! polybar-msg cmd hide; do
+  sleep 0.1
+done

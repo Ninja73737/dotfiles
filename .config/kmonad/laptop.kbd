@@ -13,6 +13,7 @@
   ;; cmp-seq ralt    ;; Set the compose key to `RightAlt'
   ;; cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
   fallthrough true
+  allow-cmd true
 )
 
 (defalias
@@ -23,6 +24,10 @@
   tnum (tap-hold-next-release 200 tab (layer-toggle num))
   bset (tap-hold-next-release 200 \ (layer-toggle settings))
   tgplv #(e r f v o l)
+  scru (cmd-button "while true; do sleep 0.1; xdotool click 4; done"
+                   "ps aux | grep \'xdotool click 4\' | awk \'{ print $2 }\' | xargs kill")
+  scrd (cmd-button "while true; do sleep 0.1; xdotool click 5; done"
+                   "ps aux | grep \'xdotool click 5\' | awk \'{ print $2 }\' | xargs kill")
 )
 
 (deflayer qwerty
@@ -34,7 +39,7 @@
 
 (deflayer nav
   _ _ home pgup pgdn end _   _    _  _    _ _
-  _ _ _    _    _    _   lft down up rght _ _
+  _ _ _    @scru @scrd    _   lft down up rght _ _
   _ _ _    _    _    _   _   _    _  _    _ _
            _    _    _   _   _    _
 )

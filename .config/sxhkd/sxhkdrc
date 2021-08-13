@@ -76,3 +76,9 @@ super + shift + {p,u,g,m}
 
 super + s
     $HOME/.scripts/polybar_toggle
+
+Super_L
+    polybar-msg cmd show
+
+@Super_L
+    polybar-msg cmd hide
