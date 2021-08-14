@@ -51,6 +51,7 @@ config.bind(
 config.bind('wp', 'hint links spawn --detach random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
 config.unbind('<Ctrl-v>')
+config.unbind('<Ctrl-a>')
 
 # Theming
 c.fonts.default_size = '12pt'
