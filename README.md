@@ -6,15 +6,16 @@ My cross-platform (MacOS and Linux) dotfiles.
 
 ## Usage
 
-If you want to make use of these yourself, just clone the repository with:
+If you want to make use of these yourself, you can get started using my bootstrap script:
 
 ```bash
-git clone https://github.com/mtoohey31/dotfiles/
+curl -L dot.mtoohey.com > bootstrap
+sh bootstrap
 ```
 
-...then copy everything to where it needs to go.
+...then select what you'd like! Be warned that some of these command may overwrite some of your current configurations, so make sure things are backed up.
 
-There are quite a few dependencies so if something is behaving unexpectedly, try taking a look at the script/config file in question, it's likely that a program it depends on is missing.
+There are quite a few dependencies so if something is behaving unexpectedly, try taking a look at the script or config file in question, it's likely that a program it depends on is missing.
 
 If you would like to also keep your dotfiles in GitHub so that you have them backed up, create your own fork of the repository on GitHub, then clone the repository with the following commands instead. Please be aware that running these two commands will overwrite any current configs that overlap with mine, so you should back your stuff up first:
 

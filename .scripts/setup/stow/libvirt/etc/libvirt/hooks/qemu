@@ -1,0 +1,19 @@
+#!/bin/sh
+
+guest_name=$1
+command=$2
+
+allocated_cpus=$(cat "/etc/libvirt/qemu/$guest_name.xml" | grep -Po "(?<=<vcpu placement='static'>).*(?=</vcpu>)")
+num_cpus=$(($(lscpu -e | wc -l)-1))
+
+if [ $command == "started" ]; then
+    last_free_cpu=$(($num_cpus-$allocated_cpus-1))
+    systemctl set-property --runtime -- system.slice AllowedCPUs=0-$last_free_cpu
+    systemctl set-property --runtime -- user.slice AllowedCPUs=0-$last_free_cpu
+    systemctl set-property --runtime -- init.slice AllowedCPUs=0-$last_free_cpu
+elif [ $command == "release" ]; then
+    last_cpu=$(($num_cpus-1))
+    systemctl set-property --runtime -- system.slice AllowedCPUs=0-$last_cpu
+    systemctl set-property --runtime -- user.slice AllowedCPUs=0-$last_cpu
+    systemctl set-property --runtime -- init.slice AllowedCPUs=0-$last_cpu
+fi

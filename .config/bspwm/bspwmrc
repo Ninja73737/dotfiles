@@ -25,7 +25,6 @@ bspc config borderless_monocle        true
 bspc config gapless_monocle           false
 bspc config single_monocle            true
 
-bspc config ignore_ewmh_struts        true
 bspc config honor_size_hints          true
 bspc config remove_disabled_monitors  true
 bspc config remove_unplugged_monitors true
@@ -41,40 +40,38 @@ switch (cat /etc/hostname)
     libinput-gestures-setup start
   case zephyrus
     if xrandr | grep "HDMI-1 connected"
-      $HOME/.scripts/screenlayout/hdmi_ultrawide_laptop
+      $HOME/.scripts/screenlayout/laptop_hdmi_acer_ultrawide
       bspc monitor -o HDMI-1 eDP-1
       bspc monitor HDMI-1 -d 1 2 3 4 5
       bspc monitor eDP-1 -d 6 7 8 9
-    else if lsusb -d 2109:8817
+    else if lsusb -d 2109:8817 && fish -c 'test (asusctl graphics -g) = "Current graphics mode: nvidia" || test (asusctl graphics -g) = "Current graphics mode: hybrid"'
       $HOME/.scripts/screenlayout/laptop_usbc_dual_ultrawide
-      bspc monitor -o %DP-0.3 %DP-0.2 eDP-1-1
       for i in (seq 1 3)
           bspc desktop "^$i" -m %DP-0.3
       end
-      bspc monitor %DP-0.3 -d 1 2 3
       for i in (seq 4 6)
           bspc desktop "^$i" -m %DP-0.2
       end
-      bspc monitor %DP-0.2 -d 4 5 6
       for i in (seq 7 9)
           bspc desktop "^$i" -m eDP-1-1
       end
+      bspc monitor -o %DP-0.3 %DP-0.2 eDP-1-1
+      bspc monitor %DP-0.3 -d 1 2 3
+      bspc monitor %DP-0.2 -d 4 5 6
       bspc monitor eDP-1-1 -d 7 8 9
     else
       $HOME/.scripts/screenlayout/laptop
-      if xrandr | grep "eDP-1 "
-        for i in (seq 1 9)
-            bspc desktop "^$i" -m eDP-1
-        end
-        bspc monitor eDP-1 -d 1 2 3 4 5 6 7 8 9
+      if xrandr | grep eDP-1-1
+        set display "eDP-1-1"
       else
-        for i in (seq 1 9)
-            bspc desktop "^$i" -m eDP-1-1
-        end
-        bspc monitor eDP-1-1 -d 1 2 3 4 5 6 7 8 9
+        set display "eDP-1"
       end
+      for i in (seq 1 9)
+          bspc desktop "^$i" -m $display
+      end
+      bspc monitor $display -d 1 2 3 4 5 6 7 8 9
       for monitor in (bspc query -M --names)
-        if ! string match 'eDP-1*' "$monitor"
+        if ! string match $display "$monitor"
           bspc monitor "%$monitor" -r
         end
       end
