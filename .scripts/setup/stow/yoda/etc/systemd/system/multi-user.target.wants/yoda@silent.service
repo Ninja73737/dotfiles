@@ -1,0 +1,8 @@
+[Unit]
+Description=Dynamically adjust liquidctl device pump and fan speeds with profile %i
+
+[Service]
+ExecStart=/bin/sh -c '/usr/bin/liquidctl initialize && eval /usr/bin/yoda $(cat "/etc/yoda/%i")'
+
+[Install]
+WantedBy=multi-user.target
