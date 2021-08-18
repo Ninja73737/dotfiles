@@ -434,4 +434,6 @@
     appname = "Spotify"
     urgency = low
     skip_display = yes
-    script = update_now_playing
+[plover]
+    appname = "Plover"
+    skip_display = yes

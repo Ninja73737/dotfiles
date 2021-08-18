@@ -267,6 +267,16 @@ if [ -z "$macos" ]; then
   run_root "mkdir -p /etc/systemd/system/getty@tty1.service.d/ && echo '[Service]' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=' > /etc/systemd/system/getty@tty1.service.d/override.conf && echo 'ExecStart=-/usr/bin/agetty --autologin $(whoami) --noclear %I \$TERM' > /etc/systemd/system/getty@tty1.service.d/override.conf"
   echo -n "> stow global config files?"
   choose && detect_pm_install stow && run_root "stow -d $HOME/.scripts/setup/stow -t / $(command ls $HOME/.scripts/setup/stow)"
+  echo -n "> install harpoond?"
+  choose && (
+  git clone https://github.com/andreldm/harpoond
+  cd harpoond
+  make
+  run_root make install
+  systemctl --user enable -now harpoond.service
+  cd ..
+  rm -r harpoond
+)
 fi
 
 echo -n "> upgrade system?"

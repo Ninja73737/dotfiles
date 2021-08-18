@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-polybar-msg hook spotify 1

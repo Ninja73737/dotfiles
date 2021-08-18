@@ -1,9 +1,14 @@
 #!/bin/sh
 
-xrandr --output eDP-1-1 --mode 2560x1440 --pos 0x0 --rotate normal
-
-if [ "$(cat /sys/class/power_supply/BAT0/status)" != "Discharging"]; then
-  xrandr --output eDP-1-1 --rate 120.00
+if xrandr | grep eDP-1-1; then
+  display="eDP-1-1"
 else
-  xrandr --output eDP-1-1 --rate 59.99
+  display="eDP-1"
+fi
+
+
+if [ "$(cat /sys/class/power_supply/BAT0/status)" != "Discharging" ]; then
+  xrandr --output "$display" --mode 2560x1440 --rate 120.00
+else
+  xrandr --output "$display" --mode 2560x1440 --rate 59.96
 fi

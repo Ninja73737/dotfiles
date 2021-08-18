@@ -224,7 +224,10 @@ Plug 'nvim-telescope/telescope.nvim'
 noremap cr <CMD>Telescope live_grep<CR>
 
 Plug 'mtoohey31/chafa.vim'
-Plug 'soywod/himalaya', {'rtp': 'vim'}
+let himalaya_path = system("which himalaya")
+if v:shell_error == 0
+    Plug 'soywod/himalaya', {'rtp': 'vim'}
+endif
 Plug 'kmonad/kmonad-vim'
 Plug 'othree/eregex.vim'
 

@@ -37,7 +37,7 @@ super + shift + space
     playerctl --player=spotify play-pause
 
 super + shift + {Down,Up}
-    pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g" | xargs -I \{\} pulsemixer --id \{\} --change-volume {-,+}2
+    pulsemixer --list-sinks | grep Spotify | awk '\{ print $4 \}' | sed "s/\,\$//g" | xargs -I \{\} pulsemixer --id \{\} --change-volume {-,+}5
 
 {XF86AudioLowerVolume,XF86AudioRaiseVolume}
     pulsemixer --change-volume {-,+}2
@@ -57,7 +57,7 @@ super + Tab
     rofi -show window
 
 super + semicolon
-    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer" | fzf)'
+    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer"\n"poweroff"\n"sudo systemctl suspend" | fzf)'
 
 super + c
     bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
@@ -78,7 +78,7 @@ super + s
     $HOME/.scripts/polybar_toggle
 
 Super_L
-    polybar-msg cmd show
+    polybar-msg cmd show && xdo raise -n polybar && xdo raise -n tray
 
 @Super_L
     polybar-msg cmd hide
