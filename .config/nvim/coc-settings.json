@@ -11,7 +11,7 @@
     "svelte",
     "typescript"
   ],
-  "coc.preferences.jumpCommand":"tab drop",
+  "coc.preferences.jumpCommand": "tab drop",
   "cSpell.language": "en-GB",
   "cSpell.ignoreRegExpList": [
     "[A-Z]{3}\\d{3,}([A-Z]|\\d)*",
@@ -79,22 +79,19 @@
     "voluntariness",
     "worldview"
   ],
-  "diagnostic-languageserver.mergeConfig": true,
-  "diagnostic-languageserver.filetypes": {
-    "json": [],
-    "markdown": [],
-    "pandoc": [],
-    "rmarkdown": []
-  },
-  "diagnostic-languageserver.linters": {
-    "languagetool": {
-      "args": [
-        "-l",
-        "en-CA",
-        "--disable",
-        "WHITESPACE_RULE,EN_QUOTES,ARROWS,MORFOLOGIK_RULE_EN_CA,DASH_RULE,COMMA_PARENTHESIS_WHITESPACE,UNLIKELY_OPENING_PUNCTUATION",
-        "%file"
-      ]
+  "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+      "rootPatterns": [".ccls-root", "compile_commands.json"],
+      "initializationOptions": {
+        "cache": {
+          "directory": ".ccls-cache"
+        },
+        "client": {
+          "snippetSupport": true
+        }
+      }
     }
   },
   "diagnostic.enableSign": false,
@@ -117,5 +114,8 @@
   "texlab.forwardSearch.executable": "/usr/bin/zathura",
   "texlab.forwardSearch.args": ["--synctex-forward", "%l:1:%f", "%p"],
   "prettier.useTabs": false,
-  "prettier.tabWidth": 2
+  "prettier.tabWidth": 2,
+  "yaml.schemas": {
+    "https://json.schemastore.org/ansible-playbook.json": "playbook.yaml"
+  }
 }
