@@ -1,30 +1,29 @@
 # vi: ft=conf
 
-# https://github.com/NomisIV/swayhide
-
 include "$HOME/.cache/wal/colors-sway"
 
-output "Unknown TL140BDXP01-0 0x00000000" {
-    scale 1
-    adaptive_sync on
-    position 0 1440
-}
+output * background "#000000" solid_color
 
-exec_always $HOME/.scripts/screenlayout/auto_g14_hz
+exec_always $HOME/.scripts/screenlayout/laptop_sway_dynamic
 
 output "Acer Technologies XV340CK P THQAA0013P00" {
-    resolution 3440x1440
     scale 1
+    mode 3440x1440
     position 0 0
 }
 
-output * background #000000 solid_color
+output "Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E" {
+    scale 1
+    mode 2560x1080@60Hz
+    position 0 0
+}
 
-exec_always pkill swayidle; swayidle -w timeout 60 "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 16x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000 --grace 10 --fade-in 10" timeout 180 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
+exec_always pkill swayidle; swayidle -w timeout 60 "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 16x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000 --grace 10 --fade-in 10" timeout 180 'systemctl suspend' before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
 
 input "1267:12440:ELAN1201:00_04F3:3098_Touchpad" {
     tap enabled
     natural_scroll enabled
+    dwt disabled
 }
 
 input "6940:7013:Corsair_CORSAIR_HARPOON_RGB_WIRELESS_Gaming_Dongle" {
@@ -48,7 +47,7 @@ focus_wrapping no
 
 for_window [title="floatme"] floating enable
 for_window [class="Bitwarden"] floating enable
-for_window [title=".*YouTube.*"] inhibit_idle visible
+for_window [title=".*YouTube.*"] inhibit_idle visible, sticky enable
 
 # window management
 
@@ -57,10 +56,10 @@ bindsym Mod4+j focus down
 bindsym Mod4+k focus up
 bindsym Mod4+l focus right
 
-bindsym Mod4+Shift+h move left
-bindsym Mod4+Shift+j move down
-bindsym Mod4+Shift+k move up
-bindsym Mod4+Shift+l move right
+bindsym Mod4+Shift+h exec swaymsg -- mark --replace focused && swaymsg focus left && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused
+bindsym Mod4+Shift+j exec swaymsg -- mark --replace focused && swaymsg focus down && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused
+bindsym Mod4+Shift+k exec swaymsg -- mark --replace focused && swaymsg focus up && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused
+bindsym Mod4+Shift+l exec swaymsg -- mark --replace focused && swaymsg focus right && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused
 
 bindsym Mod4+1 workspace number 1
 bindsym Mod4+2 workspace number 2
@@ -73,18 +72,20 @@ bindsym Mod4+8 workspace number 8
 bindsym Mod4+9 workspace number 9
 bindsym Mod4+0 workspace number 10
 
-bindsym Mod4+Shift+1 exec swaymsg move container to workspace number 1 && swaymsg workspace number 1
-bindsym Mod4+Shift+2 exec swaymsg move container to workspace number 2 && swaymsg workspace number 2
-bindsym Mod4+Shift+3 exec swaymsg move container to workspace number 3 && swaymsg workspace number 3
-bindsym Mod4+Shift+4 exec swaymsg move container to workspace number 4 && swaymsg workspace number 4
-bindsym Mod4+Shift+5 exec swaymsg move container to workspace number 5 && swaymsg workspace number 5
-bindsym Mod4+Shift+6 exec swaymsg move container to workspace number 6 && swaymsg workspace number 6
-bindsym Mod4+Shift+7 exec swaymsg move container to workspace number 7 && swaymsg workspace number 7
-bindsym Mod4+Shift+8 exec swaymsg move container to workspace number 8 && swaymsg workspace number 8
-bindsym Mod4+Shift+9 exec swaymsg move container to workspace number 9 && swaymsg workspace number 9
-bindsym Mod4+Shift+0 exec swaymsg move container to workspace number 10 && swaymsg workspace number 10
+bindsym Mod4+Shift+1 move container to workspace number 1, workspace number 1
+bindsym Mod4+Shift+2 move container to workspace number 2, workspace number 2
+bindsym Mod4+Shift+3 move container to workspace number 3, workspace number 3
+bindsym Mod4+Shift+4 move container to workspace number 4, workspace number 4
+bindsym Mod4+Shift+5 move container to workspace number 5, workspace number 5
+bindsym Mod4+Shift+6 move container to workspace number 6, workspace number 6
+bindsym Mod4+Shift+7 move container to workspace number 7, workspace number 7
+bindsym Mod4+Shift+8 move container to workspace number 8, workspace number 8
+bindsym Mod4+Shift+9 move container to workspace number 9, workspace number 9
+bindsym Mod4+Shift+0 move container to workspace number 10, workspace number 10
 
 bindsym Mod4+backslash floating toggle
+
+bindsym Mod4+S scratchpad show
 
 bindsym Mod4+r mode "resize"
 mode "resize" {
@@ -105,7 +106,9 @@ bindsym Mod4+Shift+q exec swaymsg exit
 bindsym Mod4+Return exec alacritty
 bindsym Mod4+slash exec alacritty -e fish -C lf
 bindsym Mod4+C exec alacritty -t "floatme" -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
-bindsym Mod4+space exec wofi --show drun
+bindsym Mod4+space exec rofi -show drun
+bindsym Mod4+tab exec rofi -show window
+bindsym Mod4+semicolon exec alacritty -t floatme -o background_opacity=0.8 -e $HOME/.scripts/quick_menu
 
 bindsym Mod4+p exec qbpm launch personal
 bindsym Mod4+g exec qbpm launch gaming

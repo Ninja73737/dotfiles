@@ -18,14 +18,17 @@ set -g fish_user_paths "$HOME/.scripts" $fish_user_paths
 set -g fish_user_paths "$HOME/.local/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
-set -g fish_user_paths "$HOME/.npm-global/" $fish_user_paths
-set -g fish_user_paths "$HOME/.pnpm-global/bin/" $fish_user_paths
+set -g fish_user_paths "$HOME/.npm-global/bin" $fish_user_paths
+set -g fish_user_paths "$HOME/.pnpm-global/bin" $fish_user_paths
 
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
 
 abbr tm "taskmatter"
 alias tm "taskmatter"
+
+abbr ihim "nvim +Himalaya"
+alias ihim "nvim +Himalaya"
 
 set -x GOPATH "$HOME/.go"
 
@@ -65,6 +68,8 @@ abbr v "nvim"
 abbr nv "nvim"
 alias vi "nvim"
 alias vim "nvim"
+
+export MANPAGER='nvim +Man!'
 
 function sc
     sc-im $argv
@@ -173,5 +178,12 @@ if status --is-interactive
 
     if which starship &> /dev/null
         starship init fish | source
+        if test -e /tmp/num_updates
+            if test (date -r /tmp/num_updates '+%s') -lt (math (date '+%s') - 14400)
+                checkupdates | wc -l > /tmp/num_updates & disown
+            end
+        else
+            checkupdates | wc -l > /tmp/num_updates & disown
+        end
     end
 end

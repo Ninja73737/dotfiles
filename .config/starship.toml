@@ -71,7 +71,7 @@ format = "on [$hostname]($style) "
 
 [character]
 success_symbol = "[>](green)"
-error_symbol = "[>](green)"
+error_symbol = "[>](red)"
 vicmd_symbol = "[<](blue)"
 
 [git_branch]
@@ -93,18 +93,15 @@ staged = "A"
 renamed = "R"
 deleted = "X"
 
-[shell]
-disabled = false
-
 [shlvl]
 format = "at depth [$shlvl]($style) "
 disabled = false
 
 [custom.updates]
-command = "cat /tmp/numupdates"
+command = "cat /tmp/num_updates"
 shell = "/bin/sh"
 format = "with [$output]($style) updates "
-when = "test $(cat /tmp/numupdates) -ge 25"
+when = "test $(cat /tmp/num_updates) -ge 25"
 
 # Nerd Fonts Symbols
 

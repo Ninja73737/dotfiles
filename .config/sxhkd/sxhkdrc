@@ -50,6 +50,9 @@ super + Return
 super + slash
     alacritty -e fish -C lf
 
+super + shift + slash
+    alacritty -e fish -C lf-ueberzug
+
 super + space
     rofi -show drun
 
@@ -57,7 +60,7 @@ super + Tab
     rofi -show window
 
 super + semicolon
-    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer"\n"poweroff"\n"sudo systemctl suspend" | fzf)'
+    bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish $HOME/.scripts/quick_menu
 
 super + c
     bspc rule -a Alacritty -o state=floating && alacritty -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'

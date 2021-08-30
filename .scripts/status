@@ -1,37 +1,53 @@
 #!/bin/fish
 
-## TODO: Add wireguard, wifi, and bluetooth status display
+## TODO: and graphics mode status display
 
 while true
   set output
 
-  set output $output  (df -h | grep '\s/$' | awk '{ print $4 }')" |"
+  if ip link show wg0 &> /dev/null
+    set -a output "嬨 |"
+  end
 
-  set num_updates (cat /tmp/numupdates)
+  if test (iwctl station (ip route show default | awk '{ print $5 }') show | grep -Po "(?<=State).*" | string trim) = "connected"
+    set -a output 直 (iwctl station (ip route show default | awk '{ print $5 }') show | grep -Po "(?<=Connected network).*" | string trim)" |"
+  else
+    set -a output "睊 |"
+  end
+
+  if set graphics (asusctl graphics -g | string replace 'Current graphics mode: ' '')
+    set -a output  $graphics" |"
+  else
+    set -a output " misbehaving |"
+  end
+
+  set -a output  (df -h | grep '\s/$' | awk '{ print $4 }')" |"
+
+  set num_updates (cat /tmp/num_updates)
   if test "$num_updates" -ge 25
-    set output $output  $num_updates" |"
+    set -a output  $num_updates" |"
   end
 
   set raw_hs_bat (headsetcontrol -b 2> /dev/null)
   if test "$status" -eq 0
     set hs_bat (echo $raw_hs_bat | grep Battery | awk -F: '{ print $2 }' | tr -d '\\n\\r ')
-    set output $output  $hs_bat" |"
+    set -a output  $hs_bat" |"
   end
 
   if test (cat /sys/class/power_supply/BAT0/status) != "Discharging"
-    set output $output 
+    set -a output 
   else
-    set output $output 
+    set -a output 
   end
-  set output $output (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)"% |"
+  set -a output (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)"% |"
 
   if test (pulsemixer --get-mute) -eq 1
-    set output $output 婢" |"
+    set -a output 婢" |"
   else
-    set output $output 墳 (pulsemixer --get-volume | awk '{ print $1 }')"% |"
+    set -a output 墳 (pulsemixer --get-volume | awk '{ print $1 }')"% |"
   end
 
-  set output $output (date +' %a. %b %-d  %-I:%M:%S %p')" |"
+  set -a output (date +' %a. %b %-d  %-I:%M:%S %p')" |"
 
   echo $output
   sleep 1

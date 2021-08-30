@@ -4,6 +4,7 @@ if empty($SSH_CONNECTION)
 endif
 set guifont=JetBrainsMono\ Nerd\ Font:h14
 set pumheight=15
+set completeopt=menuone,noinsert,noselect
 set number relativenumber
 set mouse=a
 set scrolloff=7
@@ -30,26 +31,9 @@ let g:polyglot_disabled = ['autoindent']
 
 call plug#begin()
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" For coc-r-lsp: install.packages("languageserver")
-let g:coc_global_extensions = ["coc-css", "coc-db", "coc-diagnostic", "coc-dictionary", "coc-docker", "coc-fish", "coc-flutter", "coc-git", "coc-gitignore", "coc-go", "coc-homeassistant", "coc-html", "coc-java", "coc-json", "coc-kotlin", "coc-markdownlint", "coc-marketplace", "coc-pairs", "coc-prettier", "coc-pyright", "coc-rls", "coc-r-lsp", "coc-sh", "coc-spell-checker", "coc-svelte", "coc-texlab", "coc-toml", "coc-tslint", "coc-tsserver", "coc-webpack", "coc-word", "coc-vimlsp",  "coc-xml", "coc-yaml"]
-autocmd FileType markdown,rmd,tex let b:coc_pairs_disabled = ['<']
-autocmd FileType markdown,rmd,tex let b:coc_pairs = [["$", "$"]]
-noremap cf :CocFix<CR>
-nmap cF <Plug>(coc-codeaction)
-noremap cm <CMD>call CocAction('format')<CR>
-noremap cn <CMD>call CocAction('diagnosticNext')<CR>
-noremap cN <CMD>call CocAction('diagnosticPrevious')<CR>
-noremap cv <CMD>call CocActionAsync('doHover')<CR>
-noremap cR <CMD>call CocActionAsync('rename')<CR>
-noremap gD <CMD>call CocActionAsync('jumpDefinition')<CR>
-noremap gr <CMD>call CocActionAsync('jumpReferences')<CR>
-noremap cpl :CocCommand latex.Build<CR>
-
 Plug 'sheerun/vim-polyglot'
 
-let g:polyglot_disabled = ['markdown', 'svelte']
+let g:polyglot_disabled = ['markdown', 'svelte', 'ansible']
 
 Plug 'leafOfTree/vim-svelte-plugin'
 
@@ -132,8 +116,8 @@ endif
 Plug 'easymotion/vim-easymotion'
 
 let g:EasyMotion_smartcase = 1
-autocmd User EasyMotionPromptBegin silent! CocDisable
-autocmd User EasyMotionPromptEnd silent! CocEnable
+autocmd User EasyMotionPromptBegin silent! LspStop
+autocmd User EasyMotionPromptEnd silent! LspStart
 map f <Plug>(easymotion-bd-w)
 
 Plug 'ron89/thesaurus_query.vim'
@@ -175,7 +159,7 @@ let g:mdip_imgdir_intext = escape(expand('%:t:r'), ' ')
 let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdown-preview.css'
 noremap cP :call mdip#MarkdownClipboardImage()<CR>
 
-Plug 'mtoohey31/doctest.nvim'
+Plug 'mtoohey31/doctest.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'mtoohey31/vim-refocus'
 
 let g:vim_refocus_kill_flashfocus = 1
@@ -187,6 +171,7 @@ let g:pencil#conceallevel = 2
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#cursorwrap = 0
 autocmd FileType markdown,rmd,tex call pencil#init()
+autocmd FileType mail setlocal cursorline
 
 Plug 'dhruvasagar/vim-table-mode'
 
@@ -226,15 +211,64 @@ noremap cr <CMD>Telescope live_grep<CR>
 Plug 'mtoohey31/chafa.vim'
 let himalaya_path = system("which himalaya")
 if v:shell_error == 0
-    Plug 'soywod/himalaya', {'rtp': 'vim'}
+  Plug 'soywod/himalaya', {'rtp': 'vim'}
 endif
 Plug 'kmonad/kmonad-vim'
 Plug 'othree/eregex.vim'
 
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+Plug 'cbarrete/completion-vcard'
+
+autocmd BufEnter * lua require'completion'.on_attach()
+let g:completion_chain_complete_list = {'default': [{ 'complete_items': ['lsp',  'path']}], 'fish': [{ 'complete_items': ['fish', 'lsp', 'path']}], 'mail': [{ 'complete_items': ['vCard']}]}
+let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
+
 call plug#end()
 
-
 colorscheme tgc_wal
+
+lua << EOF
+local nvim_lsp = require('lspconfig')
+local nvim_completion = require('completion')
+require'completion'.addCompletionSource('fish', require'fish'.complete_item)
+require('completion_vcard').setup_completion('~/.contacts/32')
+
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  local opts = { noremap=true, silent=true }
+
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<Leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<Leader>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<Leader>N', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '<Leader>n', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  -- buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<Leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+  nvim_completion.on_attach(client, bufnr)
+end
+
+local servers = { "ansiblels", "bashls", "ccls", "cssls", "dartls", "dockerls", "gopls", "html", "java_language_server", "pyright", "r_language_server", "rls", "svelte", "texlab", "tsserver", "vimls", "yamlls" }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+nvim_lsp.zeta_note.setup{ cmd = { '/home/mtoohey/.cargo/bin/zeta-note' }, on_attach = on_attach, flags = { debounce_text_changes = 150 } }
+EOF
 
 execute "hi Normal ctermbg=NONE guifg=" . color7 ." ctermfg=7"
 set termguicolors

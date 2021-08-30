@@ -1,0 +1,14 @@
+#!/bin/sh
+
+kmonad $HOME/.config/kmonad/laptop_mods.kbd &
+
+pgrep picom || bspc wm -g && picom --experimental-backends &
+pkill flashfocus; flashfocus &
+
+if [ -z "$WAYLAND_DISPLAY" ]; then
+  pgrep unclutter || unclutter --timeout 1 &
+  killall -2 plover; sleep 2.5; plover &
+fi
+
+pgrep Discord || discord --start-minimized &
+pgrep steam || steam -silent &

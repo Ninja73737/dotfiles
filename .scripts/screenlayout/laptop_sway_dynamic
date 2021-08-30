@@ -1,0 +1,19 @@
+#!/bin/sh
+
+props="adaptive_sync on"
+
+if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
+  props+=" resolution 2560x1440@60.001Hz"
+else
+  props+=" resolution 2560x1440@120Hz"
+fi
+
+if [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="XV340CK P")' | wc -l)" -gt "0" ]; then
+  props+=" scale 1.5 position 3440 480"
+elif [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="LG ULTRAWIDE")' | wc -l)" -gt "0" ]; then
+  props+=" scale 1.5 position 0 1080"
+else
+  props+=" scale 1 position 0 0"
+fi
+
+swaymsg output '"Unknown TL140BDXP01-0 0x00000000"' $props
