@@ -38,7 +38,7 @@ exec_always pgrep autotiling || autotiling
 default_border none
 gaps inner 16
 gaps outer -16
-floating_modifier Mod4 normal
+floating_modifier Mod4
 focus_follows_mouse yes
 mouse_warping container
 default_orientation horizontal
@@ -48,6 +48,7 @@ focus_wrapping no
 for_window [title="floatme"] floating enable
 for_window [class="Bitwarden"] floating enable
 for_window [title=".*YouTube.*"] inhibit_idle visible, sticky enable
+for_window [app_id="mpv"] inhibit_idle visible, sticky enable
 
 # window management
 
@@ -161,8 +162,7 @@ bar {
         urgent_workspace $foreground $foreground $background
     }
 
-    status_edge_padding 0
-    status_padding 0
+    height 22
 
 }
 

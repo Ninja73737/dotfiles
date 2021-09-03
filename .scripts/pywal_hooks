@@ -1,12 +1,14 @@
 #!/usr/bin/env sh
 
 # $HOME/.scripts/update_spicetify
-ps aux | grep ".local/share/qutebrowser-profiles" | awk '{print $16}' | xargs -I '{}' qbpm launch '{}' ':config-source'
+ps aux | grep ".local/share/qutebrowser-profiles" | awk '{ print $17 }' | xargs -I '{}' qbpm launch '{}' ':config-source'
 # To install, run `cargo install --git https://github.com/chmln/nvim-ctrl`
 nvim-ctrl 'source ~/.config/nvim/init.vim'
 if [ "$(uname)" = "Darwin" ]; then
   $HOME/.scripts/alacritty-color-export/script.sh
-else
+elif [ -n "$SWAYSOCK" ]; then
+  xrdb $HOME/.Xresources
+elif bspc wm -g; then
   $HOME/.config/bspwm/colours
   xrdb $HOME/.Xresources
   which dunst && pkill dunst && $HOME/.config/dunst/launch.sh

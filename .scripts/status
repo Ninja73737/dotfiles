@@ -1,7 +1,5 @@
 #!/bin/fish
 
-## TODO: and graphics mode status display
-
 while true
   set output
 
@@ -34,12 +32,14 @@ while true
     set -a output  $hs_bat" |"
   end
 
-  if test (cat /sys/class/power_supply/BAT0/status) != "Discharging"
-    set -a output 
-  else
-    set -a output 
+  if test -d /sys/class/power_supply/BAT0 && set battery_percent (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)
+    if test (cat /sys/class/power_supply/BAT0/status) != "Discharging"
+      set -a output 
+    else
+      set -a output 
+    end
+    set -a output "$battery_percent% |"
   end
-  set -a output (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)"% |"
 
   if test (pulsemixer --get-mute) -eq 1
     set -a output 婢" |"

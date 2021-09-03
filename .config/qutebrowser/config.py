@@ -18,21 +18,43 @@ with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
     pywal = json.load(file)
 
 # Misc
-config.load_autoconfig(False)
-config.set('statusbar.show', 'never')
-config.set('auto_save.session', True)
+c.statusbar.show = 'never'
+c.auto_save.session = True
 c.editor.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
-config.set('content.fullscreen.window', True)
-config.set('tabs.show', 'switching')
-config.set('tabs.show_switching_delay', 1500)
-config.set('tabs.last_close', 'close')
-config.set('completion.height', '25%')
-config.set('content.headers.do_not_track', None)
-config.set('downloads.location.directory', '~/')
-config.set('downloads.location.remember', False)
-config.set('hints.chars', 'asdfghjkl;qwertyuiopzxcvbnm')
-config.set('tabs.title.format', '{current_title}')
-config.set('url.start_pages', ['about:blank'])
+c.content.fullscreen.window = True
+c.tabs.show = 'switching'
+c.tabs.show_switching_delay = 1500
+c.tabs.last_close = 'close'
+c.completion.height = '25%'
+c.content.headers.do_not_track = None
+c.downloads.location.directory = '~/'
+c.downloads.location.remember = False
+c.hints.chars = 'asdfghjkl;qwertyuiopzxcvbnm'
+# TODO: Fix these for home assistant
+# c.hints.selectors = {'all': ['a', 'area', 'textarea', 'select',
+#                              'input:not([type="hidden"])', 'button', 'frame',
+#                              'iframe', 'img', 'link', 'summary',
+#                              '[contenteditable]:not([contenteditable="false"])',
+#                              '[onclick]', '[onmousedown]', '[role="link"]',
+#                              '[role="option"]', '[role="button"]',
+#                              '[ng-click]', '[ngClick]', '[data-ng-click]',
+#                              '[x-ng-click]', '[tabindex]'], 'links':
+#                      ['a[href]', 'area[href]', 'link[href]',
+#                       '[role="link"][href]'], 'images': ['img'], 'media':
+#                      ['audio', 'img', 'video'], 'url': ['[src]', '[href]'],
+#                      'inputs': ['input[type="text"]', 'input[type="date"]',
+#                                 'input[type="datetime-local"]',
+#                                 'input[type="email"]', 'input[type="month"]',
+#                                 'input[type="number"]',
+#                                 'input[type="password"]',
+#                                 'input[type="search"]', 'input[type="tel"]',
+#                                 'input[type="time"]', 'input[type="url"]',
+#                                 'input[type="week"]', 'input:not([type])',
+#                                 '[contenteditable]:not([contenteditable="false"])',
+#                                 'textarea']}
+c.tabs.title.format = '{current_title}'
+c.url.start_pages = ['about:blank']
+c.content.javascript.can_access_clipboard = True
 
 # Keybinds
 config.bind('<Ctrl-Shift-y>',
@@ -50,6 +72,8 @@ config.bind(
     '<Ctrl-p>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
 config.bind('wp', 'hint links spawn --detach random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
+config.bind('<Ctrl-c>', 'yank selection')
+config.bind('<Ctrl-Shift-c>', 'yank selection')
 config.unbind('<Ctrl-v>')
 config.unbind('<Ctrl-a>')
 
@@ -60,22 +84,22 @@ c.fonts.web.family.standard = 'SF Pro Text'
 c.fonts.web.family.sans_serif = 'SF Pro Text'
 c.fonts.web.family.serif = 'New York'
 c.fonts.web.family.fixed = 'JetBrainsMono Nerd Font'
-config.set('window.transparent', True)
 
-config.set('colors.webpage.preferred_color_scheme', 'dark')
+# TODO: make this dynamic based on sunset/sunrise with https://pypi.org/project/suntime/
+c.colors.webpage.preferred_color_scheme ='dark'
 config.source(join(expanduser('~'), '.config/qutebrowser/qutewal/qutewal.py'))
 
-config.set('url.searchengines',
-           {'DEFAULT': 'https://duckduckgo.com/?q={}&kt=SF+Pro+Text&kj=' +
-            pywal['colors']['color2'] + '&k7=' +
-            pywal['special']['background'] + '&kx=' +
-            pywal['colors']['color1'] + '&k8' +
-            pywal['special']['foreground'] + '&k9' +
-            pywal['colors']['color2'] + '&kaa' + pywal['colors']['color2'] + '&kae=d'})
+c.url.searchengines= {'DEFAULT':
+                      'https://duckduckgo.com/?q={}&kt=SF+Pro+Text&kj=' +
+                      pywal['colors']['color2'] + '&k7=' +
+                      pywal['special']['background'] + '&kx=' +
+                      pywal['colors']['color1'] + '&k8' +
+                      pywal['special']['foreground'] + '&k9' +
+                      pywal['colors']['color2'] + '&kaa' +
+                      pywal['colors']['color2'] + '&kae=d'}
 
 # Fileselect
 config.set('fileselect.handler', "external")
-# TODO: Force these to validate selections and only show valid options, requires the resolution of gokcehan/lf/issues/642
-config.set('fileselect.single_file.command', command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
-config.set('fileselect.multiple_files.command', command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$fx\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
-config.set('fileselect.folder.command', command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "set dironly; map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\''])
+c.fileselect.single_file.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']
+c.fileselect.multiple_files.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$fx\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']
+c.fileselect.folder.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "set dironly; map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']

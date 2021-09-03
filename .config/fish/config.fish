@@ -20,6 +20,13 @@ set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.npm-global/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.pnpm-global/bin" $fish_user_paths
+set -x GOPATH "$HOME/.go"
+if test -d $HOME/.go/bin
+    set -g fish_user_paths "$HOME/.go/bin" $fish_user_paths
+end
+if test -d /opt/android-sdk/cmdline-tools/latest/bin
+    set -g fish_user_paths "/opt/android-sdk/cmdline-tools/latest/bin" $fish_user_paths
+end
 
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
@@ -27,18 +34,10 @@ set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
 abbr tm "taskmatter"
 alias tm "taskmatter"
 
-abbr ihim "nvim +Himalaya"
-alias ihim "nvim +Himalaya"
-
-set -x GOPATH "$HOME/.go"
-
-if test -d $HOME/.go/bin
-    set -g fish_user_paths "$HOME/.go/bin" $fish_user_paths
-end
-
-if test -d /opt/android-sdk/cmdline-tools/latest/bin
-    set -g fish_user_paths "/opt/android-sdk/cmdline-tools/latest/bin" $fish_user_paths
-end
+abbr hi "himalaya"
+alias hi "himalaya"
+abbr ihi "nvim +Himalaya"
+alias ihi "nvim +Himalaya"
 
 abbr dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
 abbr dcd "docker-compose --env-file docker-compose.env down --remove-orphans"
@@ -132,6 +131,15 @@ else
 end
 
 fish_vi_key_bindings
+
+# TODO: make pasting work in visual mode
+# TODO: make d and x keys work with this
+bind -s p 'commandline -C (math (commandline -C) + 1); fish_clipboard_paste; commandline -f backward-char repaint-mode'
+bind -s P 'fish_clipboard_paste; commandline -f repaint-mode'
+bind -s -M visual -m default y 'fish_clipboard_copy; commandline -f swap-selection-start-stop end-selection repaint-mode'
+
+bind -s -M visual e forward-single-char forward-word backward-char
+bind -s -M visual E forward-bigword backward-char
 
 set fish_cursor_default block
 set fish_cursor_insert line

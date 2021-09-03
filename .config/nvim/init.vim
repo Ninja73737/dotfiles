@@ -10,7 +10,6 @@ set mouse=a
 set scrolloff=7
 set list
 set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
-set clipboard=unnamedplus
 set notimeout
 set expandtab
 set smarttab
@@ -22,6 +21,7 @@ syntax on
 set noshowmode
 set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾
 set nocompatible
+set termguicolors
 "" Restore cursor position
 au BufReadPost *
          \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
@@ -127,31 +127,7 @@ let g:tq_enabled_backends=["mthesaur_txt"]
 
 Plug 'chaoren/vim-wordmotion'
 Plug 'vim-scripts/loremipsum'
-Plug 'itchyny/lightline.vim'
-
-function! LineInfo()
-  return col('.') . 'x' . line('.')
-endfunction
-let g:lightline = {
-      \ 'active': {
-      \   'right': [['cocstatus'], ['percent', 'custom_lineinfo'], ['filetype']]
-      \ },
-      \ 'inactive': {
-      \   'left': [[], ['filename']],
-      \   'right': [[], ['percent', 'lineinfo'], ['filetype']]
-      \ },
-      \ 'separator' : { 'left': '', 'right': '' },
-      \ 'subseparator' : { 'left': '', 'right': '' },
-      \ 'component_function': { 'cocstatus': 'coc#status', 'wc': 'WordCount', 'custom_lineinfo': 'LineInfo'}
-      \ }
-autocmd FileType markdown,rmd,tex if (index(g:lightline['active']['right'][1], 'wc') == -1)|call add(g:lightline['active']['right'][1], 'wc')|endif
-
-if empty($SSH_CONNECTION)
-  let g:lightline['colorscheme'] = 'pywal'
-else
-  let g:lightline['colorscheme'] = 'nord'
-endif
-
+Plug 'hoob3rt/lualine.nvim'
 Plug 'ferrine/md-img-paste.vim'
 
 let g:mdip_imgdir = expand('%:t:r')
@@ -171,7 +147,6 @@ let g:pencil#conceallevel = 2
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#cursorwrap = 0
 autocmd FileType markdown,rmd,tex call pencil#init()
-autocmd FileType mail setlocal cursorline
 
 Plug 'dhruvasagar/vim-table-mode'
 
@@ -212,6 +187,8 @@ Plug 'mtoohey31/chafa.vim'
 let himalaya_path = system("which himalaya")
 if v:shell_error == 0
   Plug 'soywod/himalaya', {'rtp': 'vim'}
+
+  autocmd BufEnter /tmp/himalaya-draft.mail set ft=mail
 endif
 Plug 'kmonad/kmonad-vim'
 Plug 'othree/eregex.vim'
@@ -219,9 +196,14 @@ Plug 'othree/eregex.vim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'cbarrete/completion-vcard'
+Plug 'mtoohey31/completion-fish'
 
 autocmd BufEnter * lua require'completion'.on_attach()
-let g:completion_chain_complete_list = {'default': [{ 'complete_items': ['lsp',  'path']}], 'fish': [{ 'complete_items': ['fish', 'lsp', 'path']}], 'mail': [{ 'complete_items': ['vCard']}]}
+let g:completion_chain_complete_list = {
+                  \ 'default': [{ 'complete_items': ['lsp',  'path']}],
+                  \ 'fish': [{ 'complete_items': ['fish', 'lsp', 'path']}],
+                  \ 'mail': [{ 'complete_items': ['vCard']}]
+                  \ }
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
 
 call plug#end()
@@ -229,10 +211,13 @@ call plug#end()
 colorscheme tgc_wal
 
 lua << EOF
+require'lualine'.setup({ options = { theme = 'pywal' }, sections = { lualine_x = { 'filetype' }}})
+require'colorizer'.setup()
+
 local nvim_lsp = require('lspconfig')
 local nvim_completion = require('completion')
-require'completion'.addCompletionSource('fish', require'fish'.complete_item)
-require('completion_vcard').setup_completion('~/.contacts/32')
+nvim_completion.addCompletionSource('fish', require'completion-fish'.complete_item)
+require'completion_vcard'.setup_completion('~/.contacts/32')
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -268,14 +253,35 @@ for _, lsp in ipairs(servers) do
   }
 end
 nvim_lsp.zeta_note.setup{ cmd = { '/home/mtoohey/.cargo/bin/zeta-note' }, on_attach = on_attach, flags = { debounce_text_changes = 150 } }
-EOF
 
-execute "hi Normal ctermbg=NONE guifg=" . color7 ." ctermfg=7"
-set termguicolors
-lua << EOF
-if jit ~= nil then
-    require'colorizer'.setup()
-end
+local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
+local sumneko_binary = '/usr/bin/lua-language-server'
+
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+nvim_lsp.sumneko_lua.setup {
+  cmd = {sumneko_binary, "-E", "/usr/share/lua-language-server/main.lua"};
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+        path = '/usr/bin/luajit',
+      },
+      diagnostics = {
+        globals = {'vim'},
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      telemetry = {
+        enable = false,
+      }
+    }
+  },
+  on_attach = on_attach
+}
 EOF
 
 autocmd BufWinEnter,WinEnter term://* startinsert
@@ -316,28 +322,6 @@ noremap cpp :silent write <bar> call PandocPreview()<CR>
 
 autocmd FileType python set colorcolumn=80
 
-function! WordCount()
-  " if filereadable(expand('%:p:r') . '.pdf')
-  "   return substitute(system('pdftotext "' . expand('%:p:r') . '.pdf" - | wc -w'), '\n', '', '') . ' W'
-  " else
-    let s:old_status = v:statusmsg
-    let position = getpos(".")
-    exe ":silent normal g\<c-g>"
-    let stat = v:statusmsg
-    let s:word_count = 0
-    if stat != '--No lines in buffer--'
-      if stat =~ "^Selected"
-        let s:word_count = str2nr(split(v:statusmsg)[5])
-      else
-        let s:word_count = str2nr(split(v:statusmsg)[11])
-      end
-      let v:statusmsg = s:old_status
-    end
-    call setpos('.', position)
-    return s:word_count . ' W'
-  " endif
-endfunction
-
 noremap cH :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
@@ -360,3 +344,19 @@ inoremap ) )<C-g>u
 
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '>-2<CR>gv=gv
+
+nnoremap p "+p
+nnoremap P "+P
+vnoremap p "+p
+vnoremap P "+P
+
+nnoremap y "+y
+nnoremap Y "+Y
+vnoremap y "+y
+vnoremap Y "+Y
+
+nnoremap d "+d
+nnoremap D "+D
+vnoremap d "+d
+vnoremap D "+D
+vnoremap x "+x
