@@ -136,10 +136,6 @@ let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdow
 noremap cP :call mdip#MarkdownClipboardImage()<CR>
 
 Plug 'mtoohey31/doctest.nvim', {'do': ':UpdateRemotePlugins'}
-Plug 'mtoohey31/vim-refocus'
-
-let g:vim_refocus_kill_flashfocus = 1
-
 Plug 'kana/vim-skeleton'
 Plug 'reedes/vim-pencil'
 
