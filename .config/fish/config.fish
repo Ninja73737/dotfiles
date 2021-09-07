@@ -56,6 +56,11 @@ alias dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
 if which trash &> /dev/null
     abbr rm "trash"
     alias rm "trash"
+
+    function mv --wraps mv
+        trash "$argv[-1]" 2> /dev/null
+        command mv $argv
+    end
 end
 
 if which trash-restore &> /dev/null
