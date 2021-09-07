@@ -39,8 +39,8 @@ alias hi "himalaya"
 abbr ihi "nvim +Himalaya"
 alias ihi "nvim +Himalaya"
 
-abbr dcu "docker-compose --env-file docker-compose.env up -d --remove-orphans"
-abbr dcd "docker-compose --env-file docker-compose.env down --remove-orphans"
+abbr dcu "docker-compose up -d --remove-orphans"
+abbr dcd "docker-compose down --remove-orphans"
 
 abbr pcp "rsync -r --info=progress2"
 alias pcp "rsync -r --info=progress2"
