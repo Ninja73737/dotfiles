@@ -127,7 +127,7 @@ let g:tq_enabled_backends=["mthesaur_txt"]
 
 Plug 'chaoren/vim-wordmotion'
 Plug 'vim-scripts/loremipsum'
-Plug 'hoob3rt/lualine.nvim'
+Plug 'shadmansaleh/lualine.nvim' " TODO: change back to hoob3rt/ when he resumes maintenance
 Plug 'ferrine/md-img-paste.vim'
 
 let g:mdip_imgdir = expand('%:t:r')
