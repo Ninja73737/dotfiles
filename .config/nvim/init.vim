@@ -238,7 +238,7 @@ local on_attach = function(client, bufnr)
   nvim_completion.on_attach(client, bufnr)
 end
 
-local servers = { "ansiblels", "bashls", "ccls", "cssls", "dartls", "dockerls", "gopls", "html", "java_language_server", "pyright", "r_language_server", "rls", "svelte", "texlab", "tsserver", "vimls", "yamlls" }
+local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "java_language_server", "pyright", "r_language_server", "rls", "svelte", "texlab", "tsserver", "vimls", "yamlls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -301,7 +301,7 @@ noremap $ g_
 noremap! <C-BS> <C-w>
 " Necessary for the backspace remap above for some reason...
 noremap! <C-h> <C-w>
-noremap <ESC> <CMD>noh<CR>
+noremap <ESC> <ESC><CMD>noh<CR>
 " TODO: Implement universal preview function
 call timer_start(0, 'PreviewMap')
 function! PreviewMap (timer)
