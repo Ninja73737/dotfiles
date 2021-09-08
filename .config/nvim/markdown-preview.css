@@ -22,8 +22,7 @@ header#page-header {
   margin-bottom: 0;
 }
 .markdown-body {
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "IBM Plex Sans Text";
   font-size: 16px;
   color: var(--foreground);
   line-height: 1.6;

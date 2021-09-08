@@ -8,7 +8,7 @@ My cross-platform (MacOS and Linux) dotfiles.
 
 If you want to make use of these yourself, you can get started using my bootstrap script:
 
-```bash
+```sh
 curl -L dot.mtoohey.com > bootstrap
 sh bootstrap
 ```
@@ -19,7 +19,7 @@ There are quite a few dependencies so if something is behaving unexpectedly, try
 
 If you would like to also keep your dotfiles in GitHub so that you have them backed up, create your own fork of the repository on GitHub, then clone the repository with the following commands instead. Please be aware that running these two commands will overwrite any current configs that overlap with mine, so you should back your stuff up first:
 
-```bash
+```sh
 git clone --bare https://github.com/{YOUR_USERNAME}/dotfiles/ .dotfiles
 git --git-dir=$HOME/.dotfiles --work-tree=$HOME reset --hard
 ```

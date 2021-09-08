@@ -20,7 +20,7 @@ with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
 # Misc
 c.statusbar.show = 'never'
 c.auto_save.session = True
-c.editor.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && nvim {file}\'']
+c.editor.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && nvim +"set nonumber norelativenumber" {file}\'']
 c.content.fullscreen.window = True
 c.tabs.show = 'switching'
 c.tabs.show_switching_delay = 1500
@@ -57,8 +57,8 @@ c.url.start_pages = ['about:blank']
 c.content.javascript.can_access_clipboard = True
 
 # Keybinds
-config.bind('<Ctrl-Shift-y>',
-            'hint links spawn --detach mpv --force-window yes {hint-url}')
+config.bind('m', 'spawn --userscript view_in_mpv')
+config.bind('M', 'hint links spawn --userscript view_in_mpv {hint-url}')
 config.bind('D', 'close')
 config.bind('B',
             'spawn --userscript ~/.config/qutebrowser/userscripts/qute-bitwarden')
@@ -72,7 +72,6 @@ config.bind(
     '<Ctrl-p>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
 config.bind('wp', 'hint links spawn --detach random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
-config.bind('<Ctrl-c>', 'yank selection')
 config.bind('<Ctrl-Shift-c>', 'yank selection')
 config.unbind('<Ctrl-v>')
 config.unbind('<Ctrl-a>')

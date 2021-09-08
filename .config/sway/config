@@ -26,7 +26,7 @@ input "1267:12440:ELAN1201:00_04F3:3098_Touchpad" {
     dwt disabled
 }
 
-input "6940:7013:Corsair_CORSAIR_HARPOON_RGB_WIRELESS_Gaming_Dongle" {
+input type:pointer {
     accel_profile flat
 }
 

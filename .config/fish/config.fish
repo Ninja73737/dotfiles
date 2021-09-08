@@ -1,10 +1,11 @@
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 if test -z "$DISPLAY" -a -z "$TMUX"
     if test -n "$SSH_CONNECTION" -o -n "$TERMUX_VERSION"
         if status --is-interactive
             exec tmux
         end
     # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
-    #     export _JAVA_AWT_WM_NONREPARENTING=1
     #     exec startx
     # else if test -z "$WAYLAND_DISPLAY"
     #     exec sway --my-next-gpu-wont-be-nvidia
@@ -31,28 +32,6 @@ end
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
 
-abbr tm "taskmatter"
-alias tm "taskmatter"
-
-abbr hi "himalaya"
-alias hi "himalaya"
-abbr ihi "nvim +Himalaya"
-alias ihi "nvim +Himalaya"
-
-abbr dcu "docker-compose up -d --remove-orphans"
-abbr dcd "docker-compose down --remove-orphans"
-
-abbr pcp "rsync -r --info=progress2"
-alias pcp "rsync -r --info=progress2"
-
-if test $hostname = "rpimanjaro"
-    abbr self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
-    alias self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
-end
-
-abbr dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
-alias dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
-
 if which trash &> /dev/null
     abbr rm "trash"
     alias rm "trash"
@@ -66,18 +45,6 @@ end
 if which trash-restore &> /dev/null
     # Credit for this one-liner goes to @norcalli here: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
     alias trash-undo "echo '' | trash-restore 2>/dev/null | sed '\$d' | sort -k2,3 -k1,1n | awk 'END {print \$1}' | trash-restore >/dev/null 2>&1"
-end
-
-abbr v "nvim"
-abbr nv "nvim"
-alias vi "nvim"
-alias vim "nvim"
-
-export MANPAGER='nvim +Man!'
-
-function sc
-    sc-im $argv
-    cat $HOME/.cache/wal/sequences
 end
 
 abbr zth "zathura --fork"
@@ -109,51 +76,85 @@ alias lsd "exa -al --icons --group-directories-first"
 alias lst "exa -aT -L 5 --icons --group-directories-first"
 alias lsta "exa -aT --icons --group-directories-first"
 
-function prompt
-    while read cmd -S -c "$argv " -p fish_prompt -R fish_right_prompt
-        eval $cmd
-    end
-end
-
-abbr pg "git status; prompt git"
-alias pg "git status; prompt git"
-
-if test (uname) = "Darwin"
-    abbr copy "pbcopy"
-    alias copy "pbcopy"
-    abbr paste "pbpaste"
-    alias paste "pbpaste"
-else if test -n "$WAYLAND_DISPLAY"
-    abbr copy "wl-copy"
-    alias copy "wl-copy"
-    abbr paste "wl-paste"
-    alias paste "wl-paste"
-else
-    abbr copy "xclip -selection clipboard -in"
-    alias copy "xclip -selection clipboard -in"
-    abbr paste "xclip -selection clipboard -out"
-    alias paste "xclip -selection clipboard -out"
-end
-
-fish_vi_key_bindings
-
-# TODO: make pasting work in visual mode
-# TODO: make d and x keys work with this
-bind -s p 'commandline -C (math (commandline -C) + 1); fish_clipboard_paste; commandline -f backward-char repaint-mode'
-bind -s P 'fish_clipboard_paste; commandline -f repaint-mode'
-bind -s -M visual -m default y 'fish_clipboard_copy; commandline -f swap-selection-start-stop end-selection repaint-mode'
-
-bind -s -M visual e forward-single-char forward-word backward-char
-bind -s -M visual E forward-bigword backward-char
-
-set fish_cursor_default block
-set fish_cursor_insert line
-set fish_cursor_replace_one underscore
-
-export VISUAL=nvim
-export EDITOR=nvim
-
 if status --is-interactive
+    abbr tm "taskmatter"
+    alias tm "taskmatter"
+
+    abbr hi "himalaya"
+    alias hi "himalaya"
+    abbr ihi "nvim +Himalaya"
+    alias ihi "nvim +Himalaya"
+
+    abbr dcu "docker-compose up -d --remove-orphans"
+    abbr dcd "docker-compose down --remove-orphans"
+    abbr dcdu "docker-compose -f docker-compose.dev.yaml up -d --remove-orphans"
+    abbr dcdd "docker-compose -f docker-compose.dev.yaml down --remove-orphans"
+
+    abbr pcp "rsync -r --info=progress2"
+    alias pcp "rsync -r --info=progress2"
+
+    if test $hostname = "rpimanjaro"
+        abbr self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
+        alias self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
+    end
+
+    abbr dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
+    alias dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
+
+
+    function prompt
+        while read cmd -S -c "$argv " -p fish_prompt -R fish_right_prompt
+            eval $cmd
+        end
+    end
+
+    abbr pg "git status; prompt git"
+    alias pg "git status; prompt git"
+
+    if test (uname) = "Darwin"
+        abbr copy "pbcopy"
+        alias copy "pbcopy"
+        abbr paste "pbpaste"
+        alias paste "pbpaste"
+    else if test -n "$WAYLAND_DISPLAY"
+        abbr copy "wl-copy"
+        alias copy "wl-copy"
+        abbr paste "wl-paste"
+        alias paste "wl-paste"
+    else
+        abbr copy "xclip -selection clipboard -in"
+        alias copy "xclip -selection clipboard -in"
+        abbr paste "xclip -selection clipboard -out"
+        alias paste "xclip -selection clipboard -out"
+    end
+
+    fish_vi_key_bindings
+
+    # TODO: make pasting work in visual mode
+    # TODO: make d and x keys work with this
+    bind -s p 'commandline -C (math (commandline -C) + 1); fish_clipboard_paste; commandline -f backward-char repaint-mode'
+    bind -s P 'fish_clipboard_paste; commandline -f repaint-mode'
+    bind -s -M visual -m default y 'fish_clipboard_copy; commandline -f swap-selection-start-stop end-selection repaint-mode'
+
+    bind -s -M visual e forward-single-char forward-word backward-char
+    bind -s -M visual E forward-bigword backward-char
+
+    # bind -s -M normal V beginning-of-line begin-selection end-of-line
+    # bind -s -M normal yy 'commandlien -f kill-whole-line; fish_clipboard_copy'
+
+    set fish_cursor_default block
+    set fish_cursor_insert line
+    set fish_cursor_replace_one underscore
+
+    export VISUAL=nvim
+    export EDITOR=nvim
+    abbr e "$EDITOR"
+    alias e "$EDITOR"
+    alias vi "$EDITOR"
+    alias vim "$EDITOR"
+
+    export MANPAGER='nvim +Man!'
+
     source $HOME/.config/lf/icons
 
     set -U fish_color_autosuggestion      brblack

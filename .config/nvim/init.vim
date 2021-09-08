@@ -39,7 +39,7 @@ Plug 'leafOfTree/vim-svelte-plugin'
 
 let g:vim_svelte_plugin_use_typescript = 1
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
 let g:mkdp_page_title = '${name}.md'
@@ -180,7 +180,7 @@ Plug 'nvim-telescope/telescope.nvim'
 noremap cr <CMD>Telescope live_grep<CR>
 
 Plug 'mtoohey31/chafa.vim'
-let himalaya_path = system("which himalaya")
+let _himalaya_path = system("which himalaya")
 if v:shell_error == 0
   Plug 'soywod/himalaya', {'rtp': 'vim'}
 
@@ -188,7 +188,6 @@ if v:shell_error == 0
 endif
 Plug 'kmonad/kmonad-vim'
 Plug 'othree/eregex.vim'
-
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'cbarrete/completion-vcard'
@@ -221,20 +220,20 @@ local on_attach = function(client, bufnr)
 
   local opts = { noremap=true, silent=true }
 
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<Leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<Leader>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '<Leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<Leader>f', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<Leader>F', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   buf_set_keymap('n', '<Leader>N', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', '<Leader>n', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  -- buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap('n', '<Leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+  vim.opt.updatetime = 0
+  vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
+  vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)]]
 
   nvim_completion.on_attach(client, bufnr)
 end
@@ -297,12 +296,12 @@ endfunction
 noremap Q <CMD>quit!<CR>
 noremap W <CMD>write<CR>
 noremap Z <CMD>wq<CR>
-noremap E :edit 
 
+noremap $ g_
 noremap! <C-BS> <C-w>
 " Necessary for the backspace remap above for some reason...
 noremap! <C-h> <C-w>
-noremap ch <CMD>noh<CR>
+noremap <ESC> <CMD>noh<CR>
 " TODO: Implement universal preview function
 call timer_start(0, 'PreviewMap')
 function! PreviewMap (timer)
@@ -317,6 +316,7 @@ nmap cpm <Plug>MarkdownPreviewToggle
 noremap cpp :silent write <bar> call PandocPreview()<CR>
 
 autocmd FileType python set colorcolumn=80
+autocmd FileType lua set colorcolumn=120
 
 noremap cH :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
@@ -337,7 +337,9 @@ inoremap { {<C-g>u
 inoremap } }<C-g>u
 inoremap ] ]<C-g>u
 inoremap ) )<C-g>u
+inoremap <CR> <CR><C-g>u
 
+" TODO: Figure out horizontal shifting with similar commands
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '>-2<CR>gv=gv
 
@@ -356,3 +358,5 @@ nnoremap D "+D
 vnoremap d "+d
 vnoremap D "+D
 vnoremap x "+x
+
+

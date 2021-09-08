@@ -114,7 +114,7 @@ if [ -z "$macos" ] && [ ! -x "$(command -v git)" ]; then
   echo "> installing git"
   detect_pm_install git
 fi
-git clone --depth=1 --bare https://github.com/mtoohey31/dotfiles $HOME/.dotfiles
+git clone --bare https://github.com/mtoohey31/dotfiles $HOME/.dotfiles
 git --git-dir=$HOME/.dotfiles --work-tree=$HOME reset --hard
 $HOME/.scripts/setup/dotfiles_hide_untracked
 echo -n "> update submodules?"
@@ -236,6 +236,7 @@ if [ ! -x "$(command -v nvim)" ]; then
   fi
   sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   $HOME/.scripts/setup/get_mthesaur
+  # TODO: Plug clean with no confirmation
   nvim -e --headless +silent! colorscheme solarized +PlugInstall +qall
 )
 fi

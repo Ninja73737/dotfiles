@@ -1,0 +1,68 @@
+set number relativenumber
+set scrolloff=7
+set ignorecase
+set smartcase
+
+set surround
+set easymotion
+" TODO: fix settings for this
+
+nmap gd <Action>(GotoDeclaration)
+nmap gi <Action>(GotoImplementation)
+nmap gr <Action>(ShowUsages)
+nmap <Leader>r <Action>(RenameElement)
+
+" TODO: Figure out how to bind "Show Context Actions" to this
+" nmap <Leader>f
+nmap <Leader>F <Action>(ReformatCode)
+
+nmap <Leader>n <Action>(GotoNextError)
+nmap <Leader>N <Action>(GotoPreviousError)
+
+
+nmap $ g_
+nmap <ESC> :noh<CR>
+set incsearch
+set hlsearch
+
+noremap Q :quit!<CR>
+noremap W :write<CR>
+noremap Z :wq<CR>
+
+set ideajoin
+
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap ! !<C-g>u
+inoremap ? ?<C-g>u
+inoremap " "<C-g>u
+inoremap ' '<C-g>u
+inoremap ( (<C-g>u
+inoremap [ [<C-g>u
+inoremap { {<C-g>u
+inoremap } }<C-g>u
+inoremap ] ]<C-g>u
+inoremap ) )<C-g>u
+inoremap <CR> <CR><C-g>u
+
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '>-2<CR>gv=gv
+
+nnoremap p "+p
+nnoremap P "+P
+vnoremap p "+p
+vnoremap P "+P
+
+nnoremap y "+y
+nnoremap Y "+Y
+vnoremap y "+y
+vnoremap Y "+Y
+
+nnoremap d "+d
+nnoremap D "+D
+vnoremap d "+d
+vnoremap D "+D
+vnoremap x "+x

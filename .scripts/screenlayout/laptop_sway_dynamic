@@ -9,7 +9,7 @@ else
 fi
 
 if [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="XV340CK P")' | wc -l)" -gt "0" ]; then
-  props+=" scale 1.5 position 3440 480"
+  props+=" scale 1.5 position 3440 1080"
 elif [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="LG ULTRAWIDE")' | wc -l)" -gt "0" ]; then
   props+=" scale 1.5 position 0 1080"
 else
