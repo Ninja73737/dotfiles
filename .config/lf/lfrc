@@ -37,3 +37,4 @@ cmd mkdir &{{
 }}
 map m push :mkdir<space>
 map gc cd ~/Courses
+map x !unzip "$f"

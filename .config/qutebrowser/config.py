@@ -70,7 +70,7 @@ config.bind(
     '<Ctrl-o>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomOut.js')
 config.bind(
     '<Ctrl-p>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
-config.bind('wp', 'hint links spawn --detach random_bg -l {hint-url}')
+config.bind('wp', 'hint links spawn random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
 config.bind('<Ctrl-Shift-c>', 'yank selection')
 config.unbind('<Ctrl-v>')

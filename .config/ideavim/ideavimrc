@@ -12,18 +12,20 @@ nmap gi <Action>(GotoImplementation)
 nmap gr <Action>(ShowUsages)
 nmap <Leader>r <Action>(RenameElement)
 
+nmap <Leader>f <Action>(ReformatCode)
 " TODO: Figure out how to bind "Show Context Actions" to this
 " nmap <Leader>f
-nmap <Leader>F <Action>(ReformatCode)
 
 nmap <Leader>n <Action>(GotoNextError)
 nmap <Leader>N <Action>(GotoPreviousError)
 
 
 nmap $ g_
-nmap <ESC> :noh<CR>
+nmap <Leader>h :noh<CR>
 set incsearch
 set hlsearch
+
+nmap <Leader><CR> <Action>(Run)
 
 noremap Q :quit!<CR>
 noremap W :write<CR>
@@ -33,20 +35,6 @@ set ideajoin
 
 nnoremap n nzzzv
 nnoremap N Nzzzv
-
-inoremap , ,<C-g>u
-inoremap . .<C-g>u
-inoremap ! !<C-g>u
-inoremap ? ?<C-g>u
-inoremap " "<C-g>u
-inoremap ' '<C-g>u
-inoremap ( (<C-g>u
-inoremap [ [<C-g>u
-inoremap { {<C-g>u
-inoremap } }<C-g>u
-inoremap ] ]<C-g>u
-inoremap ) )<C-g>u
-inoremap <CR> <CR><C-g>u
 
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '>-2<CR>gv=gv

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+$HOME/.config/qutebrowser/importer.py -b -i chrome ~/.config/BraveSoftware/Brave-Browser/Default > ~/.local/share/qutebrowser-profiles/personal/config/bookmarks/urls
+$HOME/.config/qutebrowser/importer.py -b -i chrome ~/.config/BraveSoftware/Brave-Browser/Profile\ 2 > ~/.local/share/qutebrowser-profiles/university/config/bookmarks/urls
+$HOME/.config/qutebrowser/importer.py -b -i chrome ~/.config/BraveSoftware/Brave-Browser/Profile\ 3 > ~/.local/share/qutebrowser-profiles/gaming/config/bookmarks/urls
+$HOME/.config/qutebrowser/importer.py -b -i chrome ~/.config/BraveSoftware/Brave-Browser/Profile\ 4 > ~/.local/share/qutebrowser-profiles/mod/config/bookmarks/urls

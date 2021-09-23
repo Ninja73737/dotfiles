@@ -1,0 +1,68 @@
+---
+- name: Setup with my system configuration
+  hosts: all
+  roles:
+    - kewlfft.aur
+  become_method: su
+  vars:
+    become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+    g14: "{{ ansible_facts['product_name'] == 'ROG Zephyrus G14 GA401QM_GA401QM' }}"
+    cores: "{{ ansible_facts['processor_vcpus'] | int }}"
+    base_pacman_config: "[options]\nColor\nParallelDownloads = {{ cores }}"
+    g14_pacman_repo_config: |
+      [g14]
+      SigLevel = Optional TrustAll
+      Server = https://arch.asus-linux.org
+    g14_pacman_config: "{{ base_pacman_config + '\n' + g14_pacman_repo_config }}"
+    pacman_config: "{{ g14_pacman_config if g14 else base_pacman_config }}"
+  tasks:
+    - debug:
+        var: pacman_config
+    - name: Update Alpine system
+      apk:
+        upgrade: true
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Alpine'
+    - name: Update Archlinux system
+      pacman:
+        upgrade: true
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Archlinux'
+      # TODO: test on macos, figure out how to install homebrew if it's not present
+    - name: Update Darwin system
+      homebrew:
+        upgrade_all: true
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Darwin'
+    - name: Update Debian system
+      apt:
+        upgrade: full
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Debian'
+    - name: Install git
+      package:
+        name: git
+        state: present
+      become: "{{ become_for_packages }}"
+    - name: Clone dotfiles
+      git:
+        bare: true
+        clone: true
+        dest: ~/.dotfiles
+        recursive: true
+        repo: https://github.com/mtoohey31/dotfiles
+        update: true
+      # TODO: handle pulling, resetting, hiding untracked, etc., of dotfiles
+    - name: Install paru
+      aur:
+        name: paru
+        use: makepkg
+        state: present
+      become: yes
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Write pacman config
+      blockinfile:
+        path: /etc/pacman.conf
+        block: "{{ pacman_config }}"
+      become: true
+      when: ansible_facts['os_family'] == 'Archlinux'

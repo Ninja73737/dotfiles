@@ -8,6 +8,10 @@ pkill flashfocus; flashfocus &
 if [ -z "$WAYLAND_DISPLAY" ]; then
   pgrep unclutter || unclutter --timeout 1 &
   killall -2 plover; sleep 2.5; plover &
+else
+  mkfifo /tmp/wobpipe
+  . ~/.cache/wal/colors.sh
+  pkill wob; tail -f /tmp/wobpipe | wob -o 0 -b 0 -p 6 -H 28 --background-color $foreground"CC" --bar-color $background"CC" --overflow-background-color $color1"CC" --overflow-bar-color $background"CC" &
 fi
 
 pgrep Discord || discord --start-minimized &

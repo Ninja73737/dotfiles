@@ -2,7 +2,7 @@
 
 include "$HOME/.cache/wal/colors-sway"
 
-output * background "#000000" solid_color
+output * bg ~/Pictures/Wallpapers/random/random.jpeg fill
 
 exec_always $HOME/.scripts/screenlayout/laptop_sway_dynamic
 
@@ -18,7 +18,7 @@ output "Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E" {
     position 0 0
 }
 
-exec_always pkill swayidle; swayidle -w timeout 60 "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 16x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000 --grace 10 --fade-in 10" timeout 180 'systemctl suspend' before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
+exec_always pgrep swayidle; swayidle -w timeout 60 "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 16x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000 --grace 10 --fade-in 10" timeout 180 'systemctl suspend' before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
 
 input "1267:12440:ELAN1201:00_04F3:3098_Touchpad" {
     tap enabled
@@ -31,7 +31,6 @@ input type:pointer {
 }
 
 exec_always $HOME/.scripts/start_apps
-exec_always fish -c 'if test -e /usr/share/dbus-1/services/fr.emersion.mako.service; swaynag -m "mako exists as a dbus service, remove to avoid incorrect colours"; end'
 exec_always pkill mako; mako --background-color "$backgroundCC" --text-color "$foreground"
 exec_always pgrep autotiling || autotiling
 
@@ -62,6 +61,11 @@ bindsym Mod4+Shift+j exec swaymsg -- mark --replace focused && swaymsg focus dow
 bindsym Mod4+Shift+k exec swaymsg -- mark --replace focused && swaymsg focus up && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused
 bindsym Mod4+Shift+l exec swaymsg -- mark --replace focused && swaymsg focus right && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused
 
+# bindsym Mod4+Shift+h mark --replace focused, focus left, swap container with mark focused, [con_mark='^focused$'] focus, unmark focused
+# bindsym Mod4+Shift+j mark --replace focused, focus down, swap container with mark focused, [con_mark='^focused$'] focus, unmark focused
+# bindsym Mod4+Shift+k mark --replace focused, focus up, swap container with mark focused, [con_mark='^focused$'] focus, unmark focused
+# bindsym Mod4+Shift+l mark --replace focused, focus right, swap container with mark focused, [con_mark='^focused$'] focus, unmark focused
+
 bindsym Mod4+1 workspace number 1
 bindsym Mod4+2 workspace number 2
 bindsym Mod4+3 workspace number 3
@@ -90,26 +94,29 @@ bindsym Mod4+S scratchpad show
 
 bindsym Mod4+r mode "resize"
 mode "resize" {
-    bindsym h resize shrink width 10px
-    bindsym j resize grow height 10px
-    bindsym k resize shrink height 10px
-    bindsym l resize grow width 10px
+    bindsym h resize shrink width 50px
+    bindsym j resize grow height 50px
+    bindsym k resize shrink height 50px
+    bindsym l resize grow width 50px
 
     bindsym Escape mode "default"
+}
+bindsym Mod4+Escape mode "passthrough"
+mode "passthrough" {
+    bindsym Mod4+Escape mode "default"
 }
 
 bindsym Mod4+w kill
 bindsym Mod4+Shift+r reload
-bindsym Mod4+Shift+q exec swaymsg exit
+bindsym Mod4+Shift+q exit
 
 # apps
 
 bindsym Mod4+Return exec alacritty
 bindsym Mod4+slash exec alacritty -e fish -C lf
-bindsym Mod4+C exec alacritty -t "floatme" -o background_opacity=0.8 -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
-bindsym Mod4+space exec rofi -show drun
-bindsym Mod4+tab exec rofi -show window
+bindsym Mod4+space exec $HOME/.scripts/fuzzel_dynamic
 bindsym Mod4+semicolon exec alacritty -t floatme -o background_opacity=0.8 -e $HOME/.scripts/quick_menu
+bindsym Mod4+E exec alacritty -t floatme -o background_opacity=0.8 -e $HOME/.scripts/repls
 
 bindsym Mod4+p exec qbpm launch personal
 bindsym Mod4+g exec qbpm launch gaming
@@ -126,18 +133,18 @@ bindsym Mod1+Shift+S exec grimshot copy area
 
 # media and config
 
-bindsym --locked Mod4+Up exec pulsemixer --change-volume +2
-bindsym --locked XF86AudioRaiseVolume exec pulsemixer --change-volume +2
-bindsym --locked Mod4+Down exec pulsemixer --change-volume -2
-bindsym --locked XF86AudioLowerVolume exec pulsemixer --change-volume -2
+bindsym --locked Mod4+Up exec /bin/sh -c "pulsemixer --change-volume +2; pulsemixer --get-volume | awk '{ print \$1 }' > /tmp/wobpipe"
+bindsym --locked XF86AudioRaiseVolume exec /bin/sh -c "pulsemixer --change-volume +2; pulsemixer --get-volume | awk '{ print \$1 }' > /tmp/wobpipe"
+bindsym --locked Mod4+Down exec /bin/sh -c "pulsemixer --change-volume -2; pulsemixer --get-volume | awk '{ print \$1 }' > /tmp/wobpipe"
+bindsym --locked XF86AudioLowerVolume exec /bin/sh -c "pulsemixer --change-volume -2; pulsemixer --get-volume | awk '{ print \$1 }' > /tmp/wobpipe"
 bindsym --locked Mod4+Shift+Up exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume +2
 bindsym --locked Mod4+Shift+Down exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume -2
 bindsym --locked Mod4+Shift+Left exec playerctl --player=spotify previous
 bindsym --locked Mod4+Shift+Right exec playerctl --player=spotify next
 bindsym --locked Mod4+Shift+Space exec playerctl --player=spotify play-pause
 
-bindsym --locked XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'+15,255)') > /sys/class/backlight/amdgpu_bl0/brightness"
-bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl0/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl0/brightness"
+bindsym --locked XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'+15,'(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"
+bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl0/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"
 
 bindsym --locked XF86KbdBrightnessUp exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end"
 bindsym --locked XF86KbdBrightnessDown exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end"
@@ -159,7 +166,7 @@ bar {
         focused_workspace $foreground $foreground $background
         active_workspace $background $background $foreground
         inactive_workspace $background $background $foreground
-        urgent_workspace $foreground $foreground $background
+        urgent_workspace $color1 $color1 $background
     }
 
     height 22

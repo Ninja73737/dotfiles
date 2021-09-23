@@ -28,6 +28,17 @@ end
 if test -d /opt/android-sdk/cmdline-tools/latest/bin
     set -g fish_user_paths "/opt/android-sdk/cmdline-tools/latest/bin" $fish_user_paths
 end
+if test -d /usr/lib/jvm/java-16-openjdk/bin
+    set -g fish_user_paths "/usr/lib/jvm/java-16-openjdk/bin" $fish_user_paths
+end
+if test -d $HOME/.local/opt/jdtls-launcher/jdtls
+    export JDTLS_HOME=$HOME/.local/opt/jdtls-launcher/jdtls
+    export WORKSPACE=$HOME/.cache/jdtls
+end
+if test -d $HOME/Android/Sdk
+    export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+end
+
 
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
@@ -37,7 +48,9 @@ if which trash &> /dev/null
     alias rm "trash"
 
     function mv --wraps mv
-        trash "$argv[-1]" 2> /dev/null
+        if ! test -d "$argv[-1]"
+            trash "$argv[-1]" 2> /dev/null
+        end
         command mv $argv
     end
 end
@@ -140,7 +153,7 @@ if status --is-interactive
     bind -s -M visual E forward-bigword backward-char
 
     # bind -s -M normal V beginning-of-line begin-selection end-of-line
-    # bind -s -M normal yy 'commandlien -f kill-whole-line; fish_clipboard_copy'
+    # bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
 
     set fish_cursor_default block
     set fish_cursor_insert line

@@ -1,0 +1,29 @@
+---
+- name: Setup with my cli configuration
+  hosts: all
+  become_method: su
+  vars:
+    become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+  tasks:
+    - name: Install fish
+      package:
+        name: fish
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Change shell to fish
+      become: yes
+      user:
+        name: "{{ ansible_facts['user_id'] }}"
+        shell: /usr/bin/fish
+    - name: Install starship
+      package:
+        name: starship
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Install exa
+      package:
+        name: exa
+        state: latest
+      become: "{{ become_for_packages }}"
+      # TODO: Install pywal and set theme only if pywal was just installed
+      # TODO: Install lf, lf-ueberzug, and run lf exa icons

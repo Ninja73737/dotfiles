@@ -9,6 +9,19 @@ linestretch: 1.25
 header-includes: |
   <!-- \pagenumbering{gobble} -->
   \usepackage{mdframed}
+  \newcommand{\N}{\mathbb{N}}
+  \newcommand{\Z}{\mathbb{Z}}
+  \newcommand{\Q}{\mathbb{Q}}
+  \newcommand{\R}{\mathbb{R}}
+  \newcommand{\C}{\mathbb{C}}
+  \newcommand{\st}{\text{ s.t. }}
+  \newcommand{\larr}{\leftarrow}
+  \newcommand{\rarr}{\rightarrow}
+  \newcommand{\lrarr}{\leftrightarrow}
+  \newcommand{\Larr}{\Leftarrow}
+  \newcommand{\Rarr}{\Rightarrow}
+  \newcommand{\Lrarr}{\Leftrightarrow}
+  \newcommand{\QED}{\blacksquare}
   \newmdenv[rightline=false,bottomline=false,topline=false,linewidth=2pt,skipabove=\parskip]{customblockquote}
   \renewenvironment{quote}{\begin{customblockquote}\list{}{\rightmargin=0em\leftmargin=0em}%
   \item\relax\ignorespaces}{\unskip\unskip\endlist\end{customblockquote}}

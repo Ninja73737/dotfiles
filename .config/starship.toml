@@ -70,9 +70,9 @@ style = "bold green"
 format = "on [$hostname]($style) "
 
 [character]
-success_symbol = "[>](green)"
+success_symbol = "[>](blue)"
 error_symbol = "[>](red)"
-vicmd_symbol = "[<](blue)"
+vicmd_symbol = "[<](green)"
 
 [git_branch]
 symbol = ""

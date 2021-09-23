@@ -1,0 +1,8 @@
+{
+    "initial_working_directory": "~",
+    "editor_keybindings": "vim",
+    "pdf_previewer": "system",
+    "posix_terminal_shell": "custom",
+    "custom_shell_command": "/bin/fish",
+    "editor_theme": "Nord"
+}

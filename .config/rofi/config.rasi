@@ -6,12 +6,6 @@ configuration {
   display-drun:          "";
   display-window:        "";
   modi:                  "window,run,drun";
-  lines:                 7;
-  width:                 30;
-  line-padding:          10;
-  bw:                    0;
-  padding:               0;
-  line-margin:           0;
   window-format:         "{w} {c} {t}";
 }
 

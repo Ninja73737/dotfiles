@@ -2,7 +2,7 @@
 
 props="adaptive_sync on"
 
-if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
+if [ "$(cat /sys/class/power_supply/BAT0/status)" == "Discharging" ]; then
   props+=" resolution 2560x1440@60.001Hz"
 else
   props+=" resolution 2560x1440@120Hz"
@@ -10,10 +10,58 @@ fi
 
 if [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="XV340CK P")' | wc -l)" -gt "0" ]; then
   props+=" scale 1.5 position 3440 1080"
+
+  # swaymsg bindsym Mod4+1 focus output '"Acer Technologies XV340CK P THQAA0013P00"', workspace number 1
+  # swaymsg bindsym Mod4+2 focus output '"Acer Technologies XV340CK P THQAA0013P00"', workspace number 2
+  # swaymsg bindsym Mod4+3 focus output '"Acer Technologies XV340CK P THQAA0013P00"', workspace number 3
+  # swaymsg bindsym Mod4+4 focus output '"Acer Technologies XV340CK P THQAA0013P00"', workspace number 4
+  # swaymsg bindsym Mod4+5 focus output '"Acer Technologies XV340CK P THQAA0013P00"', workspace number 5
+
+  # swaymsg bindsym Mod4+Shift+1 focus output '"Acer Technologies XV340CK P THQAA0013P00"', move container to workspace number 1, workspace number 1
+  # swaymsg bindsym Mod4+Shift+2 focus output '"Acer Technologies XV340CK P THQAA0013P00"', move container to workspace number 2, workspace number 2
+  # swaymsg bindsym Mod4+Shift+3 focus output '"Acer Technologies XV340CK P THQAA0013P00"', move container to workspace number 3, workspace number 3
+  # swaymsg bindsym Mod4+Shift+4 focus output '"Acer Technologies XV340CK P THQAA0013P00"', move container to workspace number 4, workspace number 4
+  # swaymsg bindsym Mod4+Shift+5 focus output '"Acer Technologies XV340CK P THQAA0013P00"', move container to workspace number 5, workspace number 5
 elif [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="LG ULTRAWIDE")' | wc -l)" -gt "0" ]; then
   props+=" scale 1.5 position 0 1080"
+
+  # swaymsg bindsym Mod4+1 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', workspace number 1
+  # swaymsg bindsym Mod4+2 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', workspace number 2
+  # swaymsg bindsym Mod4+3 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', workspace number 3
+  # swaymsg bindsym Mod4+4 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', workspace number 4
+  # swaymsg bindsym Mod4+5 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', workspace number 5
+
+  # swaymsg bindsym Mod4+Shift+1 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', move container to workspace number 1, workspace number 1
+  # swaymsg bindsym Mod4+Shift+2 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', move container to workspace number 2, workspace number 2
+  # swaymsg bindsym Mod4+Shift+3 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', move container to workspace number 3, workspace number 3
+  # swaymsg bindsym Mod4+Shift+4 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', move container to workspace number 4, workspace number 4
+  # swaymsg bindsym Mod4+Shift+5 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', move container to workspace number 5, workspace number 5
 else
   props+=" scale 1 position 0 0"
+
+  # swaymsg bindsym Mod4+1 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 1
+  # swaymsg bindsym Mod4+2 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 2
+  # swaymsg bindsym Mod4+3 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 3
+  # swaymsg bindsym Mod4+4 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 4
+  # swaymsg bindsym Mod4+5 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 5
+
+  # swaymsg bindsym Mod4+Shift+1 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 1, workspace number 1
+  # swaymsg bindsym Mod4+Shift+2 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 2, workspace number 2
+  # swaymsg bindsym Mod4+Shift+3 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 3, workspace number 3
+  # swaymsg bindsym Mod4+Shift+4 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 4, workspace number 4
+  # swaymsg bindsym Mod4+Shift+5 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 5, workspace number 5
 fi
+
+# swaymsg bindsym Mod4+6 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 6
+# swaymsg bindsym Mod4+7 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 7
+# swaymsg bindsym Mod4+8 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 8
+# swaymsg bindsym Mod4+9 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 9
+# swaymsg bindsym Mod4+0 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 10
+
+# swaymsg bindsym Mod4+Shift+6 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 6, workspace number 6
+# swaymsg bindsym Mod4+Shift+7 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 7, workspace number 7
+# swaymsg bindsym Mod4+Shift+8 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 8, workspace number 8
+# swaymsg bindsym Mod4+Shift+9 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 9, workspace number 9
+# swaymsg bindsym Mod4+Shift+0 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 10, workspace number 10
 
 swaymsg output '"Unknown TL140BDXP01-0 0x00000000"' $props

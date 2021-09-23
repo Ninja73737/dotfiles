@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cat /dev/stdin > /tmp/mail.html
+xdg-open /tmp/mail.html

@@ -1,0 +1,167 @@
+---
+# Misisng language servers from coc.nvim configuration: coc-dictionary, coc-flutter, coc-word
+- name: Install LSPs
+  hosts: all
+  roles:
+    - kewlfft.aur
+  become_method: su
+  vars:
+    become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+  tasks:
+    - name: Install npm
+      package:
+        name: npm
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Install paru
+      aur:
+        name: paru
+        use: makepkg
+        state: present
+      become: yes
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Install Ansible language server
+      npm:
+        name: ansible-language-server
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install ansible-lint
+      pip:
+        name: ansible-lint
+        executable: pip3
+        state: latest
+    - name: Install Bash language server
+      npm:
+        name: bash-language-server
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install CCLS (Archlinux)
+      aur:
+        use: paru
+        name: ccls
+        state: latest
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Install CCLS (Darwin)
+      package:
+        name: ccls
+        state: latest
+      when: ansible_facts['os_family'] == 'Darwin'
+    - name: Install Diagnostic language server
+      npm:
+        name: diagnostic-languageserver
+        path: ~/.npm-global
+        state: latest
+    - name: Install Markdownlint CLI
+      npm:
+        name: markdownlint-cli
+        path: ~/.npm-global
+        state: latest
+    - name: Install Dockerfile language server
+      npm:
+        name: dockerfile-language-server-nodejs
+        path: ~/.npm-global
+        state: latest
+    - name: Install golang
+      package:
+        name: go
+        state: latest
+    - name: Install gopls
+      shell: go install golang.org/x/tools/gopls@latest
+      register: gopls_install_result
+      changed_when: false
+      failed_when: gopls_install_result.rc != 0
+      # TODO: figure out how to determine whether this has changed
+    - name: Install JDTLS
+      shell: "curl https://raw.githubusercontent.com/eruizc-dev/jdtls-launcher/master/install.sh | bash"
+      register: jdtls_install_result
+      changed_when: jdtls_install_result.rc == 0
+      failed_when: "jdtls_install_result.rc != 0 and 'already exists, delete it manually and try again' not in jdtls_install_result.stderr"
+    - name: Install Lua language server
+      package:
+        name: lua-language-server
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Install rustup
+      package:
+        name: rustup
+        state: latest
+    - name: Install rls
+      shell: rustup component add rls
+      register: rls_install_result
+      changed_when: "'is up to date' not in rls_install_result.stderr"
+      failed_when: rls_install_result.rc != 0
+    - name: Install rust-analysis
+      shell: rustup component add rust-analysis
+      register: rust_analysis_install_result
+      changed_when: "'is up to date' not in rust_analysis_install_result.stderr"
+      failed_when: rust_analysis_install_result.rc != 0
+    - name: Install rust-src
+      shell: rustup component add rust-src
+      register: rust_src_install_result
+      changed_when: "'is up to date' not in rust_src_install_result.stderr"
+      failed_when: rust_src_install_result.rc != 0
+    - name: Install prettier
+      npm:
+        name: prettier
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install pyright
+      npm:
+        name: pyright
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install R Language Server
+      shell: R -e 'install.packages("languageserver")'
+      register: r_language_server_install_result
+      changed_when: true
+      # changed_when: '"also installing the dependencies" in r_language_server_install_result.stderr'
+      failed_when: '"is not available for this version of R" in r_language_server_install_result.stderr'
+    - name: Install Svelte language server
+      npm:
+        name: svelte-language-server
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install Taplo
+      shell: cargo install taplo-lsp
+      register: taplo_install_result
+      changed_when: "'is already installed' not in taplo_install_result.stdout"
+      failed_when: taplo_install_result.rc != 0
+    - name: Install TexLab
+      package:
+        name: texlab
+        state: latest
+    - name: Install Typescript
+      npm:
+        name: typescript
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install TSServer
+      npm:
+        name: typescript-language-server
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install Vim language server
+      npm:
+        name: vim-language-server
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install VSCode language servers
+      npm:
+        name: vscode-langservers-extracted
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install YAML language server
+      npm:
+        name: yaml-language-server
+        global: true
+        path: ~/.npm-global
+        state: latest
