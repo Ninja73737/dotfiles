@@ -1,7 +1,10 @@
 #!/bin/bash
 
+set -e
+
 current_date=$(date '+%s')
-modification_date=$(date -d "$(grep -P -o "(?<=MetaUpdateTime=\")[\d/: ]+" "$1")" '+%s')
+modification_date_string=$(grep -P -o "(?<=MetaUpdateTime=\")[\d/: ]+" "$1")
+modification_date=$(date -d "$modification_date_string" '+%s')
 comparison_modification_date="$(($modification_date + 86400))"
 
 if [ "$comparison_modification_date" -lt "$current_date" ]; then
