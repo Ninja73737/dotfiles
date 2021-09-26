@@ -141,6 +141,9 @@ if status --is-interactive
         alias paste "xclip -selection clipboard -out"
     end
 
+    abbr music "mpv --shuffle --loop-playlist --no-audio-display --volume=30 ~/music"
+    alias music "mpv --shuffle --loop-playlist --no-audio-display --volume=30 ~/music"
+
     fish_vi_key_bindings
 
     # TODO: make pasting work in visual mode
@@ -205,12 +208,14 @@ if status --is-interactive
 
     if which starship &> /dev/null
         starship init fish | source
-        if test -e /tmp/num_updates
-            if test (date -r /tmp/num_updates '+%s') -lt (math (date '+%s') - 14400)
+        if which checkupdates &> /dev/null
+            if test -e /tmp/num_updates
+                if test (date -r /tmp/num_updates '+%s') -lt (math (date '+%s') - 14400)
+                    checkupdates | wc -l > /tmp/num_updates & disown
+                end
+            else
                 checkupdates | wc -l > /tmp/num_updates & disown
             end
-        else
-            checkupdates | wc -l > /tmp/num_updates & disown
         end
     end
 end
