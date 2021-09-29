@@ -21,6 +21,7 @@ set -g fish_user_paths "$HOME/.cargo/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.npm-global/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.pnpm-global/bin" $fish_user_paths
+set -g fish_user_paths "$HOME/.dotnet/tools" $fish_user_paths
 set -x GOPATH "$HOME/.go"
 if test -d $HOME/.go/bin
     set -g fish_user_paths "$HOME/.go/bin" $fish_user_paths
@@ -42,6 +43,10 @@ end
 
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
+
+for abbr in (abbr -l)
+      abbr -e "$abbr"
+end
 
 if which trash &> /dev/null
     abbr rm "trash"
@@ -162,12 +167,11 @@ if status --is-interactive
     set fish_cursor_insert line
     set fish_cursor_replace_one underscore
 
-    export VISUAL=nvim
+    export OPENER="$HOME/.scripts/xdg-open-disown"
     export EDITOR=nvim
+    export VISUAL=nvim
     abbr e "$EDITOR"
     alias e "$EDITOR"
-    alias vi "$EDITOR"
-    alias vim "$EDITOR"
 
     export MANPAGER='nvim +Man!'
 

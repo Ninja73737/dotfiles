@@ -47,7 +47,10 @@ focus_wrapping no
 for_window [title="floatme"] floating enable
 for_window [class="Bitwarden"] floating enable
 for_window [title=".*YouTube.*"] inhibit_idle visible, sticky enable
+for_window [title=".*Microsoft Stream.*"] inhibit_idle visible, sticky enable
+for_window [title=".*Audio Cine Films.*"] inhibit_idle visible, sticky enable
 for_window [app_id="mpv"] inhibit_idle visible, sticky enable
+exec_always $HOME/.scripts/inhibit_idle_discord_brave_sway
 
 # window management
 
@@ -98,6 +101,11 @@ mode "resize" {
     bindsym j resize grow height 50px
     bindsym k resize shrink height 50px
     bindsym l resize grow width 50px
+
+    bindsym Mod1+h resize shrink width 5px
+    bindsym Mod1+j resize grow height 5px
+    bindsym Mod1+k resize shrink height 5px
+    bindsym Mod1+l resize grow width 5px
 
     bindsym Escape mode "default"
 }

@@ -1,5 +1,113 @@
 " TODO: fix markdown setup
+" TODO: Switch to `init.lua`
+" TODO: Fix backspace remapping
 " TODO: Get dictionary lookup with K for words when lsp hover isn't available
+" TODO: Add noa writes to compile and execute commands
+" global mappings {{{
+nmap Q <CMD>quit!<CR>
+nmap W <CMD>noa write<CR>
+nmap Z <CMD>wq<CR>
+
+nmap $ g_
+vmap $ g_
+
+nmap <Leader>h <CMD>noh<CR>
+nmap <Leader>Dm <CMD>redir @" \| silent map \| redir END \| new \| put!<CR>
+nmap <Leader>Dh <CMD>echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+nmap <Leader>qo <CMD>copen<CR>
+nmap <Leader>qc <CMD>cclose<CR>
+
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap ! !<C-g>u
+inoremap ? ?<C-g>u
+inoremap " "<C-g>u
+inoremap ' '<C-g>u
+inoremap ( (<C-g>u
+inoremap [ [<C-g>u
+inoremap { {<C-g>u
+inoremap } }<C-g>u
+inoremap ] ]<C-g>u
+inoremap ) )<C-g>u
+inoremap <CR> <CR><C-g>u
+
+vmap J :m '>+1<CR>gv=gv
+vmap K :m '>-2<CR>gv=gv
+
+nnoremap p "+p
+nnoremap P "+P
+vnoremap p "+p
+vnoremap P "+P
+
+nnoremap y "+y
+nnoremap Y "+Y
+vnoremap y "+y
+vnoremap Y "+Y
+
+nnoremap d "+d
+nnoremap D "+D
+vnoremap d "+d
+vnoremap D "+D
+vnoremap x "+x
+
+imap <F1> <NUL>
+imap <F2> <NUL>
+imap <F3> <NUL>
+imap <F4> <NUL>
+imap <F5> <NUL>
+imap <F6> <NUL>
+imap <F7> <NUL>
+imap <F8> <NUL>
+imap <F9> <NUL>
+imap <F10> <NUL>
+imap <F11> <NUL>
+imap <F12> <NUL>
+
+omap <silent> i* :<C-U>normal! T*vt*<CR>
+vmap <silent> i* :<C-U>normal! T*vt*<CR>
+omap <silent> a* :<C-U>normal! F*vf*<CR>
+vmap <silent> a* :<C-U>normal! F*vf*<CR>
+
+omap <silent> i$ :<C-U>normal! T$vt$<CR>
+vmap <silent> i$ :<C-U>normal! T$vt$<CR>
+omap <silent> a$ :<C-U>normal! F$vf$<CR>
+vmap <silent> a$ :<C-U>normal! F$vf$<CR>
+
+tnoremap <C-w> <C-\><C-n><C-w>
+" }}}
+" local mappings {{{
+let g:maplocalleader = '\\'
+
+autocmd FileType java nmap <buffer> <LocalLeader><CR> <CMD>!java %<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>h <Plug>MarkdownPreviewToggle
+autocmd FileType markdown nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>i <CMD>call mdip#MarkdownClipboardImage()<CR>
+nmap <LocalLeader>t <CMD>lua require('truth_table')(vim.fn.input("separator: "))<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" | ")<CR>
+autocmd FileType python nmap <buffer> <LocalLeader><CR> <CMD>!python3 %<CR>
+autocmd FileType tex nmap <buffer> <LocalLeader><CR> <CMD>!mkdir -p /tmp/pdflatex && pdflatex -output-directory /tmp/pdflatex % && cp /tmp/pdflatex/*.pdf (dirname %)<CR>
+
+function! RUserMaps()
+      nmap <buffer> <LocalLeader>kp <Plug>RMakePDFK
+      nmap <buffer> <LocalLeader>kh <Plug>RMakeHTML
+      nmap <buffer> <LocalLeader>h <Plug>RSendChunkFH
+      nmap <buffer> <LocalLeader>c <Plug>RESendChunk
+      nmap <buffer> <LocalLeader>o <Plug>ROpenLists
+      nmap <buffer> <LocalLeader>n <Plug>RNextRChunk
+      nmap <buffer> <LocalLeader>N <Plug>RPreviousRChunk
+endfunction
+autocmd FileType rmd call RUserMaps()
+" }}}
+" settings {{{
+set foldmethod=marker
 set shortmess+=c
 if empty($SSH_CONNECTION)
   set pumblend=20
@@ -25,10 +133,26 @@ set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾
 set nocompatible
 set termguicolors
 "" Restore cursor position
-au BufReadPost *
+au BufReadPost * silent
          \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-         \ |   exe "normal! g`\""
+         \ |   exe "normal! g`\"zv"
          \ | endif
+autocmd FileType * let b:AutoPairs = AutoPairsDefine({'\v(^|\W)\zs''':"'"})
+" }}}
+" local settings {{{
+autocmd FileType java let b:no_auto_format=1
+autocmd FileType java set shiftwidth=4
+autocmd FileType markdown set softtabstop=2
+autocmd FileType java set softtabstop=4
+autocmd FileType python set colorcolumn=80
+autocmd FileType lua set colorcolumn=120
+autocmd FileType lua let b:AutoPairs = AutoPairsDefine({'\v(^|.)\zs''':"'"}, ['\v(^|\W)\zs'''])
+autocmd FileType vim let b:AutoPairs = AutoPairsDefine({'<':'>'})
+" TODO: Make mamrkdown `*` and `_` pairs only work outside math
+autocmd FileType markdown let g:AutoPairs = AutoPairsDefine({'*':'*', '**':'**', '_':'_','$':'$', '$$':'$$', "<!--":'-->'})
+autocmd FileType rust let b:AutoPairs = AutoPairsDefine({'\w\zs<': '>'})
+" }}}
+" plugins {{{
 let g:polyglot_disabled = ['autoindent']
 
 call plug#begin()
@@ -106,11 +230,14 @@ let g:pandoc#modules#disabled = ["folding", "spell"]
 Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
 
 autocmd BufNewFile,BufRead *.Rmd set filetype=rmd
-let R_args = ['--quiet']
-let R_assign = 0
-let R_openpdf = 0
 let R_auto_start = 1
-" TODO: fix keybindings
+let R_esc_term = 0
+let R_close_term = 1
+let R_args = ['--no-save', '--quiet']
+let R_assign = 0
+let R_openpdf = 1
+let R_openhtml = 0
+let R_user_maps_only = 1
 
 Plug 'mbbill/undotree'
 
@@ -129,16 +256,11 @@ endif
 
 Plug 'easymotion/vim-easymotion'
 
+let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 autocmd User EasyMotionPromptBegin silent! LspStop
 autocmd User EasyMotionPromptEnd silent! LspStart
 map f <Plug>(easymotion-bd-w)
-
-Plug 'ron89/thesaurus_query.vim'
-
-let g:tq_mthesaur_file="~/.config/nvim/mthesaur.txt"
-let g:tq_enabled_backends=["mthesaur_txt"]
-
 Plug 'chaoren/vim-wordmotion'
 Plug 'vim-scripts/loremipsum'
 Plug 'shadmansaleh/lualine.nvim' " TODO: change back to hoob3rt/ when he resumes maintenance
@@ -146,10 +268,9 @@ Plug 'ferrine/md-img-paste.vim'
 
 let g:mdip_imgdir = expand('%:t:r')
 let g:mdip_imgdir_intext = escape(expand('%:t:r'), ' ')
-" TODO: clean this up
-noremap <Leader>p :call mdip#MarkdownClipboardImage()<CR>
 
 Plug 'mtoohey31/doctest.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'mtoohey31/truth-table.nvim',
 Plug 'reedes/vim-pencil'
 
 let g:pencil#conceallevel = 2
@@ -157,34 +278,26 @@ let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#cursorwrap = 0
 autocmd FileType markdown,rmd,tex call pencil#init()
 
-Plug 'dhruvasagar/vim-table-mode'
-
-let g:table_mode_disable_mappings = 1
-let g:table_mode_disable_tableize_mappings = 1
-let g:table_mode_map_prefix = "<Plug>(table-mode-toggle)"
-
 Plug 'dkarter/bullets.vim'
 
+let g:bullets_set_mappings = 0
 let g:bullets_outline_levels = ['ABC', 'num', 'std-']
+let g:bullets_checkbox_markers = ' ox'
 let g:bullets_renumber_on_change = 0
-nmap <Tab> >>
-nmap <S-Tab> <<
-imap <Tab> <C-t>
-imap <S-Tab> <C-d>
+
+
+autocmd FileType markdown nmap <LocalLeader><Space> <CMD>ToggleCheckbox<CR>
+autocmd FileType markdown noremap o <CMD>InsertNewBullet<CR>
+let g:completion_confirm_key = ""
+inoremap <expr> <CR> pumvisible() ? complete_info()["selected"] != "-1" ? "\<Plug>(completion_confirm_completion)" : "\<C-e>\<CR>" : "\<CR>"
+autocmd FileType markdown inoremap <expr> <CR> pumvisible() ? complete_info()["selected"] != "-1" ? "\<Plug>(completion_confirm_completion)" : "\<C-e>\<CMD>InsertNewBullet<CR>" : "\<CMD>InsertNewBullet<CR>"
 
 Plug 'junegunn/goyo.vim'
 
 let g:goyo_width = "85%"
-noremap cg <CMD>Goyo<BAR>
+nmap <Leader>G <CMD>Goyo<CR>
 
 Plug 'mg979/vim-visual-multi'
-
-" TODO: Fix colors here
-
-let g:VM_maps = {}
-let g:VM_maps["Find Under"] = "<C-n>"
-let g:VM_maps["Find Subword Under"] = "<C-n>"
-
 Plug 'airblade/vim-gitgutter'
 
 let g:gitgutter_map_keys = 0
@@ -193,32 +306,50 @@ nmap <Leader>gN <Plug>(GitGutterPrevHunk)
 
 Plug 'mtoohey31/tgc_wal.vim'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'itsvinayak/image.vim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
-noremap <Leader>t <CMD>Telescope live_grep<CR>
+nmap <Leader>t <CMD>Telescope live_grep<CR>
 
 Plug 'mtoohey31/chafa.vim'
+
 let _himalaya_path = system("which himalaya")
 if v:shell_error == 0
   Plug 'soywod/himalaya', {'rtp': 'vim'}
 
   autocmd BufEnter /tmp/himalaya-draft.mail set ft=mail
 endif
-Plug 'kmonad/kmonad-vim'
+
 Plug 'othree/eregex.vim'
+Plug 'jiangmiao/auto-pairs'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'SirVer/ultisnips'
 
 let g:completion_enable_snippet = 'UltiSnips'
-let g:UltiSnipsExpandTrigger="<Nop>"
-let g:UltiSnipsJumpForwardTrigger="<Nop>"
-let g:UltiSnipsJumpBackwardTrigger="<Nop>"
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-R>=UltiSnips#JumpForwards()<CR>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-R>=UltiSnips#JumpBackwards()<CR>"
+let g:UltiSnipsExpandTrigger="<NUL>"
+let g:UltiSnipsJumpForwardTrigger="<NUL>"
+let g:UltiSnipsJumpBackwardTrigger="<NUL>"
+autocmd FileType markdown let g:completion_trigger_character = ['`', "#"]
+inoremap <expr> <Tab> pumvisible() ? "\<Down>" : "\<CMD>call JumpForwardsOrIndent()<CR>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<Up>" : "\<CMD>call JumpBackwardsOrIndent()<CR>"
+noremap <Tab> >>
+noremap <S-Tab> <<
+
+function! JumpForwardsOrIndent()
+      call UltiSnips#JumpForwards()
+      if !g:ulti_jump_forwards_res
+        call feedkeys("\<C-t>")
+      endif
+endfunction
+
+function! JumpBackwardsOrIndent()
+      call UltiSnips#JumpBackwards()
+      if !g:ulti_jump_backwards_res
+        call feedkeys("\<C-d>")
+      endif
+endfunction
 
 Plug 'honza/vim-snippets'
 Plug 'cbarrete/completion-vcard'
@@ -232,30 +363,29 @@ let g:completion_chain_complete_list = {
                   \ 'vim': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
                   \ 'sh': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
                   \ 'zsh': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
-                  \ 'mail': [{ 'complete_items': ['vCard', 'cSpell']}]
+                  \ 'mail': [{ 'complete_items': ['vCard']}]
                   \ }
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
+let g:completion_sorting = "none"
 
 call plug#end()
-
-colorscheme tgc_wal
-
+" }}}
+" lua {{{
 lua << EOF
-require'lualine'.setup({ options = { theme = 'pywal' }, sections = { lualine_x = { 'filetype' }}})
+require'lualine'.setup({ options = { theme = 'pywal' }, sections = { lualine_x = { 'filetype' } } })
+-- require'cspell'.setup_completion('en_GB')
 require'colorizer'.setup()
 
 local nvim_lsp = require('lspconfig')
 local nvim_completion = require('completion')
 nvim_completion.addCompletionSource('fish', require'completion-fish'.complete_item)
 require'completion_vcard'.setup_completion('~/.contacts/32')
--- TODO: switch to using google ngrams to get most popular words, and handle mutiple languages
-require'cspell'.setup_completion('en_GB')
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-  local opts = { noremap=true, silent=true }
+  local opts = { noremap=false, silent=true }
 
   buf_set_keymap('n', 'gd', '<cmd>split | lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -290,7 +420,7 @@ end
 
 nvim_lsp.diagnosticls.setup({
    on_attach = on_attach,
-   filetypes={ "markdown" },
+   filetypes={ "markdown", "rmd" },
    init_options = {
       formatters = {
          prettier = {
@@ -326,24 +456,22 @@ nvim_lsp.diagnosticls.setup({
             formatPattern = { ".*?:(\\d+):(\\d+)\\s*-\\s*(.*)", { line = 1, column = 2, message = 3 } }
          },
       },
-      filetypes = { markdown = { "markdownlint", "cspell" } },
+      filetypes = { markdown = { "markdownlint", "cspell" }, rmd = { "markdownlint", "cspell"} },
       formatFiletypes = {
-         markdown = "prettier"
+         markdown = "prettier",
+         rmd = "prettier"
       }
    }
 }
 )
 
-local yamlls_settings = { yaml = { schemas = {}}}
-yamlls_settings.yaml.schemas["/home/mtoohey/yams/schema.yaml"] = "recipes/**/*.yaml"
-
-nvim_lsp.yamlls.setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    },
-    settings = yamlls_settings
+nvim_lsp.omnisharp.setup{
+  cmd = { "/usr/bin/omnisharp", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) },
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
   }
+}
 
 local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
 local sumneko_binary = '/usr/bin/lua-language-server'
@@ -353,7 +481,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 nvim_lsp.sumneko_lua.setup {
-  cmd = {sumneko_binary, "-E", "/usr/share/lua-language-server/main.lua"};
+  cmd = { sumneko_binary, "-E", "/usr/share/lua-language-server/main.lua" };
   settings = {
     Lua = {
       runtime = {
@@ -374,125 +502,40 @@ nvim_lsp.sumneko_lua.setup {
   on_attach = on_attach
 }
 
+local yamlls_settings = { yaml = { schemas = {} } }
+yamlls_settings.yaml.schemas["/home/mtoohey/yams/schema.yaml"] = "recipes/**/*.yaml"
+
+nvim_lsp.yamlls.setup {
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  },
+  settings = yamlls_settings
+}
+
 local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
 
 for type, icon in pairs(signs) do
   local hl = "LspDiagnosticsSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
+
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = true,
+})
 EOF
 
 function! FormatIfOk()
   if !exists("b:no_auto_format")
-    lua vim.lsp.buf.formatting_sync(nil, 1000)
+    lua vim.lsp.buf.formatting_seq_sync(nil, 1000)
   endif
 endfunction
+" }}}
+
+colorscheme tgc_wal
 
 autocmd BufWinEnter,WinEnter term://* startinsert
-autocmd TermOpen * set nonumber norelativenumber
-tnoremap <ESC> <C-\><C-n>
-tnoremap <C-w> <C-\><C-n><C-w>
-
-function! PandocPreview ()
-  let output_path = expand('%:p:r') . '.pdf'
-  execute '!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . output_path . '"'
-endfunction
-
-function! ZathuraCurrent ()
-  call system('zth "' . expand('%:p:r') . '.pdf"')
-endfunction
-
-noremap Q <CMD>quit!<CR>
-noremap W <CMD>write<CR>
-noremap Z <CMD>wq<CR>
-
-nmap $ g_
-vmap $ g_
-noremap! <C-BS> <C-w>
-" Necessary for the backspace remap above for some reason...
-noremap! <C-h> <C-w>
-noremap <Leader>h <CMD>noh<CR>
-
-noremap cz :CocCommand latex.ForwardSearch<CR>
-noremap cz :silent call ZathuraCurrent()<CR>
-nmap cpm <Plug>MarkdownPreviewToggle
-autocmd FileType markdown noremap <Leader><CR> <CMD>silent write <bar> call PandocPreview()<CR>
-autocmd FileType java noremap <Leader><CR> <CMD>!java %<CR>
-autocmd FileType java set shiftwidth=4
-autocmd FileType java let b:no_auto_format=1
-autocmd FileType python noremap <Leader><CR> <CMD>!python3 %<CR>
-autocmd FileType tex noremap <Leader><CR> <CMD>!mkdir -p /tmp/pdflatex && pdflatex -output-directory /tmp/pdflatex % && cp /tmp/pdflatex/*.pdf (dirname %)<CR>
-autocmd FileType markdown noremap <Leader><CR> <CMD>!pandoc --metadata-file=$HOME/.config/pandoc/default-metadata.yaml -f markdown "%" -t pdf --pdf-engine=xelatex -o (echo % \| sed -r 's/\.\w+/.pdf/g')<CR>
-autocmd FileType markdown set softtabstop=2
-
-autocmd FileType python set colorcolumn=80
-autocmd FileType lua set colorcolumn=120
-
-noremap <Leader>Dm :redir @" \| silent map \| redir END \| new \| put!<CR>
-noremap <Leader>Dh <CMD>echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-inoremap , ,<C-g>u
-inoremap . .<C-g>u
-inoremap ! !<C-g>u
-inoremap ? ?<C-g>u
-inoremap " "<C-g>u
-inoremap ' '<C-g>u
-inoremap ( (<C-g>u
-inoremap [ [<C-g>u
-inoremap { {<C-g>u
-inoremap } }<C-g>u
-inoremap ] ]<C-g>u
-inoremap ) )<C-g>u
-inoremap <CR> <CR><C-g>u
-
-" TODO: Figure out horizontal shifting with similar commands
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '>-2<CR>gv=gv
-
-nnoremap p "+p
-nnoremap P "+P
-vnoremap p "+p
-vnoremap P "+P
-
-nnoremap y "+y
-nnoremap Y "+Y
-vnoremap y "+y
-vnoremap Y "+Y
-
-nnoremap d "+d
-nnoremap D "+D
-vnoremap d "+d
-vnoremap D "+D
-vnoremap x "+x
-
-imap <F1> <Nop>
-imap <F2> <Nop>
-imap <F3> <Nop>
-imap <F4> <Nop>
-imap <F5> <Nop>
-imap <F6> <Nop>
-imap <F7> <Nop>
-imap <F8> <Nop>
-imap <F9> <Nop>
-imap <F10> <Nop>
-imap <F11> <Nop>
-imap <F12> <Nop>
-
-omap <silent> i* :<C-U>normal! T*vt*<CR>
-vmap <silent> i* :<C-U>normal! T*vt*<CR>
-omap <silent> a* :<C-U>normal! F*vf*<CR>
-vmap <silent> a* :<C-U>normal! F*vf*<CR>
-
-" imap <silent> <C-z> <ESC>zza
-" TODO: argument word objects to change whole function argument
-
-" nnoremap j jzz
-" nnoremap k kzz
-
-" nnoremap gj gjzz
-" nnoremap gk gkzz
+autocmd TermOpen * setlocal nonumber norelativenumber

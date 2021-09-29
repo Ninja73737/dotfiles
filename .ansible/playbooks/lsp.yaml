@@ -13,6 +13,8 @@
         name: npm
         state: latest
       become: "{{ become_for_packages }}"
+    - name: Set npm prefix
+      shell: "npm config set prefix '~/.npm-global'"
     - name: Install paru
       aur:
         name: paru
@@ -37,6 +39,11 @@
         global: true
         path: ~/.npm-global
         state: latest
+    # - name: Install C# language server
+    #   shell: dotnet tool install --global csharp-ls
+    #   register: csharp_install_result
+    #   changed_when: "'Tool \\'csharp-ls\\' is already installed.' not in csharp_install_result.stderr"
+    #   failed_when: "'Tool \\'csharp-ls\\' is already installed.' not in csharp_install_result.stderr and csharp_install_result.rc != 0"
     - name: Install CCLS (Archlinux)
       aur:
         use: paru
@@ -135,6 +142,7 @@
       package:
         name: texlab
         state: latest
+      become: true
     - name: Install Typescript
       npm:
         name: typescript
