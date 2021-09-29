@@ -1,7 +1,7 @@
 ---
 - name: Setup with my system configuration
   hosts: all
-  roles:
+  collections:
     - kewlfft.aur
   become_method: su
   vars:

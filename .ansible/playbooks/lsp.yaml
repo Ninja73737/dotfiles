@@ -2,7 +2,7 @@
 # Misisng language servers from coc.nvim configuration: coc-dictionary, coc-flutter, coc-word
 - name: Install LSPs
   hosts: all
-  roles:
+  collections:
     - kewlfft.aur
   become_method: su
   vars:
@@ -90,6 +90,8 @@
         name: lua-language-server
         state: latest
       become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Archlinux'
+      # TODO: Get this working on other hosts
     - name: Install rustup
       package:
         name: rustup
@@ -143,6 +145,8 @@
         name: texlab
         state: latest
       become: true
+      when: ansible_facts['os_family'] == 'Archlinux'
+      # TODO: Get this working on other hosts
     - name: Install Typescript
       npm:
         name: typescript
