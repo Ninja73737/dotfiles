@@ -43,11 +43,6 @@ end
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
 
-# Clear abbreviations
-for abbr in (abbr -l)
-      abbr -e "$abbr"
-end
-
 if which trash &> /dev/null
     abbr rm "trash"
     alias rm "trash"
