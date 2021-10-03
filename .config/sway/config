@@ -47,6 +47,7 @@ focus_wrapping no
 for_window [title="floatme"] floating enable
 for_window [class="Bitwarden"] floating enable
 for_window [title=".*YouTube.*"] inhibit_idle visible, sticky enable
+for_window [title=".*Zoom Meeting.*"] inhibit_idle visible, sticky enable
 for_window [title=".*Microsoft Stream.*"] inhibit_idle visible, sticky enable
 for_window [title=".*Audio Cine Films.*"] inhibit_idle visible, sticky enable
 for_window [app_id="mpv"] inhibit_idle visible, sticky enable
@@ -91,7 +92,8 @@ bindsym Mod4+Shift+8 move container to workspace number 8, workspace number 8
 bindsym Mod4+Shift+9 move container to workspace number 9, workspace number 9
 bindsym Mod4+Shift+0 move container to workspace number 10, workspace number 10
 
-bindsym Mod4+backslash floating toggle
+bindsym Mod4+Shift+tab floating toggle
+bindsym Mod4+tab focus mode_toggle
 
 bindsym Mod4+S scratchpad show
 
@@ -149,7 +151,7 @@ bindsym --locked Mod4+Shift+Up exec pulsemixer --list-sinks | grep Spotify | awk
 bindsym --locked Mod4+Shift+Down exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume -2
 bindsym --locked Mod4+Shift+Left exec playerctl --player=spotify previous
 bindsym --locked Mod4+Shift+Right exec playerctl --player=spotify next
-bindsym --locked Mod4+Shift+Space exec playerctl --player=spotify play-pause
+bindsym --locked Mod4+Shift+space exec playerctl --player=spotify play-pause
 
 bindsym --locked XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'+15,'(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"
 bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl0/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"

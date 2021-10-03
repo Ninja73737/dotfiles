@@ -40,10 +40,10 @@ if test -d $HOME/Android/Sdk
     export ANDROID_SDK_ROOT=$HOME/Android/Sdk
 end
 
-
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
 
+# Clear abbreviations
 for abbr in (abbr -l)
       abbr -e "$abbr"
 end
@@ -146,8 +146,8 @@ if status --is-interactive
         alias paste "xclip -selection clipboard -out"
     end
 
-    abbr music "mpv --shuffle --loop-playlist --no-audio-display --volume=30 ~/music"
-    alias music "mpv --shuffle --loop-playlist --no-audio-display --volume=30 ~/music"
+    abbr music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 ~/music"
+    alias music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 ~/music"
 
     fish_vi_key_bindings
 

@@ -85,15 +85,19 @@ tnoremap <C-w> <C-\><C-n><C-w>
 let g:maplocalleader = '\\'
 
 autocmd FileType java nmap <buffer> <LocalLeader><CR> <CMD>!java %<CR>
-autocmd FileType markdown nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>
+autocmd FileType markdown,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>
 autocmd FileType markdown nmap <buffer> <LocalLeader>h <Plug>MarkdownPreviewToggle
 autocmd FileType markdown nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>
 autocmd FileType markdown nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>
 autocmd FileType markdown nmap <buffer> <LocalLeader>i <CMD>call mdip#MarkdownClipboardImage()<CR>
-nmap <LocalLeader>t <CMD>lua require('truth_table')(vim.fn.input("separator: "))<CR>
-autocmd FileType markdown nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" | ")<CR>
+nmap <LocalLeader>t <CMD>lua require('truth_table')(vim.fn.input("separator: "), vim.fn.input("left border: "), vim.fn.input("right border: "))<CR>
+autocmd FileType text nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" ")<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" <BAR> ", "<BAR> ", " <BAR>")<CR>
 autocmd FileType python nmap <buffer> <LocalLeader><CR> <CMD>!python3 %<CR>
-autocmd FileType tex nmap <buffer> <LocalLeader><CR> <CMD>!mkdir -p /tmp/pdflatex && pdflatex -output-directory /tmp/pdflatex % && cp /tmp/pdflatex/*.pdf (dirname %)<CR>
+autocmd FileType tex nmap <buffer> <LocalLeader><CR> <CMD>noa w <BAR> TexlabBuild<CR>
+autocmd FileType tex nmap <buffer> <LocalLeader>f <CMD>TexlabForward<CR>
+" autocmd FileType tex nmap <buffer> <LocalLeader><CR> <CMD>noa w <BAR> call system('mkdir -p /tmp/pdflatex && pdflatex -output-directory /tmp/pdflatex '. expand('%:p') . ' && cp /tmp/pdflatex/*.pdf (dirname ' . expand('%:p') . ')')<CR>
+" autocmd FileType tex nmap <buffer> <LocalLeader><S-CR> <CMD>noa w <BAR> !mkdir -p /tmp/pdflatex && pdflatex -output-directory /tmp/pdflatex % && cp /tmp/pdflatex/*.pdf (dirname %)<CR>
 
 function! RUserMaps()
       nmap <buffer> <LocalLeader>kp <Plug>RMakePDFK
@@ -103,8 +107,12 @@ function! RUserMaps()
       nmap <buffer> <LocalLeader>o <Plug>ROpenLists
       nmap <buffer> <LocalLeader>n <Plug>RNextRChunk
       nmap <buffer> <LocalLeader>N <Plug>RPreviousRChunk
+      nmap <buffer> <LocalLeader>l <Plug>RSendLine
 endfunction
 autocmd FileType rmd call RUserMaps()
+autocmd FileType markdown inoremap <buffer> <S-CR> <CR><CR>---<CR><CR>
+autocmd Filetype markdown vmap <C-b> S*gvS*
+autocmd Filetype markdown vmap <C-i> S_
 " }}}
 " settings {{{
 set foldmethod=marker
@@ -149,7 +157,8 @@ autocmd FileType lua set colorcolumn=120
 autocmd FileType lua let b:AutoPairs = AutoPairsDefine({'\v(^|.)\zs''':"'"}, ['\v(^|\W)\zs'''])
 autocmd FileType vim let b:AutoPairs = AutoPairsDefine({'<':'>'})
 " TODO: Make mamrkdown `*` and `_` pairs only work outside math
-autocmd FileType markdown let g:AutoPairs = AutoPairsDefine({'*':'*', '**':'**', '_':'_','$':'$', '$$':'$$', "<!--":'-->'})
+autocmd FileType markdown let g:AutoPairs = AutoPairsDefine({'*':'*', '**':'**', '_':'_', '$':'$', '$$':'$$', "<!--":'-->'})
+autocmd FileType tex let g:AutoPairs = AutoPairsDefine({'$':'$', '$$':'$$', '``':"''"}, ['`', "'"])
 autocmd FileType rust let b:AutoPairs = AutoPairsDefine({'\w\zs<': '>'})
 " }}}
 " plugins {{{
@@ -408,7 +417,7 @@ local on_attach = function(client, bufnr)
   nvim_completion.on_attach(client, bufnr)
 end
 
-local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "jdtls", "jsonls", "pyright", "r_language_server", "rls", "svelte", "taplo", "texlab", "tsserver", "vimls" }
+local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "jdtls", "jsonls", "pyright", "r_language_server", "rls", "svelte", "taplo", "tsserver", "vimls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -500,6 +509,20 @@ nvim_lsp.sumneko_lua.setup {
     }
   },
   on_attach = on_attach
+}
+
+nvim_lsp.texlab.setup{
+  settings = {
+    texlab = { forwardSearch = {
+        executable = "zathura",
+        args = { "--synctex-forward", "%l:1:%f", "%p" }
+      }
+    }
+  },
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  }
 }
 
 local yamlls_settings = { yaml = { schemas = {} } }

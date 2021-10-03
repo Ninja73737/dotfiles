@@ -5,6 +5,7 @@ set previewer pistol
 set dirfirst!
 set scrolloff 7
 
+cmd open &setsid xdg-open $f
 map <esc> clear
 map D %echo "\"$fx\"" | string join '" "' | xargs trash
 cmd trash-undo %{{
