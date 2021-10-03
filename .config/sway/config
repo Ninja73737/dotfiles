@@ -111,6 +111,20 @@ mode "resize" {
 
     bindsym Escape mode "default"
 }
+bindsym Mod4+v mode "move"
+mode "move" {
+    bindsym h move left 50px
+    bindsym j move down 50px
+    bindsym k move up 50px
+    bindsym l move right 50px
+
+    bindsym Mod1+h move left 5px
+    bindsym Mod1+j move down 5px
+    bindsym Mod1+k move up 5px
+    bindsym Mod1+l move right 5px
+
+    bindsym Escape mode "default"
+}
 bindsym Mod4+Escape mode "passthrough"
 mode "passthrough" {
     bindsym Mod4+Escape mode "default"
