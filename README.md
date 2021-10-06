@@ -2,6 +2,8 @@
 
 My cross-platform (MacOS and Linux) dotfiles.
 
+![screenshot](https://user-images.githubusercontent.com/36740602/136220803-83a71b47-8e55-46b9-bac0-31faac2bc331.png)
+
 ## Usage
 
 If you want to make use of these yourself, you can get started using my bootstrap script:
