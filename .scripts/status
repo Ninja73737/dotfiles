@@ -13,7 +13,7 @@ while true
     set -a output "睊 |"
   end
 
-  if set graphics (asusctl graphics -g | string replace 'Current graphics mode: ' '')
+  if set graphics (supergfxctl -g | string replace 'Current graphics mode: ' '')
     set -a output  $graphics" |"
   else
     set -a output " misbehaving |"

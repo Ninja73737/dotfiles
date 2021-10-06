@@ -36,12 +36,10 @@ if test -d $HOME/.local/opt/jdtls-launcher/jdtls
     export JDTLS_HOME=$HOME/.local/opt/jdtls-launcher/jdtls
     export WORKSPACE=$HOME/.cache/jdtls
 end
-if test -d $HOME/Android/Sdk
-    export ANDROID_SDK_ROOT=$HOME/Android/Sdk
-end
+export ANDROID_SDK_ROOT=$HOME/.android/Sdk
 
 # TODO: Remove this temporary export
-set -g fish_user_paths "$HOME/taskmatter" $fish_user_paths
+set -g fish_user_paths "$HOME/repos/taskmatter" $fish_user_paths
 
 if which trash &> /dev/null
     abbr rm "trash"
@@ -105,11 +103,6 @@ if status --is-interactive
 
     abbr pcp "rsync -r --info=progress2"
     alias pcp "rsync -r --info=progress2"
-
-    if test $hostname = "rpimanjaro"
-        abbr self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
-        alias self "git --git-dir=\$HOME/.selfhosting --work-tree=\$HOME"
-    end
 
     abbr dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
     alias dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"

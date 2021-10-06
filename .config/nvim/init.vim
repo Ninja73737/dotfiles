@@ -79,6 +79,15 @@ vmap <silent> i$ :<C-U>normal! T$vt$<CR>
 omap <silent> a$ :<C-U>normal! F$vf$<CR>
 vmap <silent> a$ :<C-U>normal! F$vf$<CR>
 
+imap <C-h> <ESC>vbs<C-g>u
+imap <C-BS> <ESC>vbs<C-g>u
+
+noremap <Tab> >>
+noremap <S-Tab> <<
+
+vmap <Tab> >
+vmap <S-Tab> <
+
 tnoremap <C-w> <C-\><C-n><C-w>
 " }}}
 " local mappings {{{
@@ -87,8 +96,8 @@ let g:maplocalleader = '\\'
 autocmd FileType java nmap <buffer> <LocalLeader><CR> <CMD>!java %<CR>
 autocmd FileType markdown,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>
 autocmd FileType markdown nmap <buffer> <LocalLeader>h <Plug>MarkdownPreviewToggle
-autocmd FileType markdown nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>
-autocmd FileType markdown nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown-implicit_figures "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown-implicit_figures "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>
 autocmd FileType markdown nmap <buffer> <LocalLeader>i <CMD>call mdip#MarkdownClipboardImage()<CR>
 nmap <LocalLeader>t <CMD>lua require('truth_table')(vim.fn.input("separator: "), vim.fn.input("left border: "), vim.fn.input("right border: "))<CR>
 autocmd FileType text nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" ")<CR>
@@ -111,8 +120,6 @@ function! RUserMaps()
 endfunction
 autocmd FileType rmd call RUserMaps()
 autocmd FileType markdown inoremap <buffer> <S-CR> <CR><CR>---<CR><CR>
-autocmd Filetype markdown vmap <C-b> S*gvS*
-autocmd Filetype markdown vmap <C-i> S_
 " }}}
 " settings {{{
 set foldmethod=marker
@@ -263,6 +270,8 @@ if has("persistent_undo")
     set undofile
 endif
 
+nmap U <CMD>UndotreeToggle<CR>
+
 Plug 'easymotion/vim-easymotion'
 
 let g:EasyMotion_do_mapping = 0
@@ -332,6 +341,21 @@ endif
 
 Plug 'othree/eregex.vim'
 Plug 'jiangmiao/auto-pairs'
+
+let g:AutoPairsMapCh = 0
+
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/playground'
+
+nmap tp <CMD>TSPlaygroundToggle<CR>
+
+Plug 'Olical/aniseed' " Requied for tree-docs
+Plug 'nvim-treesitter/nvim-tree-docs'
+Plug 'nvim-treesitter/nvim-treesitter-refactor'
+" TODO: Get this rainbow set up with proper colours and get rid of the old one
+Plug 'p00f/nvim-ts-rainbow'
+Plug 'SmiteshP/nvim-gps'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'SirVer/ultisnips'
@@ -343,8 +367,6 @@ let g:UltiSnipsJumpBackwardTrigger="<NUL>"
 autocmd FileType markdown let g:completion_trigger_character = ['`', "#"]
 inoremap <expr> <Tab> pumvisible() ? "\<Down>" : "\<CMD>call JumpForwardsOrIndent()<CR>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<Up>" : "\<CMD>call JumpBackwardsOrIndent()<CR>"
-noremap <Tab> >>
-noremap <S-Tab> <<
 
 function! JumpForwardsOrIndent()
       call UltiSnips#JumpForwards()
@@ -366,8 +388,8 @@ Plug 'mtoohey31/completion-fish'
 
 autocmd BufEnter * lua require'completion'.on_attach()
 let g:completion_chain_complete_list = {
-                  \ 'default': [{ 'complete_items': ['UltiSnips', 'lsp']}],
-                  \ 'markdown': [{ 'complete_items': ['UltiSnips', 'cSpell', 'lsp', 'path']}],
+                  \ 'default': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
+                  \ 'markdown': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
                   \ 'fish': [{ 'complete_items': ['UltiSnips', 'fish', 'lsp', 'path']}],
                   \ 'vim': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
                   \ 'sh': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
@@ -381,8 +403,47 @@ call plug#end()
 " }}}
 " lua {{{
 lua << EOF
-require'lualine'.setup({ options = { theme = 'pywal' }, sections = { lualine_x = { 'filetype' } } })
--- require'cspell'.setup_completion('en_GB')
+require'nvim-treesitter.configs'.setup{
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = true
+  },
+  indent = { enable = true },
+  refactor = {
+    highlight_definitions = { enable = true }
+  },
+  -- TODO: Get this working
+  tree_docs = {
+    enable = true,
+    keymaps = {
+      doc_node_at_cursor = "td",
+      doc_node_at_cursor = "td"
+    }
+  },
+  -- rainbow = {
+  --   enable = true,
+  --   extended_mode = true
+  -- },
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false
+  }
+}
+
+local gps = require'nvim-gps'
+gps.setup()
+require'lualine'.setup({
+  options = {
+    theme = 'pywal'
+  },
+  sections = {
+    lualine_c = {
+      'filename',
+      { gps.get_location, cond = gps.is_available }
+    },
+    lualine_x = { 'filetype' }
+  }
+})
 require'colorizer'.setup()
 
 local nvim_lsp = require('lspconfig')
@@ -459,7 +520,7 @@ nvim_lsp.diagnosticls.setup({
          cspell = {
             command = "cspell",
             debounce = 100,
-            args = { "--locale", "en-GB", "%filepath" },
+            args = { "stdin", "--locale", "en-GB" },
             sourceName = "cspell",
             formatLines = 1,
             formatPattern = { ".*?:(\\d+):(\\d+)\\s*-\\s*(.*)", { line = 1, column = 2, message = 3 } }
