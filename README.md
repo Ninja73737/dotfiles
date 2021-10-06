@@ -2,8 +2,6 @@
 
 My cross-platform (MacOS and Linux) dotfiles.
 
-![Screenshot](.config/screenshots/ultrawide.png)
-
 ## Usage
 
 If you want to make use of these yourself, you can get started using my bootstrap script:
