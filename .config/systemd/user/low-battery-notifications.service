@@ -1,0 +1,10 @@
+[Unit]
+Description=Low battery notifier
+
+[Service]
+ExecStart=/bin/sh -c '((battery_percent=(100*$(cat /sys/class/power_supply/BAT0/energy_now))/$(cat /sys/class/power_supply/BAT0/energy_full))) && if [ "$battery_percent" -le "35" ] && [ "$(cat /sys/class/power_supply/BAT0/status)" == "Discharging" ]; then notify-send -u critical "🔋Low Battery" "$battery_percent%"; fi'
+Restart=always
+RestartSec=300
+
+[Install]
+WantedBy=default.target
