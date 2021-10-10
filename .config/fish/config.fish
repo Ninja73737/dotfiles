@@ -1,8 +1,13 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 if test -z "$DISPLAY" -a -z "$TMUX"
-    if test -n "$SSH_CONNECTION" -o -n "$TERMUX_VERSION"
+    if test -n "$SSH_CONNECTION"
         if status --is-interactive
+            exec tmux
+        end
+    else if test -n "$TERMUX_VERSION"
+        if status --is-interactive
+            cat ~/.cache/wal/sequences
             exec tmux
         end
     # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
