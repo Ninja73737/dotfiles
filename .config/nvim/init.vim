@@ -1,8 +1,10 @@
-" TODO: fix markdown setup
+" TODO: Allow unnaturally incremented lists prettier.
 " TODO: Switch to `init.lua`
 " TODO: Fix backspace remapping
 " TODO: Get dictionary lookup with K for words when lsp hover isn't available
 " TODO: Add noa writes to compile and execute commands
+" TODO: Check out https://github.com/jose-elias-alvarez/null-ls.nvim for
+" cspell fix spelling code actions
 " global mappings {{{
 nmap Q <CMD>quit!<CR>
 nmap W <CMD>noa write<CR>
@@ -79,8 +81,9 @@ vmap <silent> i$ :<C-U>normal! T$vt$<CR>
 omap <silent> a$ :<C-U>normal! F$vf$<CR>
 vmap <silent> a$ :<C-U>normal! F$vf$<CR>
 
-imap <C-h> <ESC>vbs<C-g>u
-imap <C-BS> <ESC>vbs<C-g>u
+inoremap <C-h> <C-g>u<ESC>vT s
+inoremap <C-BS> <C-g>u<ESC>vT s
+inoremap <C-z> <C-o>u
 
 noremap <Tab> >>
 noremap <S-Tab> <<
@@ -94,11 +97,11 @@ tnoremap <C-w> <C-\><C-n><C-w>
 let g:maplocalleader = '\\'
 
 autocmd FileType java nmap <buffer> <LocalLeader><CR> <CMD>!java %<CR>
-autocmd FileType markdown,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>
-autocmd FileType markdown nmap <buffer> <LocalLeader>h <Plug>MarkdownPreviewToggle
-autocmd FileType markdown nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown-implicit_figures "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>
-autocmd FileType markdown nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown-implicit_figures "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>
-autocmd FileType markdown nmap <buffer> <LocalLeader>i <CMD>call mdip#MarkdownClipboardImage()<CR>
+autocmd FileType markdown,rmd,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>
+autocmd FileType markdown,rmd nmap <buffer> <LocalLeader>h <Plug>MarkdownPreviewToggle
+autocmd FileType markdown nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>
+autocmd FileType markdown nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>
+autocmd FileType markdown,rmd nmap <buffer> <LocalLeader>i <CMD>call mdip#MarkdownClipboardImage()<CR>
 nmap <LocalLeader>t <CMD>lua require('truth_table')(vim.fn.input("separator: "), vim.fn.input("left border: "), vim.fn.input("right border: "))<CR>
 autocmd FileType text nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" ")<CR>
 autocmd FileType markdown nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" <BAR> ", "<BAR> ", " <BAR>")<CR>
@@ -157,14 +160,15 @@ autocmd FileType * let b:AutoPairs = AutoPairsDefine({'\v(^|\W)\zs''':"'"})
 " local settings {{{
 autocmd FileType java let b:no_auto_format=1
 autocmd FileType java set shiftwidth=4
-autocmd FileType markdown set softtabstop=2
+autocmd FileType markdown,rmd set softtabstop=2
 autocmd FileType java set softtabstop=4
 autocmd FileType python set colorcolumn=80
 autocmd FileType lua set colorcolumn=120
 autocmd FileType lua let b:AutoPairs = AutoPairsDefine({'\v(^|.)\zs''':"'"}, ['\v(^|\W)\zs'''])
 autocmd FileType vim let b:AutoPairs = AutoPairsDefine({'<':'>'})
 " TODO: Make mamrkdown `*` and `_` pairs only work outside math
-autocmd FileType markdown let g:AutoPairs = AutoPairsDefine({'*':'*', '**':'**', '_':'_', '$':'$', '$$':'$$', "<!--":'-->'})
+" autocmd FileType markdown,rmd let g:AutoPairs = AutoPairsDefine({'*':'*', '**':'**', '_':'_', '$':'$', '$$':'$$', "<!--":'-->'})
+autocmd FileType markdown,rmd let g:AutoPairs = AutoPairsDefine({'$':'$', '$$':'$$', "<!--":'-->'})
 autocmd FileType tex let g:AutoPairs = AutoPairsDefine({'$':'$', '$$':'$$', '``':"''"}, ['`', "'"])
 autocmd FileType rust let b:AutoPairs = AutoPairsDefine({'\w\zs<': '>'})
 " }}}
@@ -175,17 +179,17 @@ call plug#begin()
 
 Plug 'sheerun/vim-polyglot'
 
-let g:polyglot_disabled = ['markdown', 'svelte', 'ansible']
+let g:polyglot_disabled = ['markdown', 'svelte', 'ansible', 'docker-compose']
 
 Plug 'leafOfTree/vim-svelte-plugin'
 
 let g:vim_svelte_plugin_use_typescript = 1
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'rmd', 'vim-plug']}
 
 let g:mkdp_highlight_css = $HOME . '/.cache/wal/colors.css'
 let g:mkdp_page_title = '${name}.md'
-let g:mkdp_filetypes = ['markdown', 'pandoc', 'pmd', 'rmd']
+let g:mkdp_filetypes = ['markdown', 'pandoc', 'rmd']
 let g:mkdp_command_for_global = 1
 let g:mkdp_preview_options = {
                   \ 'katex': {
@@ -201,47 +205,18 @@ let g:mkdp_markdown_css = '/' . join(split($MYVIMRC, '/')[:-2], '/') . '/markdow
 
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
-
-autocmd FileType markdown setlocal commentstring=<!--%s-->
-
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'luochen1990/rainbow'
-
-let g:rainbow_active = 1
-source ~/.cache/wal/colors-wal.vim
-" Incorrect order is intentional, 7 is foreground
-let g:rainbow_conf = {
-      \ 'guifgs': [color7, color1, color2, color3, color4, color5, color6, color8, color7, color1, color2, color3, color4, color5, color6, color8, color7, color1, color2, color3, color4, color5, color6, color8, color7, color1, color2, color3, color4, color5, color6, color8],
-      \ 'ctermfgs': [7, 1, 2, 3, 4, 5, 6, 8, 7, 1, 2, 3, 4, 5, 6, 8, 7, 1, 2, 3, 4, 5, 6, 8, 7, 1, 2, 3, 4, 5, 6, 8],
-      \ 'guis': [''],
-      \ 'cterms': [''],
-      \ 'operators': '_,_',
-      \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-      \ 'separately': {
-      \   '*': {},
-      \   'markdown': {
-      \     'parentheses_options': 'containedin=markdownCode contained',
-      \   },
-      \   'haskell': {
-      \     'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/\v\{\ze[^-]/ end=/}/ fold']
-      \   },
-      \   'vim': {
-      \     'parentheses_options': 'containedin=vimFuncBody',
-      \   },
-      \   'perl': {
-      \     'syn_name_prefix': 'perlBlockFoldRainbow',
-      \   },
-      \   'css': 0,
-      \ }
-      \ }
-
 Plug 'vim-pandoc/vim-pandoc', { 'for': 'tex' }
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
-" autocmd FileType markdown set syntax=markdown.pandoc
+autocmd FileType markdown set syntax=markdown.pandoc
 let g:pandoc#syntax#conceal#blacklist = ["atx", "codeblock_start", "codeblock_delim", "quotes"]
 let g:pandoc#modules#disabled = ["folding", "spell"]
+let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "java", "python", "r", "sh"]
+" for f in readdir(expand('<sfile>:p:h') . '/plugged/vim-polyglot/syntax', {f -> f =~ '.vim$' && f !~ '.*_.*'})
+"       call add(g:pandoc#syntax#codeblocks#embeds#langs, substitute(f, '\.vim$', '', ''))
+" endfor
 
 Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
 
@@ -302,7 +277,7 @@ let g:bullets_set_mappings = 0
 let g:bullets_outline_levels = ['ABC', 'num', 'std-']
 let g:bullets_checkbox_markers = ' ox'
 let g:bullets_renumber_on_change = 0
-
+let g:bullets_enabled_file_types = ['markdown', 'rmd', 'tex']
 
 autocmd FileType markdown nmap <LocalLeader><Space> <CMD>ToggleCheckbox<CR>
 autocmd FileType markdown noremap o <CMD>InsertNewBullet<CR>
@@ -336,7 +311,8 @@ let _himalaya_path = system("which himalaya")
 if v:shell_error == 0
   Plug 'soywod/himalaya', {'rtp': 'vim'}
 
-  autocmd BufEnter /tmp/himalaya-draft.mail set ft=mail
+  let g:himalaya_mailbox_picker = 'telescope'
+  let g:himalaya_telescope_preview_enabled = 1
 endif
 
 Plug 'othree/eregex.vim'
@@ -352,7 +328,6 @@ nmap tp <CMD>TSPlaygroundToggle<CR>
 Plug 'Olical/aniseed' " Requied for tree-docs
 Plug 'nvim-treesitter/nvim-tree-docs'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
-" TODO: Get this rainbow set up with proper colours and get rid of the old one
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'SmiteshP/nvim-gps'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
@@ -397,12 +372,18 @@ let g:completion_chain_complete_list = {
                   \ 'mail': [{ 'complete_items': ['vCard']}]
                   \ }
 let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
-let g:completion_sorting = "none"
+let g:completion_sorting = "length"
 
 call plug#end()
 " }}}
+
+" TODO: Remove this one contextcommend is fixed for rmd
+" autocmd FileType markdown,rmd setlocal commentstring=<!--%s-->
+colorscheme tgc_wal
+
 " lua {{{
 lua << EOF
+package.path = os.getenv("HOME") .. "/.cache/wal/?.lua;" .. package.path
 require'nvim-treesitter.configs'.setup{
   highlight = {
     enable = true,
@@ -420,18 +401,40 @@ require'nvim-treesitter.configs'.setup{
       doc_node_at_cursor = "td"
     }
   },
-  -- rainbow = {
-  --   enable = true,
-  --   extended_mode = true
-  -- },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    colors = require'colors'.colors,
+    termcolors = { "0", "1", "2", "3", "4", "5", "6", "7", "0", "1", "2", "3", "4", "5", "6", "7" }
+  },
   context_commentstring = {
     enable = true,
-    enable_autocmd = false
+    enable_autocmd = false,
+    config = {
+      markdown = {
+        __default = '<!-- %s -->',
+        -- TODO: make this dynamic based on language of code block
+        code_fence_content = '# %s',
+        setext_heading = '# %s'
+      },
+      rmd = {
+        __default = '<!-- %s -->',
+        -- TODO: make this dynamic based on language of code block
+        code_fence_content = '# %s',
+        setext_heading = '# %s'
+      },
+    }
   }
 }
 
 local gps = require'nvim-gps'
 gps.setup()
+
+local function word_count()
+  local wc = vim.fn.wordcount()
+  return tostring( wc.visual_words ~= nil and wc.visual_words or wc.words ) .. "W"
+end
+
 require'lualine'.setup({
   options = {
     theme = 'pywal'
@@ -441,7 +444,8 @@ require'lualine'.setup({
       'filename',
       { gps.get_location, cond = gps.is_available }
     },
-    lualine_x = { 'filetype' }
+    lualine_x = { 'filetype' },
+    lualine_y = { { word_count , cond = function() return vim.o.ft=="markdown" end }, 'progress' }
   }
 })
 require'colorizer'.setup()
@@ -490,15 +494,65 @@ end
 
 nvim_lsp.diagnosticls.setup({
    on_attach = on_attach,
-   filetypes={ "markdown", "rmd" },
+   filetypes={ "dockerfile", "fish", "lua", "markdown", "python", "rmd", "sh" },
    init_options = {
       formatters = {
+         autopep = {
+            command = "autopep8",
+            args = { "-" }
+         },
+         fish_indent = {
+           command = "fish_indent"
+         },
          prettier = {
             command = "prettier",
             args = { "--stdin-filepath", "%filename" }
+         },
+         stylua = {
+            command = "stylua",
+            args = { "--search-parent-directories", "--indent-type", "spaces", "--indent-width", tostring(vim.o.tabstop), "--stdin-filepath", "%filepath", "--", "-" }
          }
       },
       linters = {
+         cspell = {
+            command = "cspell",
+            debounce = 100,
+            args = { "--config", "/home/mtoohey/.config/nvim/cspell.jsonc", "stdin" },
+            sourceName = "cspell",
+            formatLines = 1,
+            formatPattern = { ".*?:(\\d+):(\\d+)\\s*-\\s*(.*)", { line = 1, column = 2, message = 3 } }
+         },
+         fish = {
+            command = "fish",
+            args = { "-n", "%file" },
+            isStdout = false,
+            isStderr = true,
+            sourceName = "fish",
+            formatLines = 1,
+            formatPattern = { "^.*\\(line (\\d+)\\): (.*)$", { line = 1, message = 2 } }
+         },
+         hadolint = {
+            command = "hadolint",
+            sourceName = "hadolint",
+            args = {
+              "-f",
+              "json",
+              "-"
+            },
+            rootPatterns = { ".hadolint.yaml" },
+            parseJson = {
+              line = "line",
+              column = "column",
+              security = "level",
+              message = "${message} [${code}]"
+            },
+            securities = {
+              error = "error",
+              warning = "warning",
+              info = "info",
+              style = "hint"
+            }
+          },
          markdownlint = {
             command = "markdownlint",
             isStderr = true,
@@ -513,22 +567,68 @@ nvim_lsp.diagnosticls.setup({
                {
                   line = 1,
                   column = 3,
-                  message = {4}
+                  message = { 4 }
                }
             }
          },
-         cspell = {
-            command = "cspell",
+         shellcheck = {
+            command = "shellcheck",
             debounce = 100,
-            args = { "stdin", "--locale", "en-GB" },
-            sourceName = "cspell",
-            formatLines = 1,
-            formatPattern = { ".*?:(\\d+):(\\d+)\\s*-\\s*(.*)", { line = 1, column = 2, message = 3 } }
+            args = {
+               "--format",
+               "json",
+               "-"
+            },
+            sourceName = "shellcheck",
+            parseJson = {
+              line = "line",
+              column = "column",
+              endLine = "endLine",
+              endColumn = "endColumn",
+              message = "${message} [${code}]",
+              security = "level"
+            },
+            securities = {
+              error = "error",
+              warning = "warning",
+              info = "info",
+              style = "hint"
+            }
          },
+         write_good = {
+            command = "write-good",
+            debounce = 100,
+            args = { "--text=%text" },
+            offsetLine = 0,
+            offsetColumn = 1,
+            sourceName = "write-good",
+            formatLines = 1,
+            formatPattern = { "(.*)\\s+on\\s+line\\s+(\\d+)\\s+at\\s+column\\s+(\\d+)\\s*$", { line = 2, column = 3, message = 1 } }
+          }
       },
-      filetypes = { markdown = { "markdownlint", "cspell" }, rmd = { "markdownlint", "cspell"} },
+      filetypes = {
+         dockerfile = "hadolint",
+         mail = {
+            "cspell",
+            "write_good"
+         },
+         markdown = {
+            "cspell",
+            "markdownlint",
+            "write_good"
+         },
+         rmd = {
+            "cspell",
+            "markdownlint",
+            "write_good"
+         },
+         sh = "shellcheck"
+      },
       formatFiletypes = {
+         fish = "fish_indent",
+         lua = "stylua",
          markdown = "prettier",
+         python = "autopep",
          rmd = "prettier"
       }
    }
@@ -587,7 +687,8 @@ nvim_lsp.texlab.setup{
 }
 
 local yamlls_settings = { yaml = { schemas = {} } }
-yamlls_settings.yaml.schemas["/home/mtoohey/yams/schema.yaml"] = "recipes/**/*.yaml"
+yamlls_settings.yaml.schemas["/home/mtoohey/repos/yams/schema.yaml"] = "recipes/**/*.yaml"
+yamlls_settings.yaml.schemas["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "/docker-compose*.yaml"
 
 nvim_lsp.yamlls.setup {
   on_attach = on_attach,
@@ -619,7 +720,6 @@ function! FormatIfOk()
 endfunction
 " }}}
 
-colorscheme tgc_wal
 
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd TermOpen * setlocal nonumber norelativenumber

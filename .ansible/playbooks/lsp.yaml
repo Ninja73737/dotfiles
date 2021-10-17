@@ -2,6 +2,7 @@
 # Misisng language servers from coc.nvim configuration: coc-dictionary, coc-flutter, coc-word
 - name: Install LSPs
   hosts: all
+  gather_facts: true
   collections:
     - kewlfft.aur
   become_method: su
@@ -33,17 +34,13 @@
         name: ansible-lint
         executable: pip3
         state: latest
+        extra_args: --user
     - name: Install Bash language server
       npm:
         name: bash-language-server
         global: true
         path: ~/.npm-global
         state: latest
-    # - name: Install C# language server
-    #   shell: dotnet tool install --global csharp-ls
-    #   register: csharp_install_result
-    #   changed_when: "'Tool \\'csharp-ls\\' is already installed.' not in csharp_install_result.stderr"
-    #   failed_when: "'Tool \\'csharp-ls\\' is already installed.' not in csharp_install_result.stderr and csharp_install_result.rc != 0"
     - name: Install CCLS (Archlinux)
       aur:
         use: paru
@@ -60,9 +57,53 @@
         name: diagnostic-languageserver
         path: ~/.npm-global
         state: latest
+    - name: Install autopep
+      pip:
+        name: autopep8
+        executable: pip3
+        state: latest
+        extra_args: --user
+    - name: Install cspell CLI
+      npm:
+        name: cspell
+        path: ~/.npm-global
+        state: latest
+    - name: Install hadolint (Archlinux)
+      aur:
+        use: paru
+        name: hadolint
+        state: latest
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Install hadolint (Darwin)
+      package:
+        name: hadolint
+        state: latest
+      when: ansible_facts['os_family'] == 'Darwin'
     - name: Install Markdownlint CLI
       npm:
         name: markdownlint-cli
+        path: ~/.npm-global
+        state: latest
+    - name: Install prettier
+      npm:
+        name: prettier
+        global: true
+        path: ~/.npm-global
+        state: latest
+    - name: Install shellcheck
+      package:
+        name: shellcheck
+        state: latest
+      become: true
+    - name: Install vint
+      pip:
+        name: vim-vint
+        executable: pip3
+        state: latest
+        extra_args: --user
+    - name: Install write-good
+      npm:
+        name: write-good
         path: ~/.npm-global
         state: latest
     - name: Install Dockerfile language server
@@ -92,10 +133,16 @@
       become: "{{ become_for_packages }}"
       when: ansible_facts['os_family'] == 'Archlinux'
       # TODO: Get this working on other hosts
-    - name: Install rustup
+    - name: Install rustup (Archlinux)
       package:
         name: rustup
         state: latest
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Install rust (Darwin)
+      package:
+        name: rust
+        state: latest
+      when: ansible_facts['os_family'] == 'Darwin'
     - name: Install rls
       shell: rustup component add rls
       register: rls_install_result
@@ -111,12 +158,11 @@
       register: rust_src_install_result
       changed_when: "'is up to date' not in rust_src_install_result.stderr"
       failed_when: rust_src_install_result.rc != 0
-    - name: Install prettier
-      npm:
-        name: prettier
-        global: true
-        path: ~/.npm-global
-        state: latest
+    - name: Install stylua
+      shell: cargo install stylua
+      register: stylua_install_result
+      changed_when: "'is already installed' not in stylua_install_result.stdout"
+      failed_when: stylua_install_result.rc != 0
     - name: Install pyright
       npm:
         name: pyright
