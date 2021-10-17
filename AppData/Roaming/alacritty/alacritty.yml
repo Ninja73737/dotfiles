@@ -1,0 +1,45 @@
+shell:
+  program: C:\Program Files\PowerShell\7\pwsh.exe
+  args:
+    - -NoLogo
+
+working_directory: C:\Users\mtooh
+
+scrolling:
+  history: 5000
+
+font:
+  size: 12.0
+  normal:
+    family: JetBrainsMono NF
+    style: Regular
+  bold:
+    family: JetBrainsMono NF
+    style: Bold
+  italic:
+    family: JetBrainsMono NF
+    style: Italic
+  bold_italic:
+    family: JetBrainsMono NF
+    style: Bold Italic
+
+background_opacity: 0.8
+
+cursor:
+  style:
+    shape: Beam
+    blinking: Off
+    vi_mode_style: Block
+
+debug:
+  log_level: Info
+
+key_bindings:
+  - { key: Plus, mods: Control|Shift, action: IncreaseFontSize }
+  - { key: Return, mods: Shift, chars: "\x1b[13;2u" }
+  - { key: Return, mods: Control, chars: "\x1b[13;5u" }
+window:
+  padding:
+    x: 8
+    y: 8
+  dynamic_padding: true
