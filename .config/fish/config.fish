@@ -93,6 +93,8 @@ alias lst "exa -aT -L 5 --icons --group-directories-first"
 alias lsta "exa -aT --icons --group-directories-first"
 
 if status --is-interactive
+    [ -f ~/.config/tabtab/fish/__tabtab.fish ]; and . ~/.config/tabtab/fish/__tabtab.fish; or true
+
     abbr tm taskmatter
     alias tm taskmatter
 
