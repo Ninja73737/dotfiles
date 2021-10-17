@@ -36,6 +36,7 @@ cmd mkdir &{{
     lf -remote "send $id select \"$argv\""
     echo yeet
 }}
-map m push :mkdir<space>
-map gc cd ~/Courses
+map M push :mkdir<space>
+map gc cd ~/courses
+map gr cd ~/repos
 map x !unzip "$f"

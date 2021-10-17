@@ -10,14 +10,14 @@ if test -z "$DISPLAY" -a -z "$TMUX"
             cat ~/.cache/wal/sequences
             exec tmux
         end
-    # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
-    #     exec startx
-    # else if test -z "$WAYLAND_DISPLAY"
-    #     exec sway --my-next-gpu-wont-be-nvidia
+        # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
+        #     exec startx
+        # else if test -z "$WAYLAND_DISPLAY"
+        #     exec sway --my-next-gpu-wont-be-nvidia
     end
 end
 
-if test (uname) = "Darwin"
+if test (uname) = Darwin
     set -g fish_user_paths "/usr/local/opt/arm-gcc-bin@8/bin" $fish_user_paths
 end
 set -g fish_user_paths "$HOME/.scripts" $fish_user_paths
@@ -32,10 +32,10 @@ if test -d $HOME/.go/bin
     set -g fish_user_paths "$HOME/.go/bin" $fish_user_paths
 end
 if test -d /opt/android-sdk/cmdline-tools/latest/bin
-    set -g fish_user_paths "/opt/android-sdk/cmdline-tools/latest/bin" $fish_user_paths
+    set -g fish_user_paths /opt/android-sdk/cmdline-tools/latest/bin $fish_user_paths
 end
-if test -d /usr/lib/jvm/java-16-openjdk/bin
-    set -g fish_user_paths "/usr/lib/jvm/java-16-openjdk/bin" $fish_user_paths
+if test -d /usr/lib/jvm/java-1*-openjdk/bin
+    set -g fish_user_paths /usr/lib/jvm/java-*-openjdk/bin $fish_user_paths
 end
 if test -d $HOME/.local/opt/jdtls-launcher/jdtls
     export JDTLS_HOME=$HOME/.local/opt/jdtls-launcher/jdtls
@@ -46,19 +46,19 @@ export ANDROID_SDK_ROOT=$HOME/.android/Sdk
 # TODO: Remove this temporary export
 set -g fish_user_paths "$HOME/repos/taskmatter" $fish_user_paths
 
-if which trash &> /dev/null
-    abbr rm "trash"
-    alias rm "trash"
+if which trash &>/dev/null
+    abbr rm trash
+    alias rm trash
 
     function mv --wraps mv
         if ! test -d "$argv[-1]"
-            trash "$argv[-1]" 2> /dev/null
+            trash "$argv[-1]" 2>/dev/null
         end
         command mv $argv
     end
 end
 
-if which trash-restore &> /dev/null
+if which trash-restore &>/dev/null
     # Credit for this one-liner goes to @norcalli here: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
     alias trash-undo "echo '' | trash-restore 2>/dev/null | sed '\$d' | sort -k2,3 -k1,1n | awk 'END {print \$1}' | trash-restore >/dev/null 2>&1"
 end
@@ -93,11 +93,11 @@ alias lst "exa -aT -L 5 --icons --group-directories-first"
 alias lsta "exa -aT --icons --group-directories-first"
 
 if status --is-interactive
-    abbr tm "taskmatter"
-    alias tm "taskmatter"
+    abbr tm taskmatter
+    alias tm taskmatter
 
-    abbr hi "himalaya"
-    alias hi "himalaya"
+    abbr hi himalaya
+    alias hi himalaya
     abbr ihi "nvim +Himalaya"
     alias ihi "nvim +Himalaya"
 
@@ -122,16 +122,16 @@ if status --is-interactive
     abbr pg "git status; prompt git"
     alias pg "git status; prompt git"
 
-    if test (uname) = "Darwin"
-        abbr copy "pbcopy"
-        alias copy "pbcopy"
-        abbr paste "pbpaste"
-        alias paste "pbpaste"
+    if test (uname) = Darwin
+        abbr copy pbcopy
+        alias copy pbcopy
+        abbr paste pbpaste
+        alias paste pbpaste
     else if test -n "$WAYLAND_DISPLAY"
-        abbr copy "wl-copy"
-        alias copy "wl-copy"
-        abbr paste "wl-paste"
-        alias paste "wl-paste"
+        abbr copy wl-copy
+        alias copy wl-copy
+        abbr paste wl-paste
+        alias paste wl-paste
     else
         abbr copy "xclip -selection clipboard -in"
         alias copy "xclip -selection clipboard -in"
@@ -165,53 +165,57 @@ if status --is-interactive
     export VISUAL=nvim
     abbr e "$EDITOR"
     alias e "$EDITOR"
+    if which sudoedit &>/dev/null
+        abbr se sudoedit
+        alias se sudoedit
+    end
 
     export MANPAGER='nvim +Man!'
 
     source $HOME/.config/lf/icons
 
-    set -U fish_color_autosuggestion      brblack
-    set -U fish_color_cancel              -r
-    set -U fish_color_command             brgreen
-    set -U fish_color_comment             brmagenta
-    set -U fish_color_cwd                 green
-    set -U fish_color_cwd_root            red
-    set -U fish_color_end                 brmagenta
-    set -U fish_color_error               brred
-    set -U fish_color_escape              brcyan
-    set -U fish_color_history_current     --bold
-    set -U fish_color_host                normal
-    set -U fish_color_match               --background=brblue
-    set -U fish_color_normal              normal
-    set -U fish_color_operator            cyan
-    set -U fish_color_param               brblue
-    set -U fish_color_quote               yellow
-    set -U fish_color_redirection         bryellow
-    set -U fish_color_search_match        'bryellow' '--background=brblack'
-    set -U fish_color_selection           'white' '--bold' '--background=brblack'
-    set -U fish_color_status              red
-    set -U fish_color_user                brgreen
-    set -U fish_color_valid_path          --underline
-    set -U fish_pager_color_completion    normal
-    set -U fish_pager_color_description   yellow
-    set -U fish_pager_color_prefix        'white' '--bold' '--underline'
-    set -U fish_pager_color_progress      'brwhite' '--background=cyan'
+    set -U fish_color_autosuggestion brblack
+    set -U fish_color_cancel -r
+    set -U fish_color_command brgreen
+    set -U fish_color_comment brmagenta
+    set -U fish_color_cwd green
+    set -U fish_color_cwd_root red
+    set -U fish_color_end brmagenta
+    set -U fish_color_error brred
+    set -U fish_color_escape brcyan
+    set -U fish_color_history_current --bold
+    set -U fish_color_host normal
+    set -U fish_color_match --background=brblue
+    set -U fish_color_normal normal
+    set -U fish_color_operator cyan
+    set -U fish_color_param brblue
+    set -U fish_color_quote yellow
+    set -U fish_color_redirection bryellow
+    set -U fish_color_search_match bryellow '--background=brblack'
+    set -U fish_color_selection white --bold '--background=brblack'
+    set -U fish_color_status red
+    set -U fish_color_user brgreen
+    set -U fish_color_valid_path --underline
+    set -U fish_pager_color_completion normal
+    set -U fish_pager_color_description yellow
+    set -U fish_pager_color_prefix white --bold --underline
+    set -U fish_pager_color_progress brwhite '--background=cyan'
 
-    if test -z "$SSH_CONNECTION" -a "$TERM_PROGRAM" = "alacritty" -a (uname) = "Darwin"
-        $HOME/.scripts/alacritty-color-export/script.sh > /dev/null
+    if test -z "$SSH_CONNECTION" -a "$TERM_PROGRAM" = alacritty -a (uname) = Darwin
+        $HOME/.scripts/alacritty-color-export/script.sh >/dev/null
     else if test -z "$SSH_CONNECTION"
         cat ~/.cache/wal/sequences
     end
 
-    if which starship &> /dev/null
+    if which starship &>/dev/null
         starship init fish | source
-        if which checkupdates &> /dev/null
+        if which checkupdates &>/dev/null
             if test -e /tmp/num_updates
                 if test (date -r /tmp/num_updates '+%s') -lt (math (date '+%s') - 14400)
-                    checkupdates | wc -l > /tmp/num_updates & disown
+                    checkupdates | wc -l >/tmp/num_updates & disown
                 end
             else
-                checkupdates | wc -l > /tmp/num_updates & disown
+                checkupdates | wc -l >/tmp/num_updates & disown
             end
         end
     end

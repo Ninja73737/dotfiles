@@ -186,7 +186,7 @@ if grep fish /etc/shells &> /dev/null; then
     eval "chsh -s $(grep fish /etc/shells | head -n1)"
     changed_to_fish=1
   fi
-elif [ ! -x "$(command -v fish)"]; then
+elif [ ! -x "$(command -v fish)" ]; then
   echo "adding and eching"
   run_root "echo /bin/fish >> /etc/shells" && chsh -s /bin/fish
 fi

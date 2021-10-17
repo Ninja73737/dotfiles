@@ -15,4 +15,4 @@ else
 fi
 
 pgrep Discord || discord --start-minimized &
-pgrep steam || steam -silent &
+# pgrep steam || steam -silent &

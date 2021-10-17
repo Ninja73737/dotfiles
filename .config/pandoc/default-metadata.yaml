@@ -3,11 +3,18 @@ geometry:
   - margin=2cm
 mainfont: "IBM Plex Sans Text"
 monofont: "JetBrainsMono Nerd Font"
-indent: true
 colorlinks: true
 linestretch: 1.25
 header-includes: |
   <!-- \pagenumbering{gobble} -->
+  \usepackage{float}
+  \let\origfigure\figure
+  \let\endorigfigure\endfigure
+  \renewenvironment{figure}[1][2] {
+      \expandafter\origfigure\expandafter[H]
+  } {
+      \endorigfigure
+  }
   \usepackage{mdframed}
   \newcommand{\N}{\mathbb{N}}
   \newcommand{\Z}{\mathbb{Z}}

@@ -2,7 +2,7 @@
 Description=Low battery notifier
 
 [Service]
-ExecStart=/bin/sh -c 'if [ "$(cat /sys/class/power_supply/BAT0/status)" == "Discharging" ] && [ "$(asusctl graphics -g | sed \'s/Current graphics mode: //\')" != "integrated" ]; then notify-send -u critical "🔋Using non-integrated graphics on battery"; fi'
+ExecStart=/bin/sh -c 'if [ "$(cat /sys/class/power_supply/BAT0/status)" == "Discharging" ] && [ "$(supergfxctl -g | sed \'s/Current graphics mode: //\')" != "integrated" ]; then notify-send -u critical "🔋Using non-integrated graphics on battery"; fi'
 Restart=always
 RestartSec=300
 

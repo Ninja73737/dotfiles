@@ -1,4 +1,5 @@
 set guioptions ""
 set adjust-open "width"
 set font "JetBrainsMono Nerd Font 12"
+unmap r
 include "../../.cache/wal/zathuracolors"

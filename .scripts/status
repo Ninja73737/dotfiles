@@ -1,54 +1,54 @@
 #!/bin/fish
 
 while true
-  set output
+    set output
 
-  if ip link show wg0 &> /dev/null
-    set -a output "嬨 |"
-  end
-
-  if test (iwctl station (ip route show default | awk '{ print $5 }') show | grep -Po "(?<=State).*" | string trim) = "connected"
-    set -a output 直 (iwctl station (ip route show default | awk '{ print $5 }') show | grep -Po "(?<=Connected network).*" | string trim)" |"
-  else
-    set -a output "睊 |"
-  end
-
-  if set graphics (supergfxctl -g | string replace 'Current graphics mode: ' '')
-    set -a output  $graphics" |"
-  else
-    set -a output " misbehaving |"
-  end
-
-  set -a output  (df -h | grep '\s/$' | awk '{ print $4 }')" |"
-
-  set num_updates (cat /tmp/num_updates)
-  if test "$num_updates" -ge 25
-    set -a output  $num_updates" |"
-  end
-
-  set raw_hs_bat (headsetcontrol -b 2> /dev/null)
-  if test "$status" -eq 0
-    set hs_bat (echo $raw_hs_bat | grep Battery | awk -F: '{ print $2 }' | tr -d '\\n\\r ')
-    set -a output  $hs_bat" |"
-  end
-
-  if test -d /sys/class/power_supply/BAT0 && set battery_percent (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)
-    if test (cat /sys/class/power_supply/BAT0/status) != "Discharging"
-      set -a output 
-    else
-      set -a output 
+    if ip link show wg0 &>/dev/null
+        set -a output "嬨 |"
     end
-    set -a output "$battery_percent% |"
-  end
 
-  if test (pulsemixer --get-mute) -eq 1
-    set -a output 婢" |"
-  else
-    set -a output 墳 (pulsemixer --get-volume | awk '{ print $1 }')"% |"
-  end
+    if test (iwctl station (ip route show default | awk '{ print $5 }') show | grep -Po "(?<=State).*" | string trim) = connected
+        set -a output 直 (iwctl station (ip route show default | awk '{ print $5 }') show | grep -Po "(?<=Connected network).*" | string trim)" |"
+    else
+        set -a output "睊 |"
+    end
 
-  set -a output (date +' %a. %b %-d  %-I:%M:%S %p')" |"
+    if set graphics (supergfxctl -g | string replace 'Current graphics mode: ' '')
+        set -a output  $graphics" |"
+    else
+        set -a output " misbehaving |"
+    end
 
-  echo $output
-  sleep 1
+    set -a output  (btrfs filesystem usage -H / 2> /dev/null | string match -e "Free (estimated):" | string replace -r '\s*Free \(estimated\):\s+' '' | string replace -r '\s+\(min: [\d\.]+\w+\)' '')" |"
+
+    set num_updates (cat /tmp/num_updates)
+    if test "$num_updates" -ge 25
+        set -a output  $num_updates" |"
+    end
+
+    set raw_hs_bat (headsetcontrol -b 2> /dev/null)
+    if test "$status" -eq 0
+        set hs_bat (echo $raw_hs_bat | grep Battery | awk -F: '{ print $2 }' | tr -d '\\n\\r ')
+        set -a output  $hs_bat" |"
+    end
+
+    if test -d /sys/class/power_supply/BAT0 && set battery_percent (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)
+        if test (cat /sys/class/power_supply/BAT0/status) != Discharging
+            set -a output 
+        else
+            set -a output 
+        end
+        set -a output "$battery_percent% |"
+    end
+
+    if test (pulsemixer --get-mute) -eq 1
+        set -a output 婢" |"
+    else
+        set -a output 墳 (pulsemixer --get-volume | awk '{ print $1 }')"% |"
+    end
+
+    set -a output (date +' %a. %b %-d  %-I:%M:%S %p')" |"
+
+    echo $output
+    sleep 1
 end

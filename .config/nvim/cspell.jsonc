@@ -1,7 +1,12 @@
+// TODO: Implement dynamic filetype config
 {
   "version": "0.2",
-  "language": "en",
+  "language": "en-GB",
   "words": [
-    "Toohey"
+    "deadweight", // eco courses
+    "giffen", // eco courses
+    "kanban", // global
+    "math", // global
+    "Toohey" // global
   ]
 }
