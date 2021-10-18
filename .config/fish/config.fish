@@ -34,13 +34,12 @@ end
 if test -d /opt/android-sdk/cmdline-tools/latest/bin
     set -g fish_user_paths /opt/android-sdk/cmdline-tools/latest/bin $fish_user_paths
 end
-if test -d /usr/lib/jvm/java-1*-openjdk/bin
-    set -g fish_user_paths /usr/lib/jvm/java-*-openjdk/bin $fish_user_paths
+
+export PATH=(string replace -r '/usr/lib/jvm/java\-[^:]+:' '' "$PATH")
+if test -d /usr/lib/jvm/default
+    export JAVA_HOME=/usr/lib/jvm/default
 end
-if test -d $HOME/.local/opt/jdtls-launcher/jdtls
-    export JDTLS_HOME=$HOME/.local/opt/jdtls-launcher/jdtls
-    export WORKSPACE=$HOME/.cache/jdtls
-end
+export PATH="$PATH:$JAVA_HOME/bin"
 export ANDROID_SDK_ROOT=$HOME/.android/Sdk
 
 # TODO: Remove this temporary export

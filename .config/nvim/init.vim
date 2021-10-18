@@ -482,7 +482,7 @@ local on_attach = function(client, bufnr)
   nvim_completion.on_attach(client, bufnr)
 end
 
-local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "jdtls", "jsonls", "pyright", "r_language_server", "rls", "svelte", "taplo", "tsserver", "vimls" }
+local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "jsonls", "pyright", "r_language_server", "rls", "svelte", "taplo", "tsserver", "vimls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -635,7 +635,20 @@ nvim_lsp.diagnosticls.setup({
 }
 )
 
-nvim_lsp.omnisharp.setup{
+nvim_lsp.java_language_server.setup {
+  cmd = { "java-language-server" },
+  on_attach = on_attach,
+  settings = {
+    java = {
+      externalDependencies = { "com.sun.net.httpserver:http:20070405" }
+    }
+  },
+  flags = {
+    debounce_text_changes = 150,
+  }
+}
+
+nvim_lsp.omnisharp.setup {
   cmd = { "/usr/bin/omnisharp", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) },
   on_attach = on_attach,
   flags = {
