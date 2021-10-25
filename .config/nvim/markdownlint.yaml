@@ -38,7 +38,9 @@ MD004:
 
 # MD005/list-indent - Inconsistent indentation for list items at the same level
 
-MD005: true
+# TODO: Fix this so it allows multiple levels of list indentation
+
+MD005: false
 
 # MD006/ul-start-left - Consider starting bulleted lists at the beginning of the line
 

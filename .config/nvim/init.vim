@@ -1,6 +1,4 @@
-" TODO: Allow unnaturally incremented lists prettier.
 " TODO: Switch to `init.lua`
-" TODO: Fix backspace remapping
 " TODO: Get dictionary lookup with K for words when lsp hover isn't available
 " TODO: Add noa writes to compile and execute commands
 " TODO: Check out https://github.com/jose-elias-alvarez/null-ls.nvim for
@@ -15,6 +13,7 @@ vmap $ g_
 
 nmap <Leader>h <CMD>noh<CR>
 nmap <Leader>Dm <CMD>redir @" \| silent map \| redir END \| new \| put!<CR>
+nmap <Leader>DH <CMD>redir @" \| silent hi \| redir END \| new \| put!<CR>
 nmap <Leader>Dh <CMD>echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
@@ -213,7 +212,7 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 autocmd FileType markdown set syntax=markdown.pandoc
 let g:pandoc#syntax#conceal#blacklist = ["atx", "codeblock_start", "codeblock_delim", "quotes"]
 let g:pandoc#modules#disabled = ["folding", "spell"]
-let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "java", "python", "r", "sh"]
+let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "java", "ps1", "python", "r", "sh"]
 " for f in readdir(expand('<sfile>:p:h') . '/plugged/vim-polyglot/syntax', {f -> f =~ '.vim$' && f !~ '.*_.*'})
 "       call add(g:pandoc#syntax#codeblocks#embeds#langs, substitute(f, '\.vim$', '', ''))
 " endfor
@@ -247,16 +246,20 @@ endif
 
 nmap U <CMD>UndotreeToggle<CR>
 
-Plug 'easymotion/vim-easymotion'
+" Plug 'easymotion/vim-easymotion'
 
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_smartcase = 1
-autocmd User EasyMotionPromptBegin silent! LspStop
-autocmd User EasyMotionPromptEnd silent! LspStart
-map f <Plug>(easymotion-bd-w)
+" let g:EasyMotion_do_mapping = 0
+" let g:EasyMotion_smartcase = 1
+" autocmd User EasyMotionPromptBegin silent! LspStop
+" autocmd User EasyMotionPromptEnd silent! LspStart
+" map f <Plug>(easymotion-bd-w)
+Plug 'phaazon/hop.nvim'
+
+map f <CMD>lua require'hop'.hint_words()<CR>
+
 Plug 'chaoren/vim-wordmotion'
 Plug 'vim-scripts/loremipsum'
-Plug 'shadmansaleh/lualine.nvim' " TODO: change back to hoob3rt/ when he resumes maintenance
+Plug 'nvim-lualine/lualine.nvim'
 Plug 'ferrine/md-img-paste.vim'
 
 let g:mdip_imgdir = expand('%:t:r')
@@ -361,7 +364,10 @@ Plug 'honza/vim-snippets'
 Plug 'cbarrete/completion-vcard'
 Plug 'mtoohey31/completion-fish'
 
-autocmd BufEnter * lua require'completion'.on_attach()
+" TODO: Switch to nvim-cmp and fix telescope live grep colon filetypes
+let s:completion_blacklist = ["TelescopePrompt"]
+echo index(s:completion_blacklist, &ft)
+autocmd BufEnter * if index(s:completion_blacklist, &ft) < 0 | lua require'completion'.on_attach()
 let g:completion_chain_complete_list = {
                   \ 'default': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
                   \ 'markdown': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
@@ -384,6 +390,7 @@ colorscheme tgc_wal
 " lua {{{
 lua << EOF
 package.path = os.getenv("HOME") .. "/.cache/wal/?.lua;" .. package.path
+require'hop'.setup({})
 require'nvim-treesitter.configs'.setup{
   highlight = {
     enable = true,
@@ -482,7 +489,7 @@ local on_attach = function(client, bufnr)
   nvim_completion.on_attach(client, bufnr)
 end
 
-local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "jsonls", "pyright", "r_language_server", "rls", "svelte", "taplo", "tsserver", "vimls" }
+local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "jsonls", "pyright", "r_language_server", "rls", "svelte", "tailwindcss", "taplo", "tsserver", "vimls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -494,7 +501,7 @@ end
 
 nvim_lsp.diagnosticls.setup({
    on_attach = on_attach,
-   filetypes={ "dockerfile", "fish", "lua", "markdown", "python", "rmd", "sh" },
+   filetypes = { "css", "dockerfile", "fish", "java", "javascript", "lua", "markdown", "python",  "rmd", "sh", "svelte", "typescript", "typescriptreact" },
    init_options = {
       formatters = {
          autopep = {
@@ -503,6 +510,10 @@ nvim_lsp.diagnosticls.setup({
          },
          fish_indent = {
            command = "fish_indent"
+         },
+         google_java_format = {
+           command = "google-java-format",
+            args = { "--aosp", "-" }
          },
          prettier = {
             command = "prettier",
@@ -610,26 +621,33 @@ nvim_lsp.diagnosticls.setup({
          dockerfile = "hadolint",
          mail = {
             "cspell",
-            "write_good"
+            -- "write_good"
          },
          markdown = {
             "cspell",
             "markdownlint",
-            "write_good"
+            -- "write_good"
          },
          rmd = {
             "cspell",
             "markdownlint",
-            "write_good"
+            -- "write_good"
          },
          sh = "shellcheck"
       },
       formatFiletypes = {
          fish = "fish_indent",
+         java = "google_java_format",
          lua = "stylua",
-         markdown = "prettier",
+         -- TODO: Fix this so it doesn't mess up my bullets
+         -- markdown = "prettier",
          python = "autopep",
-         rmd = "prettier"
+         -- rmd = "prettier"
+         css = "prettier",
+         javascript = "prettier",
+         svelte = prettier,
+         typescript = "prettier",
+         typescriptreact =  "prettier",
       }
    }
 }
@@ -640,7 +658,14 @@ nvim_lsp.java_language_server.setup {
   on_attach = on_attach,
   settings = {
     java = {
-      externalDependencies = { "com.sun.net.httpserver:http:20070405" }
+      externalDependencies = {
+        "com.sun.net.httpserver:http:20070405",
+        "org.junit.jupiter:junit-jupiter-api:5.7.0",
+        "org.junit.jupiter:junit-jupiter-engine:5.7.0",
+        "javax.json:javax.json-api:1.1.4",
+        "org.glassfish:javax.json:1.1.4",
+        "org.json:json:20210307"
+      }
     }
   },
   flags = {
@@ -736,3 +761,10 @@ endfunction
 
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd TermOpen * setlocal nonumber norelativenumber
+
+hi clear HopNextKey
+hi link HopNextKey LspDiagnosticsDefaultError
+hi clear HopNextKey1
+hi link HopNextKey1 LspDiagnosticsDefaultError
+hi clear HopNextKey2
+hi link HopNextKey2 LspDiagnosticsDefaultWarning

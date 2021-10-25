@@ -1,10 +1,14 @@
-// TODO: Implement dynamic filetype config
+// TODO: Implement path specific configuration in cspell (not some hacky workaround)
 {
   "version": "0.2",
   "language": "en-GB",
   "words": [
-    "deadweight", // eco courses
-    "giffen", // eco courses
+    "deadweight", // eco*
+    "giffen", // eco*
+    "Logisim", // csc258
+    "Karnaugh", // csc258
+    "Chebyshev", // sta*
+    "shiba", // global
     "kanban", // global
     "math", // global
     "Toohey" // global

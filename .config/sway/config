@@ -51,6 +51,7 @@ for_window [title=".*Zoom Meeting.*"] inhibit_idle visible, sticky enable
 for_window [title=".*Microsoft Stream.*"] inhibit_idle visible, sticky enable
 for_window [title=".*Audio Cine Films.*"] inhibit_idle visible, sticky enable
 for_window [app_id="mpv"] inhibit_idle visible, sticky enable
+for_window [app_id="Alacritty" title="mpv .*"] inhibit_idle open
 exec_always $HOME/.scripts/inhibit_idle_discord_brave_sway
 
 # window management

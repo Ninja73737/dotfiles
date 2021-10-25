@@ -39,4 +39,6 @@ cmd mkdir &{{
 map M push :mkdir<space>
 map gc cd ~/courses
 map gr cd ~/repos
+map gf cd ~/.config
 map x !unzip "$f"
+map W &alacritty > /dev/null &

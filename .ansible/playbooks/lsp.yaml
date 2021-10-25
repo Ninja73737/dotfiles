@@ -121,11 +121,18 @@
       changed_when: false
       failed_when: gopls_install_result.rc != 0
       # TODO: figure out how to determine whether this has changed
-    - name: Install JDTLS
-      shell: "curl https://raw.githubusercontent.com/eruizc-dev/jdtls-launcher/master/install.sh | bash"
-      register: jdtls_install_result
-      changed_when: jdtls_install_result.rc == 0
-      failed_when: "jdtls_install_result.rc != 0 and 'already exists, delete it manually and try again' not in jdtls_install_result.stderr"
+    # - name: Install JDTLS
+    #   shell: "curl https://raw.githubusercontent.com/eruizc-dev/jdtls-launcher/master/install.sh | bash"
+    #   register: jdtls_install_result
+    #   changed_when: jdtls_install_result.rc == 0
+    #   failed_when: "jdtls_install_result.rc != 0 and 'already exists, delete it manually and try again' not in jdtls_install_result.stderr"
+    - name: Install Java Language Server
+      aur:
+        name: java-language-server
+        use: paru
+        state: latest
+      when: ansible_facts['os_family'] == 'Archlinux'
+      # TODO: Get this working on other hosts
     - name: Install Lua language server
       package:
         name: lua-language-server
@@ -193,6 +200,12 @@
       become: true
       when: ansible_facts['os_family'] == 'Archlinux'
       # TODO: Get this working on other hosts
+    - name: Install Tailwind CSS language server
+      npm:
+        name: "@tailwindcss/language-server"
+        global: true
+        path: ~/.npm-global
+        state: latest
     - name: Install Typescript
       npm:
         name: typescript

@@ -31,9 +31,6 @@ cursor:
     blinking: Off
     vi_mode_style: Block
 
-debug:
-  log_level: Info
-
 key_bindings:
   - { key: Plus, mods: Control|Shift, action: IncreaseFontSize }
   - { key: Return, mods: Shift, chars: "\x1b[13;2u" }
