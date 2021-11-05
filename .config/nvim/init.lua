@@ -186,6 +186,19 @@ cmd([[autocmd FileType markdown,pandoc,rmd let g:AutoPairs = AutoPairsDefine({'$
 cmd([[autocmd FileType tex let g:AutoPairs = AutoPairsDefine({'$':'$', '$$':'$$', '``':"''"}, ['`', "'"])]])
 cmd([[autocmd FileType rust let b:AutoPairs = AutoPairsDefine({'\w\zs<': '>'})]])
 
+local fn = vim.fn
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({
+    "git",
+    "clone",
+    "--depth",
+    "1",
+    "https://github.com/wbthomason/packer.nvim",
+    install_path,
+  })
+end
+
 local packer = require("packer")
 packer.startup(function(use)
   use("wbthomason/packer.nvim")
@@ -1038,8 +1051,10 @@ packer.startup(function(use)
       })
     end,
   })
+  if packer_bootstrap then
+    require("packer").sync()
+  end
 end)
--- packer.compile()
 
 cmd("colorscheme tgc_wal")
 
