@@ -25,8 +25,7 @@ cmd touch &{{
 }}
 cmd edit ${{
     set IFS " "
-    $EDITOR "$argv"
-    lf -remote "send $id select \"$argv\""
+    $EDITOR "$argv" && lf -remote "send $id select \"$argv\""
 }}
 map t push :touch<space>
 map E push :edit<space>
@@ -41,4 +40,12 @@ map gc cd ~/courses
 map gr cd ~/repos
 map gf cd ~/.config
 map x !unzip "$f"
-map W &alacritty > /dev/null &
+map W &alacritty -e fish -C lf > /dev/null &
+map c ${{
+    set IFS " "
+    set n 1
+    while test -e "card$n.md"
+      set n (math $n + 1)
+    end
+    $EDITOR -c "startinsert" "card$n.md" && lf -remote "send $id select \"card$n.md\""
+}}

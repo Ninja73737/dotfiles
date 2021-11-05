@@ -1,10 +1,17 @@
 " TODO: Switch to `init.lua`
+" TODO: Make tree sitter indent adjusting plugin
 " TODO: Get dictionary lookup with K for words when lsp hover isn't available
 " TODO: Add noa writes to compile and execute commands
 " TODO: Check out https://github.com/jose-elias-alvarez/null-ls.nvim for
-" cspell fix spelling code actions
+" cspell fix spelling code actions, these can be implemented with an async
+" code action that checks if the currently selected word is being detected by
+" cspell by creating a tempfile file containg only that word (not by using the
+" trace subcommand because that's slower) and displaying the option add it to
+" the file's ignore or the global config maybe if the check's exit code is
+" non-zero.
+
 " global mappings {{{
-nmap Q <CMD>quit!<CR>
+nmap Q <CMD>quitall!<CR>
 nmap W <CMD>noa write<CR>
 nmap Z <CMD>wq<CR>
 
@@ -157,9 +164,8 @@ au BufReadPost * silent
 autocmd FileType * let b:AutoPairs = AutoPairsDefine({'\v(^|\W)\zs''':"'"})
 " }}}
 " local settings {{{
-autocmd FileType java let b:no_auto_format=1
 autocmd FileType java set shiftwidth=4
-autocmd FileType markdown,rmd set softtabstop=2
+autocmd FileType markdown,rmd set softtabstop=1
 autocmd FileType java set softtabstop=4
 autocmd FileType python set colorcolumn=80
 autocmd FileType lua set colorcolumn=120
@@ -213,9 +219,6 @@ autocmd FileType markdown set syntax=markdown.pandoc
 let g:pandoc#syntax#conceal#blacklist = ["atx", "codeblock_start", "codeblock_delim", "quotes"]
 let g:pandoc#modules#disabled = ["folding", "spell"]
 let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "java", "ps1", "python", "r", "sh"]
-" for f in readdir(expand('<sfile>:p:h') . '/plugged/vim-polyglot/syntax', {f -> f =~ '.vim$' && f !~ '.*_.*'})
-"       call add(g:pandoc#syntax#codeblocks#embeds#langs, substitute(f, '\.vim$', '', ''))
-" endfor
 
 Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
 
@@ -223,7 +226,7 @@ autocmd BufNewFile,BufRead *.Rmd set filetype=rmd
 let R_auto_start = 1
 let R_esc_term = 0
 let R_close_term = 1
-let R_args = ['--no-save', '--quiet']
+let R_args = ['--quiet', '--save']
 let R_assign = 0
 let R_openpdf = 1
 let R_openhtml = 0
@@ -245,14 +248,6 @@ if has("persistent_undo")
 endif
 
 nmap U <CMD>UndotreeToggle<CR>
-
-" Plug 'easymotion/vim-easymotion'
-
-" let g:EasyMotion_do_mapping = 0
-" let g:EasyMotion_smartcase = 1
-" autocmd User EasyMotionPromptBegin silent! LspStop
-" autocmd User EasyMotionPromptEnd silent! LspStart
-" map f <Plug>(easymotion-bd-w)
 Plug 'phaazon/hop.nvim'
 
 map f <CMD>lua require'hop'.hint_words()<CR>
@@ -260,6 +255,7 @@ map f <CMD>lua require'hop'.hint_words()<CR>
 Plug 'chaoren/vim-wordmotion'
 Plug 'vim-scripts/loremipsum'
 Plug 'nvim-lualine/lualine.nvim'
+" TODO: Make my own version of this, use https://vi.stackexchange.com/questions/25996/write-register-0-to-file
 Plug 'ferrine/md-img-paste.vim'
 
 let g:mdip_imgdir = expand('%:t:r')
@@ -284,21 +280,12 @@ let g:bullets_enabled_file_types = ['markdown', 'rmd', 'tex']
 
 autocmd FileType markdown nmap <LocalLeader><Space> <CMD>ToggleCheckbox<CR>
 autocmd FileType markdown noremap o <CMD>InsertNewBullet<CR>
-let g:completion_confirm_key = ""
-inoremap <expr> <CR> pumvisible() ? complete_info()["selected"] != "-1" ? "\<Plug>(completion_confirm_completion)" : "\<C-e>\<CR>" : "\<CR>"
-autocmd FileType markdown inoremap <expr> <CR> pumvisible() ? complete_info()["selected"] != "-1" ? "\<Plug>(completion_confirm_completion)" : "\<C-e>\<CMD>InsertNewBullet<CR>" : "\<CMD>InsertNewBullet<CR>"
-
-Plug 'junegunn/goyo.vim'
-
-let g:goyo_width = "85%"
-nmap <Leader>G <CMD>Goyo<CR>
+autocmd FileType markdown inoremap <CR> <CMD>InsertNewBullet<CR>
 
 Plug 'mg979/vim-visual-multi'
-Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
 
-let g:gitgutter_map_keys = 0
-nmap <Leader>gn <Plug>(GitGutterNextHunk)
-nmap <Leader>gN <Plug>(GitGutterPrevHunk)
+nmap <Leader>b <CMD>Gitsigns toggle_current_line_blame<CR>
 
 Plug 'mtoohey31/tgc_wal.vim'
 Plug 'norcalli/nvim-colorizer.lua'
@@ -323,11 +310,12 @@ Plug 'jiangmiao/auto-pairs'
 
 let g:AutoPairsMapCh = 0
 
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 
 nmap tp <CMD>TSPlaygroundToggle<CR>
 
+Plug 'theHamsta/nvim-treesitter-pairs'
 Plug 'Olical/aniseed' " Requied for tree-docs
 Plug 'nvim-treesitter/nvim-tree-docs'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
@@ -335,8 +323,22 @@ Plug 'p00f/nvim-ts-rainbow'
 Plug 'SmiteshP/nvim-gps'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-buffer'
+" TODO: make this work without a prefixed `./`
+Plug 'hrsh7th/cmp-path'
+Plug 'f3fora/cmp-nuspell'
+" TODO: make this work for tex math
+Plug 'hrsh7th/cmp-calc'
+Plug 'hrsh7th/cmp-emoji'
+" TODO: Should I keep this or replace it with a snippet thing that I can tab
+" through?
+" Plug 'fiorematteo/cmp-katex'
+" TODO: Consider the alternatives to this that are also supported by nvim-cmp
 Plug 'SirVer/ultisnips'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+Plug 'mtoohey31/cmp-fish'
 
 let g:completion_enable_snippet = 'UltiSnips'
 let g:UltiSnipsExpandTrigger="<NUL>"
@@ -361,25 +363,12 @@ function! JumpBackwardsOrIndent()
 endfunction
 
 Plug 'honza/vim-snippets'
-Plug 'cbarrete/completion-vcard'
-Plug 'mtoohey31/completion-fish'
+" TODO: Fix this after completion changes
+" Plug 'cbarrete/completion-vcard'
 
-" TODO: Switch to nvim-cmp and fix telescope live grep colon filetypes
-let s:completion_blacklist = ["TelescopePrompt"]
-echo index(s:completion_blacklist, &ft)
-autocmd BufEnter * if index(s:completion_blacklist, &ft) < 0 | lua require'completion'.on_attach()
-let g:completion_chain_complete_list = {
-                  \ 'default': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
-                  \ 'markdown': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
-                  \ 'fish': [{ 'complete_items': ['UltiSnips', 'fish', 'lsp', 'path']}],
-                  \ 'vim': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
-                  \ 'sh': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
-                  \ 'zsh': [{ 'complete_items': ['UltiSnips', 'lsp', 'path']}],
-                  \ 'mail': [{ 'complete_items': ['vCard']}]
-                  \ }
-let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
-let g:completion_sorting = "length"
+" TODO: Fix telescope live grep colon filetypes
 
+Plug 'jose-elias-alvarez/null-ls.nvim'
 call plug#end()
 " }}}
 
@@ -390,6 +379,18 @@ colorscheme tgc_wal
 " lua {{{
 lua << EOF
 package.path = os.getenv("HOME") .. "/.cache/wal/?.lua;" .. package.path
+require('gitsigns').setup({
+  signs = {
+    add          = { hl = 'GitSignsAdd'   , text = '+', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn' },
+    change       = { hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn' },
+    delete       = { hl = 'GitSignsDelete', text = '-', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn' },
+    topdelete    = { hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn' },
+    changedelete = { hl = 'GitSignsChange', text = '≃', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn' },
+  },
+  attach_to_untracked = false,
+  current_line_blame_opts = { delay = 0 },
+  keymaps = {}
+})
 require'hop'.setup({})
 require'nvim-treesitter.configs'.setup{
   highlight = {
@@ -431,6 +432,27 @@ require'nvim-treesitter.configs'.setup{
         setext_heading = '# %s'
       },
     }
+  },
+  playground = {
+    enable = true
+  },
+  pairs = {
+    enable = true,
+    disable = {},
+    highlight_pair_events = {}, -- e.g. {"CursorMoved"}, -- when to highlight the pairs, use {} to deactivate highlighting
+    highlight_self = false, -- whether to highlight also the part of the pair under cursor (or only the partner)
+    goto_right_end = false, -- whether to go to the end of the right partner or the beginning
+    fallback_cmd_normal = "call matchit#Match_wrapper('',1,'n')", -- What command to issue when we can't find a pair (e.g. "normal! %")
+    keymaps = {
+      goto_partner = "<leader>%",
+      delete_balanced = "X",
+    },
+    delete_balanced = {
+      only_on_first_char = false, -- whether to trigger balanced delete when on first character of a pair
+      fallback_cmd_normal = nil, -- fallback command when no pair found, can be nil
+      longest_partner = false, -- whether to delete the longest or the shortest pair when multiple found.
+                               -- E.g. whether to delete the angle bracket or whole tag in  <pair> </pair>
+    }
   }
 }
 
@@ -456,11 +478,10 @@ require'lualine'.setup({
   }
 })
 require'colorizer'.setup()
-
 local nvim_lsp = require('lspconfig')
-local nvim_completion = require('completion')
-nvim_completion.addCompletionSource('fish', require'completion-fish'.complete_item)
-require'completion_vcard'.setup_completion('~/.contacts/32')
+-- local nvim_completion = require('completion')
+-- nvim_completion.addCompletionSource('fish', require'completion-fish'.complete_item)
+-- require'completion_vcard'.setup_completion('~/.contacts/32')
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -480,14 +501,17 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<Leader>n', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 
   vim.opt.updatetime = 250
+  vim.opt.signcolumn = "yes"
   vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
   -- TODO: check if we're in a repository owned by someone else or a fork of a
   -- repository owned by someone else, and if we are, don't register this
   -- autocommand.
-  vim.cmd [[autocmd BufWritePre * call FormatIfOk()]]
+  vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)]]
 
-  nvim_completion.on_attach(client, bufnr)
+  -- nvim_completion.on_attach(client, bufnr)
 end
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local servers = { "ansiblels", "bashls", "ccls", "cssls", "dockerls", "gopls", "html", "jsonls", "pyright", "r_language_server", "rls", "svelte", "tailwindcss", "taplo", "tsserver", "vimls" }
 for _, lsp in ipairs(servers) do
@@ -495,13 +519,14 @@ for _, lsp in ipairs(servers) do
     on_attach = on_attach,
     flags = {
       debounce_text_changes = 150,
-    }
+    },
+    capabilities = capabilities
   }
 end
 
 nvim_lsp.diagnosticls.setup({
    on_attach = on_attach,
-   filetypes = { "css", "dockerfile", "fish", "java", "javascript", "lua", "markdown", "python",  "rmd", "sh", "svelte", "typescript", "typescriptreact" },
+   filetypes = { "css", "dockerfile", "fish", "java", "javascript", "lua", "markdown", "python",  "rmd", "sh", "typescript", "typescriptreact", "yaml" },
    init_options = {
       formatters = {
          autopep = {
@@ -528,7 +553,7 @@ nvim_lsp.diagnosticls.setup({
          cspell = {
             command = "cspell",
             debounce = 100,
-            args = { "--config", "/home/mtoohey/.config/nvim/cspell.jsonc", "stdin" },
+            args = { "--config", "/home/mtoohey/.config/nvim/cspell.yaml", "stdin" },
             sourceName = "cspell",
             formatLines = 1,
             formatPattern = { ".*?:(\\d+):(\\d+)\\s*-\\s*(.*)", { line = 1, column = 2, message = 3 } }
@@ -564,6 +589,19 @@ nvim_lsp.diagnosticls.setup({
               style = "hint"
             }
           },
+          languagetool = {
+             command = "languagetool",
+             debounce = 200,
+             args = { "-" },
+             offsetLine = 0,
+             offsetColumn = 0,
+             sourceName = "languagetool",
+             formatLines = 2,
+             formatPattern = {
+                "^\\d+?\\.\\)\\s+Line\\s+(\\d+),\\s+column\\s+(\\d+),\\s+([^\\n]+)\nMessage:\\s+(.*)(\\r|\\n)*$",
+                { line = 1, column = 2, message = { 4, 3 } }
+            },
+         },
          markdownlint = {
             command = "markdownlint",
             isStderr = true,
@@ -605,33 +643,24 @@ nvim_lsp.diagnosticls.setup({
               info = "info",
               style = "hint"
             }
-         },
-         write_good = {
-            command = "write-good",
-            debounce = 100,
-            args = { "--text=%text" },
-            offsetLine = 0,
-            offsetColumn = 1,
-            sourceName = "write-good",
-            formatLines = 1,
-            formatPattern = { "(.*)\\s+on\\s+line\\s+(\\d+)\\s+at\\s+column\\s+(\\d+)\\s*$", { line = 2, column = 3, message = 1 } }
-          }
+         }
       },
       filetypes = {
          dockerfile = "hadolint",
          mail = {
             "cspell",
-            -- "write_good"
+            -- TODO: Fix this
+            -- "languagetool"
          },
          markdown = {
             "cspell",
             "markdownlint",
-            -- "write_good"
+            -- "languagetool"
          },
          rmd = {
             "cspell",
             "markdownlint",
-            -- "write_good"
+            -- "languagetool"
          },
          sh = "shellcheck"
       },
@@ -641,17 +670,17 @@ nvim_lsp.diagnosticls.setup({
          lua = "stylua",
          -- TODO: Fix this so it doesn't mess up my bullets
          -- markdown = "prettier",
+         -- rmd = "prettier",
          python = "autopep",
-         -- rmd = "prettier"
          css = "prettier",
          javascript = "prettier",
-         svelte = prettier,
          typescript = "prettier",
          typescriptreact =  "prettier",
+         yaml = "prettier",
       }
-   }
-}
-)
+   },
+   capabilities = capabilities
+})
 
 nvim_lsp.java_language_server.setup {
   cmd = { "java-language-server" },
@@ -670,7 +699,8 @@ nvim_lsp.java_language_server.setup {
   },
   flags = {
     debounce_text_changes = 150,
-  }
+   },
+   capabilities = capabilities
 }
 
 nvim_lsp.omnisharp.setup {
@@ -678,7 +708,8 @@ nvim_lsp.omnisharp.setup {
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
-  }
+  },
+  capabilities = capabilities
 }
 
 local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
@@ -707,7 +738,8 @@ nvim_lsp.sumneko_lua.setup {
       }
     }
   },
-  on_attach = on_attach
+  on_attach = on_attach,
+  capabilities = capabilities
 }
 
 nvim_lsp.texlab.setup{
@@ -721,7 +753,8 @@ nvim_lsp.texlab.setup{
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
-  }
+  },
+  capabilities = capabilities
 }
 
 local yamlls_settings = { yaml = { schemas = {} } }
@@ -733,7 +766,8 @@ nvim_lsp.yamlls.setup {
   flags = {
     debounce_text_changes = 150,
   },
-  settings = yamlls_settings
+  settings = yamlls_settings,
+  capabilities = capabilities
 }
 
 local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
@@ -749,22 +783,49 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagn
   underline = true,
   update_in_insert = true,
 })
+
+local cmp = require'cmp'
+
+require'nuspell'
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+    end,
+  },
+  mapping = {
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
+    ['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+  },
+  sources = cmp.config.sources({
+    { name = 'fish' },
+    { name = 'nvim_lsp' },
+    { name = 'ultisnips' },
+    { name = 'buffer' },
+    { name = 'path' },
+    { name = 'nuspell' },
+    { name = 'calc' },
+    { name = 'emoji' }
+  })
+})
+
+local null_ls = require("null-ls")
+null_ls.config({ sources = { require'cmp-nuspell.null-ls' } })
+require("lspconfig")["null-ls"].setup({
+  on_attach = on_attach,
+  autostart = true
+})
 EOF
-
-function! FormatIfOk()
-  if !exists("b:no_auto_format")
-    lua vim.lsp.buf.formatting_seq_sync(nil, 1000)
-  endif
-endfunction
 " }}}
-
 
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd TermOpen * setlocal nonumber norelativenumber
-
-hi clear HopNextKey
-hi link HopNextKey LspDiagnosticsDefaultError
-hi clear HopNextKey1
-hi link HopNextKey1 LspDiagnosticsDefaultError
-hi clear HopNextKey2
-hi link HopNextKey2 LspDiagnosticsDefaultWarning

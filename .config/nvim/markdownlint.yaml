@@ -44,19 +44,19 @@ MD005: false
 
 # MD006/ul-start-left - Consider starting bulleted lists at the beginning of the line
 
-MD006: true
+MD006: false
 
 # MD007/ul-indent - Unordered list indentation
 
-MD007:
+MD007: false
 
 # Spaces for indent
 
-  indent: 2
+  # indent: 2
 
 # Whether to indent the first level of the list
 
-  start_indented: false
+  # start_indented: false
 
 # MD009/no-trailing-spaces - Trailing spaces
 

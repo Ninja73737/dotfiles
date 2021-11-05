@@ -20,7 +20,9 @@ with open(join(expanduser('~'), ".cache/wal/colors.json")) as file:
 # Misc
 c.statusbar.show = 'never'
 c.auto_save.session = True
-c.editor.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && nvim +"set nonumber norelativenumber" {file}\'']
+c.editor.command = command_prefix_list + \
+    [command_prefix_string +
+        'fish -c \'cat ".cache/wal/sequences" && nvim +"set nonumber norelativenumber" {file}\'']
 c.content.fullscreen.window = True
 c.tabs.show = 'switching'
 c.tabs.show_switching_delay = 1500
@@ -67,12 +69,16 @@ config.bind('e', 'edit-url')
 config.bind('(', 'jseval --world=main -f ~/.config/qutebrowser/js/slowDown.js')
 config.bind(')', 'jseval --world=main -f ~/.config/qutebrowser/js/speedUp.js')
 config.bind(
-    '<Ctrl-o>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomOut.js')
+    'c-', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomOut.js')
 config.bind(
-    '<Ctrl-p>', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
+    'c+', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
 config.bind('wp', 'hint links spawn random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
 config.bind('<Ctrl-Shift-c>', 'yank selection')
+config.bind('h', 'hint all hover')
+config.bind('<Ctrl-F>', 'hint --rapid all tab-bg')
+config.bind('<Ctrl-e>', 'fake-key <Ctrl-a><Ctrl-c><Ctrl-Shift-e>')
+config.bind('<Ctrl-Shift-e>', 'spawn alacritty -t "floatme" -o background_opacity=0.8 -e /bin/fish -c \'cat ~/.cache/wal/sequences && nvim +"nnoremap Z ggVG\\"+yZQ|normal!\\"+p:" && qbpm launch (echo "$QTWEBENGINE_DICTIONARIES_PATH" | sed "s/^.*qutebrowser-profiles\\///" | sed "\\/.*//g") ":fake-key <Ctrl-v>"\'')
 config.unbind('<Ctrl-v>')
 config.unbind('<Ctrl-a>')
 
@@ -85,20 +91,26 @@ c.fonts.web.family.serif = 'New York'
 c.fonts.web.family.fixed = 'JetBrainsMono Nerd Font'
 
 # TODO: make this dynamic based on sunset/sunrise with https://pypi.org/project/suntime/
-c.colors.webpage.preferred_color_scheme ='dark'
+c.colors.webpage.preferred_color_scheme = 'dark'
 config.source(join(expanduser('~'), '.config/qutebrowser/qutewal/qutewal.py'))
 
-c.url.searchengines= {'DEFAULT':
-                      'https://duckduckgo.com/?q={}&kt=SF+Pro+Text&kj=' +
-                      pywal['colors']['color2'] + '&k7=' +
-                      pywal['special']['background'] + '&kx=' +
-                      pywal['colors']['color1'] + '&k8' +
-                      pywal['special']['foreground'] + '&k9' +
-                      pywal['colors']['color2'] + '&kaa' +
-                      pywal['colors']['color2'] + '&kae=d'}
+c.url.searchengines = {'DEFAULT':
+                       'https://duckduckgo.com/?q={}&kt=SF+Pro+Text&kj=' +
+                       pywal['colors']['color2'] + '&k7=' +
+                       pywal['special']['background'] + '&kx=' +
+                       pywal['colors']['color1'] + '&k8' +
+                       pywal['special']['foreground'] + '&k9' +
+                       pywal['colors']['color2'] + '&kaa' +
+                       pywal['colors']['color2'] + '&kae=d'}
 
 # Fileselect
 config.set('fileselect.handler', "external")
-c.fileselect.single_file.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']
-c.fileselect.multiple_files.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$fx\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']
-c.fileselect.folder.command = command_prefix_list + [command_prefix_string + 'fish -c \'cat ".cache/wal/sequences" && lf -command "set dironly; map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']
+c.fileselect.single_file.command = command_prefix_list + \
+    [command_prefix_string +
+        'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']
+c.fileselect.multiple_files.command = command_prefix_list + \
+    [command_prefix_string +
+        'fish -c \'cat ".cache/wal/sequences" && lf -command "map <enter> \\${{echo \\"\\$fx\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']
+c.fileselect.folder.command = command_prefix_list + \
+    [command_prefix_string +
+        'fish -c \'cat ".cache/wal/sequences" && lf -command "set dironly; map <enter> \\${{echo \\"\\$f\\" > {}; lf -remote \\"send \\$id quit\\"}}"\'']

@@ -65,7 +65,7 @@ end
 abbr zth "zathura --fork"
 alias zth "zathura --fork"
 
-alias R "R --quiet --no-save"
+alias R "R --quiet --save"
 
 function python
     # Intelligently determines which startup silencing method to use by testing paths of python instances
@@ -104,24 +104,14 @@ if status --is-interactive
 
     abbr dcu "docker-compose up -d --remove-orphans"
     abbr dcd "docker-compose down --remove-orphans"
-    abbr dcdu "docker-compose -f docker-compose.dev.yaml up -d --remove-orphans"
-    abbr dcdd "docker-compose -f docker-compose.dev.yaml down --remove-orphans"
+    abbr dcdu "docker-compose -f docker-compose-dev.yaml up --remove-orphans"
+    abbr dcdd "docker-compose -f docker-compose-dev.yaml down --remove-orphans"
 
     abbr pcp "rsync -r --info=progress2"
     alias pcp "rsync -r --info=progress2"
 
     abbr dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
     alias dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
-
-
-    function prompt
-        while read cmd -S -c "$argv " -p fish_prompt -R fish_right_prompt
-            eval $cmd
-        end
-    end
-
-    abbr pg "git status; prompt git"
-    alias pg "git status; prompt git"
 
     if test (uname) = Darwin
         abbr copy pbcopy
@@ -140,8 +130,8 @@ if status --is-interactive
         alias paste "xclip -selection clipboard -out"
     end
 
-    abbr music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 ~/music"
-    alias music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 ~/music"
+    abbr music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ~/music"
+    alias music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ~/music"
 
     fish_vi_key_bindings
 
@@ -161,6 +151,9 @@ if status --is-interactive
     set fish_cursor_insert line
     set fish_cursor_replace_one underscore
 
+    abbr g git
+    alias g git
+
     export OPENER="$HOME/.scripts/xdg-open-disown"
     export EDITOR=nvim
     export VISUAL=nvim
@@ -171,7 +164,7 @@ if status --is-interactive
         alias se sudoedit
     end
 
-    export MANPAGER='nvim +Man!'
+    export PAGER='nvim +Man!'
 
     source $HOME/.config/lf/icons
 

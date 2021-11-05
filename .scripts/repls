@@ -5,9 +5,9 @@ cat ".cache/wal/sequences"
 set potential_prompts evcxr jshell node python3 R
 
 for prompt in $potential_prompts
-  if command -q "$prompt"
-    set -a prompts "$prompt"
-  end
+    if command -q "$prompt"
+        set -a prompts "$prompt"
+    end
 end
 
-eval (string join \n $prompts | fzf)
+eval (string join \n $prompts | fzf --color 16)

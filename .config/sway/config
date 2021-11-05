@@ -47,6 +47,7 @@ focus_wrapping no
 for_window [title="floatme"] floating enable
 for_window [class="Bitwarden"] floating enable
 for_window [title=".*YouTube.*"] inhibit_idle visible, sticky enable
+for_window [title=".* - Twitch - .*"] inhibit_idle visible, sticky enable
 for_window [title=".*Zoom Meeting.*"] inhibit_idle visible, sticky enable
 for_window [title=".*Microsoft Stream.*"] inhibit_idle visible, sticky enable
 for_window [title=".*Audio Cine Films.*"] inhibit_idle visible, sticky enable
@@ -140,6 +141,11 @@ bindsym Mod4+Shift+q exit
 bindsym Mod4+Return exec alacritty
 bindsym Mod4+slash exec alacritty -e fish -C lf
 bindsym Mod4+space exec $HOME/.scripts/fuzzel_dynamic
+bindsym Mod4+Shift+space exec test -S /tmp/mpv-socket && echo '{ "command": ["cycle", "pause"] }' | socat - /tmp/mpv-socket || alacritty -e fish -C "music"
+bindsym Mod4+Shift+Right exec echo '{ "command": ["playlist-next"] }' | socat - /tmp/mpv-socket
+bindsym Mod4+Shift+Left exec echo '{ "command": ["playlist-prev"] }' | socat - /tmp/mpv-socket
+bindsym Mod4+Shift+Down exec echo '{ "command": ["add", "volume", "-2"] }' | socat - /tmp/mpv-socket
+bindsym Mod4+Shift+Up exec echo '{ "command": ["add", "volume", "2"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+semicolon exec alacritty -t floatme -o background_opacity=0.8 -e $HOME/.scripts/quick_menu
 bindsym Mod4+E exec alacritty -t floatme -o background_opacity=0.8 -e $HOME/.scripts/repls
 
@@ -162,11 +168,11 @@ bindsym --locked Mod4+Up exec /bin/sh -c "pulsemixer --change-volume +2; pulsemi
 bindsym --locked XF86AudioRaiseVolume exec /bin/sh -c "pulsemixer --change-volume +2; pulsemixer --get-volume | awk '{ print \$1 }' > /tmp/wobpipe"
 bindsym --locked Mod4+Down exec /bin/sh -c "pulsemixer --change-volume -2; pulsemixer --get-volume | awk '{ print \$1 }' > /tmp/wobpipe"
 bindsym --locked XF86AudioLowerVolume exec /bin/sh -c "pulsemixer --change-volume -2; pulsemixer --get-volume | awk '{ print \$1 }' > /tmp/wobpipe"
-bindsym --locked Mod4+Shift+Up exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume +2
-bindsym --locked Mod4+Shift+Down exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume -2
-bindsym --locked Mod4+Shift+Left exec playerctl --player=spotify previous
-bindsym --locked Mod4+Shift+Right exec playerctl --player=spotify next
-bindsym --locked Mod4+Shift+space exec playerctl --player=spotify play-pause
+# bindsym --locked Mod4+Shift+Up exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume +2
+# bindsym --locked Mod4+Shift+Down exec pulsemixer --list-sinks | grep Spotify | awk '{ print $4 }' | sed "s/\,\$//g" | xargs -I {} pulsemixer --id {} --change-volume -2
+# bindsym --locked Mod4+Shift+Left exec playerctl --player=spotify previous
+# bindsym --locked Mod4+Shift+Right exec playerctl --player=spotify next
+# bindsym --locked Mod4+Shift+space exec playerctl --player=spotify play-pause
 
 bindsym --locked XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'+15,'(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"
 bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl0/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"

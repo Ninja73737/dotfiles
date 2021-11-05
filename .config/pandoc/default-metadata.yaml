@@ -28,7 +28,8 @@ header-includes: |
   \newcommand{\Larr}{\Leftarrow}
   \newcommand{\Rarr}{\Rightarrow}
   \newcommand{\Lrarr}{\Leftrightarrow}
-  \newcommand{\QED}{\blacksquare}
+  \newcommand{\sube}{\subseteq}
+  \newcommand{\supe}{\superseteq}
   \newmdenv[rightline=false,bottomline=false,topline=false,linewidth=2pt,skipabove=\parskip]{customblockquote}
   \renewenvironment{quote}{\begin{customblockquote}\list{}{\rightmargin=0em\leftmargin=0em}%
   \item\relax\ignorespaces}{\unskip\unskip\endlist\end{customblockquote}}

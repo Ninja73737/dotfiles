@@ -101,11 +101,6 @@
         executable: pip3
         state: latest
         extra_args: --user
-    - name: Install write-good
-      npm:
-        name: write-good
-        path: ~/.npm-global
-        state: latest
     - name: Install Dockerfile language server
       npm:
         name: dockerfile-language-server-nodejs
