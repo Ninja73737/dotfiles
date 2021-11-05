@@ -1,18 +1,23 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR __fish_initialized:3100
-SETUVAR _fish_abbr_copy:xclip\x20\x2dselection\x20clipboard\x20\x2din
-SETUVAR _fish_abbr_dcd:docker\x2dcompose\x20\x2d\x2denv\x2dfile\x20docker\x2dcompose\x2eenv\x20down\x20\x2d\x2dremove\x2dorphans
-SETUVAR _fish_abbr_dcu:docker\x2dcompose\x20\x2d\x2denv\x2dfile\x20docker\x2dcompose\x2eenv\x20up\x20\x2dd\x20\x2d\x2dremove\x2dorphans
+SETUVAR _fish_abbr_copy:wl\x2dcopy
+SETUVAR _fish_abbr_dcd:docker\x2dcompose\x20down\x20\x2d\x2dremove\x2dorphans
+SETUVAR _fish_abbr_dcdd:docker\x2dcompose\x20\x2df\x20docker\x2dcompose\x2ddev\x2eyaml\x20down\x20\x2d\x2dremove\x2dorphans
+SETUVAR _fish_abbr_dcdu:docker\x2dcompose\x20\x2df\x20docker\x2dcompose\x2ddev\x2eyaml\x20up\x20\x2d\x2dremove\x2dorphans
+SETUVAR _fish_abbr_dcu:docker\x2dcompose\x20up\x20\x2dd\x20\x2d\x2dremove\x2dorphans
 SETUVAR _fish_abbr_dot:git\x20\x2d\x2dgit\x2ddir\x3d\x24HOME/\x2edotfiles\x20\x2d\x2dwork\x2dtree\x3d\x24HOME
-SETUVAR _fish_abbr_nv:nvim
-SETUVAR _fish_abbr_paste:xclip\x20\x2dselection\x20clipboard\x20\x2dout
+SETUVAR _fish_abbr_e:nvim
+SETUVAR _fish_abbr_g:git
+SETUVAR _fish_abbr_hi:himalaya
+SETUVAR _fish_abbr_ihi:nvim\x20\x2bHimalaya
+SETUVAR _fish_abbr_music:mpv\x20\x2d\x2dshuffle\x20\x2d\x2dloop\x2dplaylist\x20\x2d\x2dno\x2daudio\x2ddisplay\x20\x2d\x2dvolume\x3d40\x20\x2d\x2dinput\x2dipc\x2dserver\x3d/tmp/mpv\x2dsocket\x20\x7e/music
+SETUVAR _fish_abbr_paste:wl\x2dpaste
 SETUVAR _fish_abbr_pcp:rsync\x20\x2dr\x20\x2d\x2dinfo\x3dprogress2
-SETUVAR _fish_abbr_pg:git\x20status\x3b\x20prompt\x20git
+SETUVAR _fish_abbr_pdot:git\x20\x2d\x2dgit\x2ddir\x3d\x24HOME/\x2eprivate\x2ddotfiles\x20\x2d\x2dwork\x2dtree\x3d\x24HOME
 SETUVAR _fish_abbr_rm:trash
+SETUVAR _fish_abbr_se:sudoedit
 SETUVAR _fish_abbr_tm:taskmatter
-SETUVAR _fish_abbr_v:nvim
-SETUVAR _fish_abbr_vf:nvim\x20\x2dc\x20\x27G\x20\x7c\x20only\x27
 SETUVAR _fish_abbr_zth:zathura\x20\x2d\x2dfork
 SETUVAR fish_color_autosuggestion:brblack
 SETUVAR fish_color_cancel:\x2dr
