@@ -1,14 +1,13 @@
 local api = vim.api
 local map = api.nvim_set_keymap
 local cmd = vim.cmd
-
 map("n", "<SPACE>", "<NOP>", { noremap = true })
 map("n", "<BS>", "<NOP>", { noremap = true })
 cmd([[let mapleader = "\<BS>"]])
 vim.g.maplocalleader = " "
 
+-- TODO: https://github.com/windwp/nvim-autopairs
 -- TODO: https://github.com/mfussenegger/nvim-dap
--- TODO: https://github.com/folke/todo-comments.nvim
 -- TODO: Fix telescope live grep colon filetypes
 -- TODO: Get dictionary lookup with K for words when lsp hover isn't available
 -- TODO: Add noa writes to compile and execute commands
@@ -99,8 +98,8 @@ map("i", "<C-z>", "<C-o>u", { noremap = true })
 map("n", "<Tab>", ">>", {})
 map("n", "<S-Tab>", "<<", {})
 
-map("v", "<Tab>", ">", {})
-map("v", "<S-Tab>", "<", {})
+map("v", "<Tab>", ">gv", {})
+map("v", "<S-Tab>", "<gv", {})
 
 map("t", "<C-w>", "<C-\\><C-n><C-w>", {})
 
@@ -142,7 +141,8 @@ cmd([[autocmd FileType markdown,pandoc inoremap <buffer> <S-CR> <CR><CR>---<CR><
 
 vim.g.cursorhold_updatetime = 250
 vim.o.foldmethod = "marker"
-cmd("set shortmess+=c")
+-- vim.o.shortmess:append("c")
+cmd([[set shortmess += "c"]])
 if os.getenv("SSH_CONNECTION") ~= nil then
   vim.o.pumblend = 20
 end
@@ -159,10 +159,12 @@ vim.o.timeout = false
 vim.o.expandtab = true
 vim.o.smarttab = true
 vim.o.autoindent = true
-cmd([[filetype plugin indent on]])
+cmd([[
+syntax on
+filetype plugin indent on
+]])
 vim.o.ignorecase = true
 vim.o.smartcase = true
-cmd([[syntax on]])
 vim.o.showmode = false
 vim.o.fillchars = "fold: ,vert:│,eob: ,msgsep:‾"
 vim.o.compatible = false
@@ -213,6 +215,7 @@ packer.startup(function(use)
   })
   use({
     "leafOfTree/vim-svelte-plugin",
+    ft = "svelte",
     config = function()
       vim.g.vim_svelte_plugin_use_typescript = 1
     end,
@@ -248,6 +251,7 @@ packer.startup(function(use)
   use({ "vim-pandoc/vim-pandoc", ft = "tex" })
   use({
     "vim-pandoc/vim-pandoc-syntax",
+    ft = { "markdown", "pandoc", "rmd" },
     config = function()
       -- vim.cmd([[autocmd FileType markdown set syntax=markdown.pandoc]])
       vim.g["pandoc#syntax#conceal#blacklist"] = {
@@ -271,6 +275,7 @@ packer.startup(function(use)
   use({
     "jalvesaq/Nvim-R",
     branch = "stable",
+    ft = { "rmd", "r" },
     config = function()
       vim.cmd([[autocmd BufNewFile,BufRead *.Rmd set filetype=rmd]])
       vim.g.R_auto_start = 1
@@ -342,6 +347,7 @@ packer.startup(function(use)
   -- TODO: Make my own version of this, use https://vi.stackexchange.com/questions/25996/write-register-0-to-file
   use({
     "ferrine/md-img-paste.vim",
+    ft = { "markdown", "pandoc", "rmd" },
     config = function()
       vim.g.mdip_imgdir = vim.fn.expand("%:t:r")
       vim.g.mdip_imgdir_intext = vim.fn.escape(vim.fn.expand("%:t:r"), " ")
@@ -349,6 +355,7 @@ packer.startup(function(use)
   })
   use({
     "mtoohey31/doctest.nvim",
+    ft = "python",
     run = function()
       cmd("UpdateRemotePlugins")
     end,
@@ -356,6 +363,7 @@ packer.startup(function(use)
   use("mtoohey31/truth-table.nvim")
   use({
     "reedes/vim-pencil",
+    ft = { "markdown", "pandoc", "rmd", "tex" },
     config = function()
       vim.g["pencil#conceallevel"] = 2
       vim.g["pencil#wrapModeDefault"] = "soft"
@@ -429,7 +437,12 @@ packer.startup(function(use)
     end,
     requires = { "nvim-lua/plenary.nvim" },
   })
-  use("mtoohey31/tgc_wal.vim")
+  use({
+    "mtoohey31/tgc_wal.vim",
+    config = function()
+      vim.cmd("colorscheme tgc_wal")
+    end,
+  })
   use({
     "norcalli/nvim-colorizer.lua",
     config = function()
@@ -440,7 +453,10 @@ packer.startup(function(use)
   use({
     "nvim-telescope/telescope.nvim",
     config = function()
-      vim.api.nvim_set_keymap("n", "<Leader>t", "<CMD>Telescope live_grep<CR>", {})
+      vim.api.nvim_set_keymap("n", "tg", "<CMD>Telescope live_grep<CR>", {})
+      vim.api.nvim_set_keymap("n", "tf", "<CMD>Telescope find_files<CR>", {})
+      vim.api.nvim_set_keymap("n", "tt", "<CMD>Telescope filetypes<CR>", {})
+      vim.api.nvim_set_keymap("n", "tb", "<CMD>Telescope git_branches<CR>", {})
     end,
     requires = { "nvim-lua/plenary.nvim" },
   })
@@ -489,8 +505,8 @@ packer.startup(function(use)
         rainbow = {
           enable = true,
           extended_mode = true,
-          colors = require("colors").colors,
-          termcolors = { "0", "1", "2", "3", "4", "5", "6", "7", "0", "1", "2", "3", "4", "5", "6", "7" },
+          colors = require("colors").colorful,
+          termcolors = { "1", "2", "3", "4", "5", "6", "7", "1", "2", "3", "4", "5", "6", "7", "1", "2" },
         },
         context_commentstring = {
           enable = true,
@@ -963,12 +979,13 @@ packer.startup(function(use)
   -- " TODO: Consider the alternatives to this that are also supported by nvim-cmp
   use("SirVer/ultisnips")
   use("quangnguyen30192/cmp-nvim-ultisnips")
-  use("mtoohey31/cmp-fish")
+  use({ "mtoohey31/cmp-fish", ft = "fish" })
 
+  -- TODO
   -- let g:completion_enable_snippet = 'UltiSnips'
-  -- let g:UltiSnipsExpandTrigger="<NUL>"
-  -- let g:UltiSnipsJumpForwardTrigger="<NUL>"
-  -- let g:UltiSnipsJumpBackwardTrigger="<NUL>"
+  vim.g.UltiSnipsExpandTrigger = "<NUL>"
+  vim.g.UltiSnipsJumpForwardTrigger = "<NUL>"
+  vim.g.UltiSnipsJumpBackwardTrigger = "<NUL>"
   -- autocmd FileType markdown let g:completion_trigger_character = ['`', "#"]
   -- inoremap <expr> <Tab> pumvisible() ? "\<Down>" : "\<CMD>call JumpForwardsOrIndent()<CR>"
   -- inoremap <expr> <S-Tab> pumvisible() ? "\<Up>" : "\<CMD>call JumpBackwardsOrIndent()<CR>"
@@ -1051,12 +1068,34 @@ packer.startup(function(use)
       })
     end,
   })
+  -- TODO: set this up
+  use({
+    "pwntester/octo.nvim",
+    config = function()
+      require("octo").setup()
+    end,
+  })
+  use({
+    "vuki656/package-info.nvim",
+    requires = "MunifTanjim/nui.nvim",
+    config = function()
+      require("package-info").setup({ autostart = false })
+    end,
+  })
+  -- TODO: set up cmp for this
+  use({
+    "Saecki/crates.nvim",
+    event = { "BufRead Cargo.toml" },
+    requires = { { "nvim-lua/plenary.nvim" } },
+    config = function()
+      require("crates").setup()
+    end,
+  })
   if packer_bootstrap then
     require("packer").sync()
   end
+  use("editorconfig/editorconfig-vim")
 end)
-
-cmd("colorscheme tgc_wal")
 
 cmd([[autocmd BufWinEnter,WinEnter term://* startinsert]])
 cmd([[autocmd TermOpen * setlocal nonumber norelativenumber]])
