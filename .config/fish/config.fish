@@ -197,7 +197,7 @@ if status --is-interactive
 
     if test -z "$SSH_CONNECTION" -a "$TERM_PROGRAM" = alacritty -a (uname) = Darwin
         $HOME/.scripts/alacritty-color-export/script.sh >/dev/null
-    else if test -z "$SSH_CONNECTION"
+    else if test -z "$SSH_CONNECTION" -a -z "$TMUX"
         cat ~/.cache/wal/sequences
     end
 
