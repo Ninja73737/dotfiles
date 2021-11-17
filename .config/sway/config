@@ -53,6 +53,7 @@ for_window [title=".*Microsoft Stream.*"] inhibit_idle visible, sticky enable
 for_window [title=".*Audio Cine Films.*"] inhibit_idle visible, sticky enable
 for_window [app_id="mpv"] inhibit_idle visible, sticky enable
 for_window [app_id="Alacritty" title="mpv .*"] inhibit_idle open
+for_window [app_id="kitty" title="mpv .*"] inhibit_idle open
 exec_always $HOME/.scripts/inhibit_idle_discord_brave_sway
 
 # window management
@@ -138,16 +139,16 @@ bindsym Mod4+Shift+q exit
 
 # apps
 
-bindsym Mod4+Return exec alacritty
-bindsym Mod4+slash exec alacritty -e fish -C lf
+bindsym Mod4+Return exec kitty
+bindsym Mod4+slash exec kitty -e fish -C lf
 bindsym Mod4+space exec $HOME/.scripts/fuzzel_dynamic
-bindsym Mod4+Shift+space exec test -S /tmp/mpv-socket && echo '{ "command": ["cycle", "pause"] }' | socat - /tmp/mpv-socket || alacritty -e fish -C "music"
+bindsym Mod4+Shift+space exec test -S /tmp/mpv-socket && echo '{ "command": ["cycle", "pause"] }' | socat - /tmp/mpv-socket || kitty -e fish -C "music"
 bindsym Mod4+Shift+Right exec echo '{ "command": ["playlist-next"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+Shift+Left exec echo '{ "command": ["playlist-prev"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+Shift+Down exec echo '{ "command": ["add", "volume", "-2"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+Shift+Up exec echo '{ "command": ["add", "volume", "2"] }' | socat - /tmp/mpv-socket
-bindsym Mod4+semicolon exec alacritty -t floatme -o background_opacity=0.8 -e $HOME/.scripts/quick_menu
-bindsym Mod4+E exec alacritty -t floatme -o background_opacity=0.8 -e $HOME/.scripts/repls
+bindsym Mod4+semicolon exec kitty -T floatme -o background_opacity=0.8 -e $HOME/.scripts/quick_menu
+bindsym Mod4+E exec kitty -T floatme -o background_opacity=0.8 -e $HOME/.scripts/repls
 
 bindsym Mod4+p exec qbpm launch personal
 bindsym Mod4+g exec qbpm launch gaming

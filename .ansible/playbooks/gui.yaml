@@ -6,5 +6,5 @@
     become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
   tasks:
     # TODO: set up yabai and shkd on MacOS
-    # TODO: set up bspwm, sxhkd, sway, and window manager on linux
+    # TODO: set up sway
     # TODO: Set up alacritty, qutebrowser, qbpm, and harpoond on both

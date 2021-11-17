@@ -29,6 +29,7 @@
         global: true
         path: ~/.npm-global
         state: latest
+    # TODO: am I using this?
     - name: Install ansible-lint
       pip:
         name: ansible-lint
@@ -52,11 +53,6 @@
         name: ccls
         state: latest
       when: ansible_facts['os_family'] == 'Darwin'
-    - name: Install Diagnostic language server
-      npm:
-        name: diagnostic-languageserver
-        path: ~/.npm-global
-        state: latest
     - name: Install autopep
       pip:
         name: autopep8
@@ -90,6 +86,12 @@
         global: true
         path: ~/.npm-global
         state: latest
+    - name: Install prettierd
+      npm:
+        name: "@fsouza/prettierd"
+        global: true
+        path: ~/.npm-global
+        state: latest
     - name: Install shellcheck
       package:
         name: shellcheck
@@ -115,12 +117,7 @@
       register: gopls_install_result
       changed_when: false
       failed_when: gopls_install_result.rc != 0
-      # TODO: figure out how to determine whether this has changed
-    # - name: Install JDTLS
-    #   shell: "curl https://raw.githubusercontent.com/eruizc-dev/jdtls-launcher/master/install.sh | bash"
-    #   register: jdtls_install_result
-    #   changed_when: jdtls_install_result.rc == 0
-    #   failed_when: "jdtls_install_result.rc != 0 and 'already exists, delete it manually and try again' not in jdtls_install_result.stderr"
+      # TODO: Get this working on other hosts
     - name: Install Java Language Server
       aur:
         name: java-language-server
@@ -134,7 +131,6 @@
         state: latest
       become: "{{ become_for_packages }}"
       when: ansible_facts['os_family'] == 'Archlinux'
-      # TODO: Get this working on other hosts
     - name: Install rustup (Archlinux)
       package:
         name: rustup
@@ -188,13 +184,13 @@
       register: taplo_install_result
       changed_when: "'is already installed' not in taplo_install_result.stdout"
       failed_when: taplo_install_result.rc != 0
+      # TODO: Get this working on other hosts
     - name: Install TexLab
       package:
         name: texlab
         state: latest
       become: true
       when: ansible_facts['os_family'] == 'Archlinux'
-      # TODO: Get this working on other hosts
     - name: Install Tailwind CSS language server
       npm:
         name: "@tailwindcss/language-server"

@@ -195,6 +195,10 @@ if status --is-interactive
     set -U fish_pager_color_prefix white --bold --underline
     set -U fish_pager_color_progress brwhite '--background=cyan'
 
+    if test "$TERM_PROGRAM" = kitty
+        alias ssh="TERM=xterm-256color command ssh"
+    end
+
     if test -z "$SSH_CONNECTION" -a "$TERM_PROGRAM" = alacritty -a (uname) = Darwin
         $HOME/.scripts/alacritty-color-export/script.sh >/dev/null
     else if test -z "$SSH_CONNECTION" -a -z "$TMUX"

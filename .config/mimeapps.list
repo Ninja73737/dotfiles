@@ -11,6 +11,7 @@ x-scheme-handler/unknown=qbpm.desktop
 x-scheme-handler/msteams=teams.desktop
 x-scheme-handler/mochi=mochi.desktop
 application/xml=Logisim.desktop
+audio/x-m4b=mpv.desktop
 
 [Added Associations]
 image/png=gimp.desktop;

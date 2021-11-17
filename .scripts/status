@@ -1,5 +1,7 @@
 #!/bin/fish
 
+# TODO: add media status display using mpv socket, which will require modification of the mpv.desktop file so it always uses the socket
+
 while true
     set output
 
@@ -28,7 +30,7 @@ while true
 
     set raw_hs_bat (headsetcontrol -b 2> /dev/null)
     if test "$status" -eq 0
-        set hs_bat (echo $raw_hs_bat | grep Battery | awk -F: '{ print $2 }' | tr -d '\\n\\r ')
+        set hs_bat (string match -r "\d+%" "$raw_hs_bat")
         set -a output  $hs_bat" |"
     end
 
