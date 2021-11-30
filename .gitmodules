@@ -10,6 +10,6 @@
 [submodule ".scripts/alacritty-color-export"]
 	path = .scripts/alacritty-color-export
 	url = https://github.com/mtoohey31/alacritty-color-export
-[submodule "repos/clean-imports/vendor/tree-sitter-java"]
-	path = repos/clean-imports/vendor/tree-sitter-java
-	url = https://github.com/tree-sitter/tree-sitter-java
+[submodule ".config/kitty/search"]
+	path = .config/kitty/search
+	url = https://github.com/trygveaa/kitty-kitten-search
