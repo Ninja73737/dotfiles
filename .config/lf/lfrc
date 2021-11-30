@@ -1,11 +1,13 @@
+# vi: commentstring=#%s
 set icons on
 set smartcase on
 set shell fish
 set previewer pistol
+set cleaner ~/.config/lf/cleaner
 set dirfirst!
 set scrolloff 7
 
-cmd open &setsid xdg-open $f
+cmd open &setsid xdg-open "$f"
 map <esc> clear
 map D %echo "\"$fx\"" | string join '" "' | xargs trash
 cmd trash-undo %{{
@@ -15,7 +17,6 @@ cmd trash-undo %{{
 map u trash-undo
 map d
 map dd cut
-map go %echo "\"$fx\"" | string join '" "' | xargs dragon-drag-and-drop -a -x
 map r reload
 map R rename
 cmd touch &{{
@@ -36,11 +37,18 @@ cmd mkdir &{{
     echo yeet
 }}
 map M push :mkdir<space>
+map o push $octo<space>
+map go %echo "\"$fx\"" | string join '" "' | xargs dragon-drag-and-drop -a -x
 map gc cd ~/courses
 map gr cd ~/repos
 map gf cd ~/.config
+map gl cd ~/.local
+map gp cd ~/.local/share/nvim/site/pack/packer
+# map gs &{{
+#     for 
+# }}
 map x !unzip "$f"
-map W &alacritty -e fish -C lf > /dev/null &
+map W &$TERM_PROGRAM -e fish -C lf > /dev/null &
 map c ${{
     set IFS " "
     set n 1
