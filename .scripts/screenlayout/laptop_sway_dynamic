@@ -2,14 +2,14 @@
 
 props="adaptive_sync on"
 
-if [ "$(cat /sys/class/power_supply/BAT0/status)" == "Discharging" ]; then
-  props+=" resolution 2560x1440@60.001Hz"
+if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
+  props="$props resolution 2560x1440@60.001Hz"
 else
-  props+=" resolution 2560x1440@120Hz"
+  props="$props resolution 2560x1440@120Hz"
 fi
 
 if [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="XV340CK P")' | wc -l)" -gt "0" ]; then
-  props+=" scale 1.5 position 3440 1080"
+  props="$props scale 1.75 position 2752 960"
 
   # swaymsg bindsym Mod4+1 focus output '"Acer Technologies XV340CK P THQAA0013P00"', workspace number 1
   # swaymsg bindsym Mod4+2 focus output '"Acer Technologies XV340CK P THQAA0013P00"', workspace number 2
@@ -23,7 +23,7 @@ if [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="XV340CK P")' | wc -
   # swaymsg bindsym Mod4+Shift+4 focus output '"Acer Technologies XV340CK P THQAA0013P00"', move container to workspace number 4, workspace number 4
   # swaymsg bindsym Mod4+Shift+5 focus output '"Acer Technologies XV340CK P THQAA0013P00"', move container to workspace number 5, workspace number 5
 elif [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="LG ULTRAWIDE")' | wc -l)" -gt "0" ]; then
-  props+=" scale 1.5 position 0 1080"
+  props="$props scale 1.5 position 0 1080"
 
   # swaymsg bindsym Mod4+1 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', workspace number 1
   # swaymsg bindsym Mod4+2 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', workspace number 2
@@ -37,7 +37,7 @@ elif [ "$(swaymsg -t get_outputs | jq -cM '.[]|select(.model=="LG ULTRAWIDE")' |
   # swaymsg bindsym Mod4+Shift+4 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', move container to workspace number 4, workspace number 4
   # swaymsg bindsym Mod4+Shift+5 focus output '"Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E"', move container to workspace number 5, workspace number 5
 else
-  props+=" scale 1 position 0 0"
+  props="$props scale 1.5 position 0 0"
 
   # swaymsg bindsym Mod4+1 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 1
   # swaymsg bindsym Mod4+2 focus output '"Unknown TL140BDXP01-0 0x00000000"', workspace number 2
@@ -64,4 +64,4 @@ fi
 # swaymsg bindsym Mod4+Shift+9 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 9, workspace number 9
 # swaymsg bindsym Mod4+Shift+0 focus output '"Unknown TL140BDXP01-0 0x00000000"', move container to workspace number 10, workspace number 10
 
-swaymsg output '"Unknown TL140BDXP01-0 0x00000000"' $props
+swaymsg output '"Unknown TL140BDXP01-0 0x00000000"' "$props"

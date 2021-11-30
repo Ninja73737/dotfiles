@@ -7,7 +7,7 @@ output * bg ~/Pictures/Wallpapers/random/random.jpeg fill
 exec_always $HOME/.scripts/screenlayout/laptop_sway_dynamic
 
 output "Acer Technologies XV340CK P THQAA0013P00" {
-    scale 1
+    scale 1.25
     mode 3440x1440
     position 0 0
 }
