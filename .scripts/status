@@ -28,10 +28,9 @@ while true
         set -a output  $num_updates" |"
     end
 
-    set raw_hs_bat (headsetcontrol -b 2> /dev/null)
+    set hs_bat (headsetcontrol -cb 2> /dev/null)
     if test "$status" -eq 0
-        set hs_bat (string match -r "\d+%" "$raw_hs_bat")
-        set -a output  $hs_bat" |"
+        set -a output  $hs_bat"% |"
     end
 
     if test -d /sys/class/power_supply/BAT0 && set battery_percent (math -s 0 (cat /sys/class/power_supply/BAT0/energy_now) / (cat /sys/class/power_supply/BAT0/energy_full) \* 100)
