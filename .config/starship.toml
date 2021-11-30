@@ -81,16 +81,16 @@ format = "at [$hash]($style) [$tag]($style) "
 
 [git_status]
 format = "(with [$all_status$ahead_behind]($style) )"
-conflicted = "C"
-ahead = "H"
+conflicted = "UU"
+ahead = "A"
 behind = "B"
-diverged = "D"
+diverged = "V"
 untracked = "U"
-stashed = "S"
+stashed = "T"
 modified = "M"
-staged = "A"
-renamed = "R"
-deleted = "X"
+staged = "S"
+renamed = "M"
+deleted = "D"
 
 [shlvl]
 format = "at depth [$shlvl]($style) "
