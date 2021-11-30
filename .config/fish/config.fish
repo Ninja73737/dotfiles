@@ -102,6 +102,7 @@ if status --is-interactive
     abbr ihi "nvim +Himalaya"
     alias ihi "nvim +Himalaya"
 
+    abbr dc docker-compose
     abbr dcu "docker-compose up -d --remove-orphans"
     abbr dcd "docker-compose down --remove-orphans"
     abbr dcdu "docker-compose -f docker-compose-dev.yaml up --remove-orphans"
@@ -110,8 +111,8 @@ if status --is-interactive
     abbr pcp "rsync -r --info=progress2"
     alias pcp "rsync -r --info=progress2"
 
-    abbr dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
-    alias dot "git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME"
+    abbr dot "git --git-dir ~/.dotfiles --work-tree ~"
+    alias dot "git --git-dir ~$HOME/.dotfiles --work-tree ~"
 
     if test (uname) = Darwin
         abbr copy pbcopy
@@ -130,8 +131,8 @@ if status --is-interactive
         alias paste "xclip -selection clipboard -out"
     end
 
-    abbr music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ~/music"
-    alias music "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ~/music"
+    abbr music 'if ! tmux has-session -t music &>/dev/null; tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ." && tmux split-window -h cava && tmux select-pane -t 0; end && tmux attach-session -t music'
+    alias music 'if ! tmux has-session -t music &>/dev/null; tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ." && tmux split-window -h cava && tmux select-pane -t 0; end && tmux attach-session -t music'
 
     fish_vi_key_bindings
 
