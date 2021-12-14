@@ -10,6 +10,7 @@ vim.g.maplocalleader = " "
 -- TODO: https://github.com/mfussenegger/nvim-dap
 -- TODO: fix telescope live grep colon filetypes
 -- TODO: add noa writes to compile and execute commands
+-- TODO: call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true) (for markdown headers)
 
 map("n", "Q", "<CMD>quitall!<CR>", {})
 map("n", "W", "<CMD>write<CR>", {})
@@ -18,15 +19,12 @@ map("n", "Z", "<CMD>wq<CR>", {})
 map("n", "$", "g_", {})
 map("v", "$", "g_", {})
 
--- TODO: Switch these to commands instead of mappings
 map("n", "<Leader>h", "<CMD>noh<CR>", {})
-map("n", "<Leader>Dm", '<CMD>redir @" \\| silent map \\| redir END \\| new \\| put!<CR>', {})
-map("n", "<Leader>DH", '<CMD>redir @" \\| silent hi \\| redir END \\| new \\| put!<CR>', {})
-map(
-    "n",
-    "<Leader>Dh",
-    '<CMD>echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . \'> trans<\' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>',
-    {}
+
+cmd([[command! DebugMap redir @" | silent map | redir END | new | put!]])
+cmd([[command! DebugHi redir @" | silent hi | redir END | new | put!]])
+cmd(
+    [[command! DebugCurrentHi echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"]]
 )
 
 map("n", "<Leader>qo", "<CMD>copen<CR>", {})
@@ -94,15 +92,15 @@ map("t", "<C-w>", "<C-\\><C-n><C-w>", {})
 
 cmd([[autocmd FileType java nmap <buffer> <LocalLeader><CR> <CMD>!java %<CR>]])
 cmd(
-    [[autocmd FileType markdown,pandoc,rmd,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>]]
+    [[autocmd FileType markdown,rmd,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>]]
 )
 cmd(
-    [[autocmd FileType markdown,pandoc nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>]]
+    [[autocmd FileType markdown nmap <buffer> <LocalLeader>p <CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf" &')<CR>]]
 )
 cmd(
-    [[autocmd FileType markdown,pandoc nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>]]
+    [[autocmd FileType markdown, nmap <buffer> <LocalLeader>P <CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>]]
 )
-cmd([[autocmd FileType markdown,pandoc,rmd nmap <buffer> <LocalLeader>i <CMD>call mdip#MarkdownClipboardImage()<CR>]])
+cmd([[autocmd FileType markdown,rmd nmap <buffer> <LocalLeader>i <CMD>call mdip#MarkdownClipboardImage()<CR>]])
 map(
     "n",
     "<LocalLeader>t",
@@ -111,7 +109,7 @@ map(
 )
 cmd([[autocmd FileType text nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" ")<CR>]])
 cmd(
-    [[autocmd FileType markdown,pandoc nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" <BAR> ", "<BAR> ", " <BAR>")<CR>]]
+    [[autocmd FileType markdown nmap <buffer> <LocalLeader>t <CMD>lua require('truth_table')(" <BAR> ", "<BAR> ", " <BAR>")<CR>]]
 )
 cmd([[autocmd FileType python nmap <buffer> <LocalLeader><CR> <CMD>!python3 %<CR>]])
 cmd([[autocmd FileType tex nmap <buffer> <LocalLeader><CR> <CMD>noa w <BAR> TexlabBuild<CR>]])
@@ -126,7 +124,9 @@ cmd([[autocmd FileType rmd nmap <buffer> <LocalLeader>n <Plug>RNextRChunk]])
 cmd([[autocmd FileType rmd nmap <buffer> <LocalLeader>N <Plug>RPreviousRChunk]])
 cmd([[autocmd FileType rmd nmap <buffer> <LocalLeader>l <Plug>RSendLine]])
 
-cmd([[autocmd FileType markdown,pandoc inoremap <S-CR> <CR><CR>---<CR><CR>]])
+cmd([[autocmd FileType markdown inoremap <S-CR> <CR><CR>---<CR><CR>]])
+
+cmd([[autocmd BufNewFile markdown,rmd call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true)]])
 
 vim.g.cursorhold_updatetime = 250
 vim.o.foldmethod = "marker"
@@ -134,9 +134,7 @@ vim.o.foldmethod = "marker"
 -- cmd([[set foldexpr=nvim_treesitter#foldexpr()]])
 -- vim.o.shortmess:append("c")
 cmd([[set shortmess += "c"]])
-if os.getenv("SSH_CONNECTION") ~= nil then
-    vim.o.pumblend = 20
-end
+vim.o.pumblend = 20
 vim.o.guifont = "JetBrainsMono Nerd Font:h14"
 vim.o.pumheight = 15
 vim.o.completeopt = "menuone,noinsert,noselect"
@@ -165,7 +163,7 @@ cmd(
 )
 
 cmd([[autocmd FileType java set shiftwidth=4]])
-cmd([[autocmd FileType markdown,pandoc,rmd set softtabstop=1]])
+cmd([[autocmd FileType markdown,rmd set softtabstop=1]])
 cmd([[autocmd FileType java set softtabstop=4]])
 cmd([[autocmd FileType python set colorcolumn=80]])
 cmd([[autocmd FileType lua set colorcolumn=120]])
@@ -207,11 +205,11 @@ packer.startup(function(use)
         run = function()
             vim.fn["mkdp#util#install"](0)
         end,
-        ft = { "markdown", "pandoc", "rmd" },
+        ft = { "markdown", "rmd" },
         config = function()
             vim.g.mkdp_highlight_css = os.getenv("HOME") .. "/.cache/wal/colors.css"
             vim.g.mkdp_page_title = "${name}.md"
-            vim.g.mkdp_filetypes = { "markdown", "pandoc", "rmd" }
+            vim.g.mkdp_filetypes = { "markdown", "rmd" }
             vim.g.mkdp_command_for_global = 1
             vim.g.mkdp_preview_options = {
                 katex = {
@@ -223,43 +221,30 @@ packer.startup(function(use)
             }
             vim.g.mkdp_preview_options.katex.macros["\\st"] = "\\text{ s.t. }"
             vim.g.mkdp_markdown_css = vim.fn.fnamemodify(os.getenv("MYVIMRC"), ":h") .. "markdown-preview.css"
-            vim.cmd([[autocmd FileType markdown,pandoc,rmd nmap <buffer> <LocalLeader>h <Plug>MarkdownPreviewToggle]])
+            vim.cmd([[autocmd FileType markdown,rmd nmap <buffer> <LocalLeader>h <Plug>MarkdownPreviewToggle]])
         end,
     })
     use("tpope/vim-sleuth")
     use("tpope/vim-commentary")
     use("tpope/vim-surround")
     use("tpope/vim-fugitive")
-    use({ "vim-pandoc/vim-pandoc", ft = "tex" })
-    use({
-        "vim-pandoc/vim-pandoc-syntax",
-        ft = { "markdown", "pandoc", "rmd" },
-        config = function()
-            -- vim.cmd([[autocmd FileType markdown set syntax=markdown.pandoc]])
-            vim.g["pandoc#syntax#conceal#blacklist"] = {
-                "atx",
-                "codeblock_start",
-                "codeblock_delim",
-                "quotes",
-            }
-            vim.g["pandoc#modules#disabled"] = { "folding", "spell" }
-            vim.g["pandoc#syntax#codeblocks#embeds#langs"] = {
-                "bash=sh",
-                "java",
-                "ps1",
-                "python",
-                "r",
-                "sh",
-            }
-        end,
-    })
     use("antoinemadec/FixCursorHold.nvim")
     use({
         "jalvesaq/Nvim-R",
         branch = "stable",
-        ft = { "rmd", "r" },
+        cond = function()
+            local buf_ext = vim.fn.expand("%:e")
+            for _, ext in ipairs({ "Rmd", "rmd", "R", "r" }) do
+                if buf_ext == ext then
+                    return true
+                end
+            end
+            return false
+        end,
+        run = function()
+            os.execute()
+        end,
         config = function()
-            vim.cmd([[autocmd BufNewFile,BufRead *.Rmd set filetype=rmd]])
             vim.g.R_auto_start = 1
             vim.g.R_esc_term = 0
             vim.g.R_close_term = 1
@@ -316,7 +301,7 @@ packer.startup(function(use)
                                 return tostring(wc.visual_words ~= nil and wc.visual_words or wc.words) .. "W"
                             end,
                             cond = function()
-                                return vim.o.ft == "markdown" or vim.o.ft == "pandoc"
+                                return vim.o.ft == "markdown"
                             end,
                         },
                         "progress",
@@ -329,7 +314,7 @@ packer.startup(function(use)
     -- TODO: Make my own version of this, use https://vi.stackexchange.com/questions/25996/write-register-0-to-file
     use({
         "ferrine/md-img-paste.vim",
-        ft = { "markdown", "pandoc", "rmd" },
+        ft = { "markdown", "rmd" },
         config = function()
             vim.g.mdip_imgdir = vim.fn.expand("%:t:r")
             vim.g.mdip_imgdir_intext = vim.fn.escape(vim.fn.expand("%:t:r"), " ")
@@ -345,12 +330,12 @@ packer.startup(function(use)
     use("mtoohey31/truth-table.nvim")
     use({
         "reedes/vim-pencil",
-        ft = { "markdown", "pandoc", "rmd", "tex" },
+        ft = { "markdown", "rmd", "tex" },
         config = function()
             vim.g["pencil#conceallevel"] = 2
             vim.g["pencil#wrapModeDefault"] = "soft"
             vim.g["pencil#cursorwrap"] = 0
-            vim.cmd([[autocmd FileType markdown,pandoc,rmd,tex call pencil#init()]])
+            vim.cmd([[autocmd FileType markdown,rmd,tex call pencil#init()]])
         end,
     })
     use({
@@ -360,7 +345,7 @@ packer.startup(function(use)
             vim.g.bullets_outline_levels = { "ABC", "num", "std-" }
             vim.g.bullets_checkbox_markers = " ox"
             vim.g.bullets_renumber_on_change = 0
-            vim.g.bullets_enabled_file_types = { "markdown", "pandoc", "rmd", "tex" }
+            vim.g.bullets_enabled_file_types = { "markdown", "rmd", "tex" }
 
             vim.cmd(
                 "autocmd FileType "
@@ -431,13 +416,12 @@ packer.startup(function(use)
             require("colorizer").setup()
         end,
     })
-    use("nvim-lua/popup.nvim")
     use({
         "nvim-telescope/telescope.nvim",
         config = function()
             vim.api.nvim_set_keymap("n", "tg", "<CMD>Telescope live_grep<CR>", {})
             vim.api.nvim_set_keymap("n", "tf", "<CMD>Telescope find_files<CR>", {})
-            vim.api.nvim_set_keymap("n", "tt", "<CMD>Telescope filetypes<CR>", {})
+            vim.api.nvim_set_keymap("n", "ty", "<CMD>Telescope filetypes<CR>", {})
             vim.api.nvim_set_keymap("n", "tb", "<CMD>Telescope git_branches<CR>", {})
         end,
         requires = { "nvim-lua/plenary.nvim" },
@@ -466,9 +450,7 @@ packer.startup(function(use)
             pairs.setup({
                 disable_filetype = { "TelescopePrompt" },
             })
-            pairs.add_rule(Rule("<", ">", "rust"):with_pair(cond.not_before_regex_check(" ")))
-            -- TODO: get this working at the start of the file
-            -- pairs.add_rule(Rule("---", "---", "pandoc"):with_pair(cond.not_before_regex_check("[^a]+")))
+            pairs.add_rule(Rule("<", ">", "rust"):with_pair(cond.not_before_regex_check("[%d ]")))
         end,
     })
     use({
@@ -482,7 +464,7 @@ packer.startup(function(use)
                 ensure_installed = "all",
                 highlight = {
                     enable = true,
-                    additional_vim_regex_highlighting = true,
+                    additional_vim_regex_highlighting = false,
                 },
                 indent = { enable = true },
                 fold = { enable = true },
@@ -507,12 +489,6 @@ packer.startup(function(use)
                     enable_autocmd = false,
                     config = {
                         markdown = {
-                            __default = "<!-- %s -->",
-                            -- TODO: make this dynamic based on language of code block
-                            code_fence_content = "# %s",
-                            setext_heading = "# %s",
-                        },
-                        pandoc = {
                             __default = "<!-- %s -->",
                             -- TODO: make this dynamic based on language of code block
                             code_fence_content = "# %s",
@@ -577,7 +553,7 @@ packer.startup(function(use)
         "JoosepAlviste/nvim-ts-context-commentstring",
         setup = function()
             -- TODO: remove this after fixing contextcomment for rmd
-            vim.cmd([[autocmd FileType markdown,pandoc,rmd setlocal commentstring=<!--%s-->]])
+            vim.cmd([[autocmd FileType markdown,rmd setlocal commentstring=<!--%s-->]])
         end,
         after = "nvim-treesitter",
     })
@@ -586,6 +562,7 @@ packer.startup(function(use)
         as = "lspconfig",
         config = function()
             local nvim_lsp = require("lspconfig")
+            local configs = require("lspconfig.configs")
             -- local nvim_completion = require('completion')
             -- nvim_completion.addCompletionSource('fish', require'completion-fish'.complete_item)
             -- require'completion_vcard'.setup_completion('~/.contacts/32')
@@ -629,27 +606,66 @@ packer.startup(function(use)
                 "bashls",
                 "ccls",
                 "cssls",
+                "clojure_lsp",
+                "dartls",
                 "dockerls",
+                "fsautocomplete",
                 "gopls",
+                "hls",
                 "html",
-                "jsonls",
+                "ltex",
                 "pyright",
                 "r_language_server",
-                "rls",
+                "solargraph",
                 "svelte",
                 "tailwindcss",
                 "taplo",
                 "vimls",
+                "zls",
             }
             for _, lsp in ipairs(servers) do
                 nvim_lsp[lsp].setup({
                     on_attach = on_attach,
+                    -- root_dir = function(startpath)
+                    --     -- configs[lsp].get_root_dir(startpath)
+                    --     return vim.fn.getcwd()
+                    -- end,
                     flags = {
                         debounce_text_changes = 150,
                     },
                     capabilities = capabilities,
                 })
             end
+
+            nvim_lsp.emmet_ls.setup({
+                filetypes = {
+                    "html",
+                    "css",
+                    "svelte",
+                    "typescriptreact",
+                    "javascriptreact",
+                    "vue",
+                    "scss",
+                    "less",
+                },
+                on_attach = on_attach,
+                flags = {
+                    debounce_text_changes = 150,
+                },
+                capabilities = capabilities,
+            })
+
+            -- nvim_lsp.grammarly.setup({
+            --     cmd = { "node", "/home/mtoohey/repos/grammarly/extension/dist/server/index.js", "--stdio" },
+            --     root_dir = function()
+            --         return "."
+            --     end,
+            --     on_attach = on_attach,
+            --     flags = {
+            --         debounce_text_changes = 150,
+            --     },
+            --     capabilities = capabilities,
+            -- })
 
             nvim_lsp.java_language_server.setup({
                 cmd = { "java-language-server" },
@@ -670,6 +686,18 @@ packer.startup(function(use)
                         },
                     },
                 },
+                flags = {
+                    debounce_text_changes = 150,
+                },
+                capabilities = capabilities,
+            })
+
+            nvim_lsp.jsonls.setup({
+                on_attach = function(client, bufnr)
+                    on_attach(client, bufnr)
+                    client.resolved_capabilities.document_formatting = false
+                    client.resolved_capabilities.document_range_formatting = false
+                end,
                 flags = {
                     debounce_text_changes = 150,
                 },
@@ -734,7 +762,7 @@ packer.startup(function(use)
 
             local yamlls_settings = { yaml = { schemas = {} } }
             yamlls_settings.yaml.schemas["/home/mtoohey/repos/yams/schema.yaml"] = "recipes/**/*.yaml"
-            yamlls_settings.yaml.schemas["https://json.schemastore.org/github-action.json"] =
+            yamlls_settings.yaml.schemas["https://json.schemastore.org/github-workflow.json"] =
                 "**/.github/workflows/*.yaml"
             yamlls_settings.yaml.schemas["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] =
                 "/docker-compose*.yaml"
@@ -760,6 +788,18 @@ packer.startup(function(use)
                 capabilities = capabilities,
             })
 
+            require("rust-tools").setup({
+                tools = {
+                    hover_actions = { border = "none" },
+                    runnables = { use_telescope = true },
+                    debuggables = { use_telescope = true },
+                },
+                server = {
+                    on_attach = on_attach,
+                    flags = { debounce_text_changes = 150, capabilities = capabilities },
+                },
+            })
+
             local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
 
             for type, icon in pairs(signs) do
@@ -767,18 +807,14 @@ packer.startup(function(use)
                 vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
             end
 
-            vim.lsp.handlers["textDocument/publishDiagnostics"] =
-                vim.lsp.with(
-                    vim.lsp.diagnostic.on_publish_diagnostics,
-                    {
-                        virtual_text = true,
-                        signs = true,
-                        underline = true,
-                        update_in_insert = true,
-                    }
-                )
+            vim.diagnostic.config({
+                virtual_text = true,
+                signs = true,
+                underline = true,
+                update_in_insert = true,
+            })
         end,
-        after = "cmp-nvim-lsp",
+        after = { "cmp-nvim-lsp", "rust-tools.nvim" },
     })
     use("hrsh7th/cmp-nvim-lsp")
     use({
@@ -816,17 +852,15 @@ packer.startup(function(use)
                 }),
             })
         end,
+        after = { "ultisnips" },
     })
-    use("hrsh7th/cmp-buffer")
+    use({ "hrsh7th/cmp-buffer", after = "nvim-cmp" })
     -- " TODO: make this work without a prefixed `./`
     use("hrsh7th/cmp-path")
     use({ "f3fora/cmp-nuspell", rocks = "lua-nuspell" })
     -- " TODO: make this work for tex math
     use("hrsh7th/cmp-calc")
     use("hrsh7th/cmp-emoji")
-    -- " TODO: Should I keep this or replace it with a snippet thing that I can tab
-    -- " through?
-    -- " use 'fiorematteo/cmp-katex'
     -- " TODO: Consider the alternatives to this that are also supported by nvim-cmp
     use("SirVer/ultisnips")
     use("quangnguyen30192/cmp-nvim-ultisnips")
@@ -859,23 +893,23 @@ packer.startup(function(use)
     -- " Plug 'cbarrete/completion-vcard'
     use({
         "jose-elias-alvarez/null-ls.nvim",
-        -- requires = "nvim-lua/plenary.nvim", -- needed for the dictionary diagnostic source
+        rocks = "lua-nuspell",
+        requires = "mtoohey31/null-ls-typo-fix",
         config = function()
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
             local diagnostics = builtins.diagnostics
             local formatting = builtins.formatting
-            local hover = builtins.hover
             null_ls.config({
                 sources = {
-                    -- TODO: get a fix spelling code action working, such as the one I wrote for nuspell
+                    require("typo_fix").setup("en_GB"),
                     diagnostics.cspell.with({
-                        filetypes = { "markdown", "pandoc", "rmd" },
+                        filetypes = { "markdown", "rmd" },
                         extra_args = { "--config", os.getenv("HOME") .. "/.config/nvim/cspell.yaml" },
                     }),
                     diagnostics.hadolint,
                     diagnostics.markdownlint.with({
-                        filetypes = { "pandoc" },
+                        filetypes = { "markdown" },
                         extra_args = {
                             "-c",
                             os.getenv("HOME") .. "/.config/nvim/markdownlint.yaml",
@@ -887,7 +921,7 @@ packer.startup(function(use)
                     formatting.autopep8,
                     formatting.fish_indent,
                     formatting.google_java_format.with({ extra_args = { "--aosp" } }),
-                    formatting.markdownlint.with({ filetypes = { "pandoc" } }),
+                    formatting.markdownlint.with({ filetypes = { "markdown" } }),
                     formatting.prettierd.with({
                         filetypes = {
                             "javascript",
@@ -903,7 +937,7 @@ packer.startup(function(use)
                             "yaml",
                             "markdown",
                             "graphql",
-                            "svelte",
+                            -- "svelte",
                         },
                     }),
                     formatting.stylua.with({
@@ -916,9 +950,6 @@ packer.startup(function(use)
                             }
                         end,
                     }),
-
-                    -- TODO: get dictionary lookup with K for words when lsp hover isn't available
-                    -- hover.dictionary
                 },
             })
             local capabilities = require("cmp_nvim_lsp").update_capabilities(
@@ -947,7 +978,7 @@ packer.startup(function(use)
                 vim.opt.signcolumn = "yes"
 
                 vim.cmd(
-                    [[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
+                    [[autocmd CursorHold,CursorHoldI,DiagnosticChanged * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
                 )
                 -- TODO: check if we're in a repository owned by someone else or a fork of a
                 -- repository owned by someone else, and if we are, don't register this
@@ -977,7 +1008,8 @@ packer.startup(function(use)
         requires = "kyazdani42/nvim-web-devicons",
         config = function()
             require("trouble").setup({
-                vim.api.nvim_set_keymap("n", "T", "<CMD>TroubleToggle<CR>", {}),
+                vim.api.nvim_set_keymap("n", "tt", "<CMD>TroubleToggle<CR>", {}),
+                vim.api.nvim_set_keymap("n", "td", "<CMD>TodoTrouble<CR>", {}),
             })
         end,
     })
@@ -992,7 +1024,6 @@ packer.startup(function(use)
         "vuki656/package-info.nvim",
         requires = "MunifTanjim/nui.nvim",
         config = function()
-            -- require("package-info").setup({ autostart = false })
             require("package-info").setup()
         end,
     })
@@ -1000,18 +1031,42 @@ packer.startup(function(use)
     use({
         "Saecki/crates.nvim",
         event = { "BufRead Cargo.toml" },
-        requires = { { "nvim-lua/plenary.nvim" } },
+        requires = "nvim-lua/plenary.nvim",
         config = function()
             require("crates").setup()
         end,
     })
-    if PackerBootstrap then
-        require("packer").sync()
-    end
     use("editorconfig/editorconfig-vim")
     -- TODO: configure this
     use("ThePrimeagen/git-worktree.nvim")
+    -- TODO: set up dap integration for this when I add it
+    use({
+        "simrat39/rust-tools.nvim",
+        requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
+    })
+    use({
+        "lukas-reineke/indent-blankline.nvim",
+        config = function()
+            -- TODO: set up pywal based rainbow guides
+            require("indent_blankline").setup({ filetype_exclude = { "octo" } })
+        end,
+    })
+    -- use({
+    --     "edluffy/hologram.nvim",
+    --     config = function()
+    --         require("hologram").setup()
+    --     end,
+    -- })
+
+    if PackerBootstrap then
+        require("packer").sync()
+    end
 end)
 
 cmd([[autocmd BufWinEnter,WinEnter term://* startinsert]])
 cmd([[autocmd TermOpen * setlocal nonumber norelativenumber]])
+cmd(
+    [[autocmd BufRead * if !empty($LF_LEVEL) | call system('lf -remote "send $id cd ' .. expand('%:p:h') .. '" && lf -remote "send $id select ' .. expand('%') .. '"') | endif]]
+)
+
+cmd([[autocmd BufNewFile,BufRead *.S set ft=asm]])
