@@ -91,6 +91,7 @@ map("v", "<S-Tab>", "<gv", {})
 map("t", "<C-w>", "<C-\\><C-n><C-w>", {})
 
 cmd([[autocmd FileType java nmap <buffer> <LocalLeader><CR> <CMD>!java %<CR>]])
+cmd([[autocmd BufNewFile *.md,*.rmd call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true)]])
 cmd(
     [[autocmd FileType markdown,rmd,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>]]
 )
@@ -132,7 +133,6 @@ vim.g.cursorhold_updatetime = 250
 vim.o.foldmethod = "marker"
 -- vim.o.foldmethod = "expr"
 -- cmd([[set foldexpr=nvim_treesitter#foldexpr()]])
--- vim.o.shortmess:append("c")
 cmd([[set shortmess += "c"]])
 vim.o.pumblend = 20
 vim.o.guifont = "JetBrainsMono Nerd Font:h14"
@@ -180,6 +180,42 @@ if fn.empty(fn.glob(install_path)) > 0 then
         install_path,
     })
 end
+
+local on_attach = function(_, bufnr)
+    local function buf_map(...)
+        vim.api.nvim_buf_set_keymap(bufnr, ...)
+    end
+
+    local opts = { noremap = false, silent = true }
+
+    buf_map("n", "gd", "<CMD>split | Telescope lsp_definitions<CR>", opts)
+    buf_map("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", opts)
+    buf_map("n", "gi", "<CMD>Telescope lsp_implementations<CR>", opts)
+    buf_map("n", "gr", "<CMD>Telescope lsp_references<CR>", opts)
+    buf_map("n", "K", "<CMD>lua vim.lsp.buf.hover()<CR>", opts)
+    buf_map("n", "<Leader>r", "<CMD>lua vim.lsp.buf.rename()<CR>", opts)
+    buf_map("n", "<Leader>f", "<CMD>lua vim.lsp.buf.formatting()<CR>", opts)
+    buf_map("n", "<Leader>F", "<CMD>Telescope lsp_code_actions<CR>", opts)
+    buf_map("v", "<Leader>F", "<CMD>Telescope lsp_range_code_actions<CR>", opts)
+    buf_map("n", "<Leader>N", "<CMD>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
+    buf_map("n", "<Leader>n", "<CMD>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+
+    vim.opt.signcolumn = "yes"
+
+    vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]])
+    -- TODO: check if we're in a repository owned by someone else or a fork of a
+    -- repository owned by someone else, and if we are, don't register this
+    -- autocommand.
+    vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)]])
+end
+
+local on_attach_no_fomatting = function(client, bufnr)
+    on_attach(client, bufnr)
+    client.resolved_capabilities.document_formatting = false
+    client.resolved_capabilities.document_range_formatting = false
+end
+
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local packer = require("packer")
 packer.startup(function(use)
@@ -311,7 +347,7 @@ packer.startup(function(use)
         end,
         after = "nvim-gps",
     })
-    -- TODO: Make my own version of this, use https://vi.stackexchange.com/questions/25996/write-register-0-to-file
+    -- TODO: make my own version of this, use https://vi.stackexchange.com/questions/25996/write-register-0-to-file
     use({
         "ferrine/md-img-paste.vim",
         ft = { "markdown", "rmd" },
@@ -419,10 +455,12 @@ packer.startup(function(use)
     use({
         "nvim-telescope/telescope.nvim",
         config = function()
-            vim.api.nvim_set_keymap("n", "tg", "<CMD>Telescope live_grep<CR>", {})
-            vim.api.nvim_set_keymap("n", "tf", "<CMD>Telescope find_files<CR>", {})
-            vim.api.nvim_set_keymap("n", "ty", "<CMD>Telescope filetypes<CR>", {})
-            vim.api.nvim_set_keymap("n", "tb", "<CMD>Telescope git_branches<CR>", {})
+            ---@diagnostic disable-next-line: redefined-local
+            local map = vim.api.nvim_set_keymap
+            map("n", "tg", "<CMD>Telescope live_grep<CR>", {})
+            map("n", "tf", "<CMD>Telescope find_files<CR>", {})
+            map("n", "ty", "<CMD>Telescope filetypes<CR>", {})
+            map("n", "tb", "<CMD>Telescope git_branches<CR>", {})
         end,
         requires = { "nvim-lua/plenary.nvim" },
     })
@@ -484,6 +522,7 @@ packer.startup(function(use)
                     colors = require("colors").colorful,
                     termcolors = { "1", "2", "3", "4", "5", "6", "7", "1", "2", "3", "4", "5", "6", "7", "1", "2" },
                 },
+                -- TODO: add contexts for different markdown comments, and maybe contribute them if someone else hasn't already?
                 context_commentstring = {
                     enable = true,
                     enable_autocmd = false,
@@ -508,19 +547,18 @@ packer.startup(function(use)
                 pairs = {
                     enable = true,
                     disable = {},
-                    highlight_pair_events = {}, -- e.g. {"CursorMoved"}, -- when to highlight the pairs, use {} to deactivate highlighting
-                    highlight_self = false, -- whether to highlight also the part of the pair under cursor (or only the partner)
-                    goto_right_end = false, -- whether to go to the end of the right partner or the beginning
-                    fallback_cmd_normal = "call matchit#Match_wrapper('',1,'n')", -- What command to issue when we can't find a pair (e.g. "normal! %")
+                    highlight_pair_events = {},
+                    highlight_self = false,
+                    goto_right_end = false,
+                    fallback_cmd_normal = "call matchit#Match_wrapper('',1,'n')",
                     keymaps = {
                         goto_partner = "<leader>%",
                         delete_balanced = "X",
                     },
                     delete_balanced = {
-                        only_on_first_char = false, -- whether to trigger balanced delete when on first character of a pair
-                        fallback_cmd_normal = nil, -- fallback command when no pair found, can be nil
-                        longest_partner = false, -- whether to delete the longest or the shortest pair when multiple found.
-                        -- E.g. whether to delete the angle bracket or whole tag in  <pair> </pair>
+                        only_on_first_char = false,
+                        fallback_cmd_normal = nil,
+                        longest_partner = false,
                     },
                 },
             })
@@ -562,44 +600,6 @@ packer.startup(function(use)
         as = "lspconfig",
         config = function()
             local nvim_lsp = require("lspconfig")
-            local configs = require("lspconfig.configs")
-            -- local nvim_completion = require('completion')
-            -- nvim_completion.addCompletionSource('fish', require'completion-fish'.complete_item)
-            -- require'completion_vcard'.setup_completion('~/.contacts/32')
-
-            local on_attach = function(_, bufnr)
-                local function buf_map(...)
-                    vim.api.nvim_buf_set_keymap(bufnr, ...)
-                end
-
-                local opts = { noremap = false, silent = true }
-
-                buf_map("n", "gd", "<CMD>split | Telescope lsp_definitions<CR>", opts)
-                buf_map("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", opts)
-                buf_map("n", "gi", "<CMD>Telescope lsp_implementations<CR>", opts)
-                buf_map("n", "gr", "<CMD>Telescope lsp_references<CR>", opts)
-                buf_map("n", "K", "<CMD>lua vim.lsp.buf.hover()<CR>", opts)
-                buf_map("n", "<Leader>r", "<CMD>lua vim.lsp.buf.rename()<CR>", opts)
-                buf_map("n", "<Leader>f", "<CMD>lua vim.lsp.buf.formatting()<CR>", opts)
-                buf_map("n", "<Leader>F", "<CMD>Telescope lsp_code_actions<CR>", opts)
-                buf_map("v", "<Leader>F", "<CMD>Telescope lsp_range_code_actions<CR>", opts)
-                buf_map("n", "<Leader>N", "<CMD>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-                buf_map("n", "<Leader>n", "<CMD>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
-
-                vim.opt.signcolumn = "yes"
-
-                vim.cmd(
-                    [[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
-                )
-                -- TODO: check if we're in a repository owned by someone else or a fork of a
-                -- repository owned by someone else, and if we are, don't register this
-                -- autocommand.
-                vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)]])
-            end
-
-            local capabilities = require("cmp_nvim_lsp").update_capabilities(
-                vim.lsp.protocol.make_client_capabilities()
-            )
 
             local servers = {
                 "ansiblels",
@@ -613,7 +613,7 @@ packer.startup(function(use)
                 "gopls",
                 "hls",
                 "html",
-                "ltex",
+                -- "ltex",
                 "pyright",
                 "r_language_server",
                 "solargraph",
@@ -626,10 +626,21 @@ packer.startup(function(use)
             for _, lsp in ipairs(servers) do
                 nvim_lsp[lsp].setup({
                     on_attach = on_attach,
-                    -- root_dir = function(startpath)
-                    --     -- configs[lsp].get_root_dir(startpath)
-                    --     return vim.fn.getcwd()
-                    -- end,
+                    flags = {
+                        debounce_text_changes = 150,
+                    },
+                    capabilities = capabilities,
+                })
+            end
+
+            local servers_no_fomatting = {
+                "jsonls",
+                "tsserver",
+            }
+
+            for _, lsp in ipairs(servers_no_fomatting) do
+                nvim_lsp[lsp].setup({
+                    on_attach = on_attach_no_fomatting,
                     flags = {
                         debounce_text_changes = 150,
                     },
@@ -669,11 +680,7 @@ packer.startup(function(use)
 
             nvim_lsp.java_language_server.setup({
                 cmd = { "java-language-server" },
-                on_attach = function(client, bufnr)
-                    on_attach(client, bufnr)
-                    client.resolved_capabilities.document_formatting = false
-                    client.resolved_capabilities.document_range_formatting = false
-                end,
+                on_attach = on_attach_no_fomatting,
                 settings = {
                     java = {
                         externalDependencies = {
@@ -692,18 +699,6 @@ packer.startup(function(use)
                 capabilities = capabilities,
             })
 
-            nvim_lsp.jsonls.setup({
-                on_attach = function(client, bufnr)
-                    on_attach(client, bufnr)
-                    client.resolved_capabilities.document_formatting = false
-                    client.resolved_capabilities.document_range_formatting = false
-                end,
-                flags = {
-                    debounce_text_changes = 150,
-                },
-                capabilities = capabilities,
-            })
-
             nvim_lsp.omnisharp.setup({
                 cmd = { "/usr/bin/omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
                 on_attach = on_attach,
@@ -713,14 +708,12 @@ packer.startup(function(use)
                 capabilities = capabilities,
             })
 
-            local sumneko_binary = "/usr/bin/lua-language-server"
-
             local runtime_path = vim.split(package.path, ";")
             table.insert(runtime_path, "lua/?.lua")
             table.insert(runtime_path, "lua/?/init.lua")
 
             nvim_lsp.sumneko_lua.setup({
-                cmd = { sumneko_binary, "-E", "/usr/share/lua-language-server/main.lua" },
+                cmd = { "/usr/bin/lua-language-server", "-E", "/usr/share/lua-language-server/main.lua" },
                 settings = {
                     Lua = {
                         runtime = {
@@ -776,18 +769,6 @@ packer.startup(function(use)
                 capabilities = capabilities,
             })
 
-            nvim_lsp.tsserver.setup({
-                on_attach = function(client, bufnr)
-                    on_attach(client, bufnr)
-                    client.resolved_capabilities.document_formatting = false
-                    client.resolved_capabilities.document_range_formatting = false
-                end,
-                flags = {
-                    debounce_text_changes = 150,
-                },
-                capabilities = capabilities,
-            })
-
             require("rust-tools").setup({
                 tools = {
                     hover_actions = { border = "none" },
@@ -821,14 +802,10 @@ packer.startup(function(use)
         "hrsh7th/nvim-cmp",
         config = function()
             local cmp = require("cmp")
-            ---@diagnostic disable-next-line: redundant-parameter
             cmp.setup({
                 snippet = {
                     expand = function(args)
-                        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-                        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-                        vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-                        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+                        vim.fn["UltiSnips#Anon"](args.body)
                     end,
                 },
                 mapping = {
@@ -866,7 +843,7 @@ packer.startup(function(use)
     use("quangnguyen30192/cmp-nvim-ultisnips")
     use({ "mtoohey31/cmp-fish", ft = "fish" })
 
-    -- TODO
+    -- TODO: get tab working beautifully, including in markdown
     -- let g:completion_enable_snippet = 'UltiSnips'
     vim.g.UltiSnipsExpandTrigger = "<NUL>"
     vim.g.UltiSnipsJumpForwardTrigger = "<NUL>"
@@ -900,7 +877,7 @@ packer.startup(function(use)
             local builtins = null_ls.builtins
             local diagnostics = builtins.diagnostics
             local formatting = builtins.formatting
-            null_ls.config({
+            null_ls.setup({
                 sources = {
                     require("typo_fix").setup("en_GB"),
                     diagnostics.cspell.with({
@@ -951,49 +928,11 @@ packer.startup(function(use)
                         end,
                     }),
                 },
-            })
-            local capabilities = require("cmp_nvim_lsp").update_capabilities(
-                vim.lsp.protocol.make_client_capabilities()
-            )
-            -- TODO: figure out how to fix this duplication
-            local on_attach = function(_, bufnr)
-                local function buf_map(...)
-                    vim.api.nvim_buf_set_keymap(bufnr, ...)
-                end
-
-                local opts = { noremap = false, silent = true }
-
-                buf_map("n", "gd", "<CMD>split | Telescope lsp_definitions<CR>", opts)
-                buf_map("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", opts)
-                buf_map("n", "gi", "<CMD>Telescope lsp_implementations<CR>", opts)
-                buf_map("n", "gr", "<CMD>Telescope lsp_references<CR>", opts)
-                buf_map("n", "K", "<CMD>lua vim.lsp.buf.hover()<CR>", opts)
-                buf_map("n", "<Leader>r", "<CMD>lua vim.lsp.buf.rename()<CR>", opts)
-                buf_map("n", "<Leader>f", "<CMD>lua vim.lsp.buf.formatting()<CR>", opts)
-                buf_map("n", "<Leader>F", "<CMD>Telescope lsp_code_actions<CR>", opts)
-                buf_map("v", "<Leader>F", "<CMD>Telescope lsp_range_code_actions<CR>", opts)
-                buf_map("n", "<Leader>N", "<CMD>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-                buf_map("n", "<Leader>n", "<CMD>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
-
-                vim.opt.signcolumn = "yes"
-
-                vim.cmd(
-                    [[autocmd CursorHold,CursorHoldI,DiagnosticChanged * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
-                )
-                -- TODO: check if we're in a repository owned by someone else or a fork of a
-                -- repository owned by someone else, and if we are, don't register this
-                -- autocommand.
-                vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)]])
-            end
-            require("lspconfig")["null-ls"].setup({
                 on_attach = on_attach,
-                flags = {
-                    debounce_text_changes = 150,
-                },
                 capabilities = capabilities,
             })
         end,
-        after = { "lspconfig", "cmp-nvim-lsp" },
+        after = { "cmp-nvim-lsp" },
     })
     -- TODO: set this up to use the root of the current git directory
     use({
@@ -1013,7 +952,6 @@ packer.startup(function(use)
             })
         end,
     })
-    -- TODO: set this up
     use({
         "pwntester/octo.nvim",
         config = function()
@@ -1068,5 +1006,4 @@ cmd([[autocmd TermOpen * setlocal nonumber norelativenumber]])
 cmd(
     [[autocmd BufRead * if !empty($LF_LEVEL) | call system('lf -remote "send $id cd ' .. expand('%:p:h') .. '" && lf -remote "send $id select ' .. expand('%') .. '"') | endif]]
 )
-
 cmd([[autocmd BufNewFile,BufRead *.S set ft=asm]])
