@@ -77,7 +77,7 @@ vicmd_symbol = "[<](green)"
 symbol = ""
 
 [git_commit]
-format = "at [$hash]($style) [$tag]($style) "
+format = "at [$hash]($style) [$tag]($style)"
 
 [git_status]
 format = "(with [$all_status$ahead_behind]($style) )"
