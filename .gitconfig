@@ -1,8 +1,6 @@
 [user]
 	name = Matthew Toohey
 	email = contact@mtoohey.com
-[credential]
-	helper = libsecret
 [alias]
 	a = add --verbose
 	aa = add --all --verbose
@@ -71,3 +69,5 @@
 	defaultBranch = main
 [branch]
 	autosetuprebase = always
+[url "git@github.com:"]
+	insteadOf = https://github.com/
