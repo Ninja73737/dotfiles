@@ -1,0 +1,3 @@
+#!/bin/sh
+
+printf '%s\n%s' "$(date '+%s')" "$(termux-location)" >> "$HOME/location-history"

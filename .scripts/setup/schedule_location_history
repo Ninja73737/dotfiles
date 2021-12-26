@@ -1,0 +1,3 @@
+#!/bin/sh
+
+termux-job-scheduler --script "$HOME/.scripts/log_termux_location" --period-ms 900000 --persisted true
