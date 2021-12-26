@@ -10,11 +10,15 @@
 	b = "!git --no-pager branch"
 	bd = branch --delete
 	br = "!git branch -m $(git rev-parse --abbrev-ref HEAD)"
+	bs = branch --set-upstream-to
+	bt = branch --track
 	bv = "!git --no-pager branch --verbose"
 	c = commit
-	cm = commit --message
 	ca = commit --amend
+	cap = "!git commit --amend && git push"
+	cm = commit --message
 	can = commit --amend --no-edit
+	canp = "!git commit --amend --no-edit && git push"
 	d = diff
 	dl = diff HEAD^ HEAD
 	ds = diff --staged
@@ -23,7 +27,9 @@
 	ec = rebase --continue
 	ei = rebase --interactive
 	eir = rebase --interactive --root
-	f = reflog
+	f = fetch
+	fu = fetch --unshallow
+	g = reflog
 	i = init
 	k = checkout
 	kb = checkout -b
@@ -48,7 +54,7 @@
 	rs = restore --staged
 	rp = restore --patch
 	rsh = restore --staged .
-	rsp = restore --staged .
+	rsp = restore --staged --patch .
 	s = status --short
 	t = stash push --include-untracked
 	tc = stash clear
@@ -60,11 +66,10 @@
 	wa = worktree add
 	wm = worktree move
 	wr = worktree remove
-	v = fetch
-	vu = fetch --unshallow
 	x = rm
 	xc = rm --cached
 	xrc = rm -r --cached
+	unbare = "!f() { TARGET=\"$(echo \"$1\" | sed -E 's/\\.git\\/?$//')\" && mkdir \"$TARGET\" && cp -r \"$1\" \"$TARGET/.git\" && cd \"$TARGET\" && git config --local --bool core.bare false && git reset --hard; }; f"
 [init]
 	defaultBranch = main
 [branch]
