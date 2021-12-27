@@ -27,6 +27,7 @@ set -g fish_user_paths "$HOME/.gem/ruby/2.7.0/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.npm-global/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.pnpm-global/bin" $fish_user_paths
 set -g fish_user_paths "$HOME/.dotnet/tools" $fish_user_paths
+set -g fish_user_paths "$HOME/.local/share/gem/ruby/3.0.0/bin" $fish_user_paths
 set -x GOPATH "$HOME/.go"
 if test -d $HOME/.go/bin
     set -g fish_user_paths "$HOME/.go/bin" $fish_user_paths
@@ -91,6 +92,8 @@ alias lsd "exa -al --icons --group-directories-first"
 alias lst "exa -aT -L 5 --icons --group-directories-first"
 alias lsta "exa -aT --icons --group-directories-first"
 
+export pager="less"
+
 if status --is-interactive
     [ -f ~/.config/tabtab/fish/__tabtab.fish ]; and . ~/.config/tabtab/fish/__tabtab.fish; or true
 
@@ -99,20 +102,20 @@ if status --is-interactive
 
     abbr hi himalaya
     alias hi himalaya
-    abbr ihi "nvim +Himalaya"
-    alias ihi "nvim +Himalaya"
+    abbr ihi "nvim +'Himalaya'"
+    alias ihi "nvim +'Himalaya'"
 
-    abbr dc docker-compose
-    abbr dcu "docker-compose up -d --remove-orphans"
-    abbr dcd "docker-compose down --remove-orphans"
-    abbr dcdu "docker-compose -f docker-compose-dev.yaml up --remove-orphans"
-    abbr dcdd "docker-compose -f docker-compose-dev.yaml down --remove-orphans"
+    abbr dc "docker compose"
+    abbr dcu "docker compose up -d --remove-orphans"
+    abbr dcd "docker compose down --remove-orphans"
+    abbr dcdu "docker compose -f docker-compose-dev.yaml up --remove-orphans"
+    abbr dcdd "docker compose -f docker-compose-dev.yaml down --remove-orphans"
 
     abbr pcp "rsync -r --info=progress2"
     alias pcp "rsync -r --info=progress2"
 
     abbr dot "git --git-dir ~/.dotfiles --work-tree ~"
-    alias dot "git --git-dir ~$HOME/.dotfiles --work-tree ~"
+    alias dot "git --git-dir ~/.dotfiles --work-tree ~"
 
     if test (uname) = Darwin
         abbr copy pbcopy
