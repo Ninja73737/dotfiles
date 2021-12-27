@@ -82,6 +82,15 @@ config.bind('<Ctrl-Shift-e>', f'spawn {term_program} -t "floatme" -o background_
 config.unbind('<Ctrl-v>')
 config.unbind('<Ctrl-a>')
 
+config.bind('o', 'set statusbar.show always;; set-cmd-text -s :open')
+config.bind('O', 'set statusbar.show always;; set-cmd-text -s :open -t')
+config.bind(':', 'set statusbar.show always;; set-cmd-text :')
+config.bind('/', 'set statusbar.show always;; set-cmd-text /')
+config.bind(
+    '<Escape>', 'mode-enter normal;; set statusbar.show never', mode='command')
+config.bind(
+    '<Return>', 'command-accept;; set statusbar.show never', mode='command')
+
 # Theming
 c.fonts.default_size = '12pt'
 c.fonts.default_family = 'JetBrainsMono Nerd Font'
