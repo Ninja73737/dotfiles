@@ -18,7 +18,7 @@ output "Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E" {
     position 0 0
 }
 
-exec_always pgrep swayidle; swayidle -w timeout 60 "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 16x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000 --grace 10 --fade-in 10" timeout 180 'systemctl suspend' before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
+exec_always pgrep swayidle; swayidle before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000" after-resume "pgrep mako || mako --background-color \\"$background\\"CC --text-color \\"$foreground\\""
 
 input "1267:12440:ELAN1201:00_04F3:3098_Touchpad" {
     tap enabled
@@ -31,7 +31,7 @@ input type:pointer {
 }
 
 exec_always $HOME/.scripts/start_apps
-exec_always pkill mako; mako --background-color "$backgroundCC" --text-color "$foreground"
+exec_always pkill mako; mako --background-color "$background"CC --text-color "$foreground"
 exec_always pgrep autotiling || autotiling
 
 default_border none
