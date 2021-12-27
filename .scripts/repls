@@ -2,7 +2,7 @@
 
 cat ".cache/wal/sequences"
 
-set potential_prompts evcxr jshell node python3 R
+set potential_prompts eva evcxr jshell node python3 R
 
 for prompt in $potential_prompts
     if command -q "$prompt"
