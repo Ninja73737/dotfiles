@@ -150,10 +150,10 @@ bindsym Mod4+Shift+Up exec echo '{ "command": ["add", "volume", "2"] }' | socat 
 bindsym Mod4+semicolon exec kitty -T floatme -o background_opacity=0.8 -e $HOME/.scripts/quick_menu
 bindsym Mod4+E exec kitty -T floatme -o background_opacity=0.8 -e $HOME/.scripts/repls
 
-bindsym Mod4+p exec qbpm launch personal
-bindsym Mod4+g exec qbpm launch gaming
-bindsym Mod4+u exec qbpm launch university
-bindsym Mod4+m exec qbpm launch mod
+bindsym Mod4+p exec ~/.local/bin/qbpm launch personal
+bindsym Mod4+g exec ~/.local/bin/qbpm launch gaming
+bindsym Mod4+u exec ~/.local/bin/qbpm launch university
+bindsym Mod4+m exec ~/.local/bin/qbpm launch mod
 
 bindsym Mod4+Shift+p exec brave --profile-directory="Default"
 bindsym Mod4+Shift+u exec brave --profile-directory="Profile 2"
