@@ -12,8 +12,8 @@ if test -z "$DISPLAY" -a -z "$TMUX"
         end
         # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
         #     exec startx
-        # else if test -z "$WAYLAND_DISPLAY"
-        #     exec sway --my-next-gpu-wont-be-nvidia
+    else if test -z "$WAYLAND_DISPLAY"
+        exec sway --unsupported-gpu
     end
 end
 
