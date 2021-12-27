@@ -4,4 +4,4 @@ pkg install rsync termux-api
 termux-setup-storage
 ssh-keygen
 ssh-copy-id tooheys@192.168.86.112
-termux-job-scheduler --script $HOME/.scripts/sync_photos --period-ms 3600000 --network unmetered
+termux-job-scheduler --script "$HOME/.scripts/sync_photos" --period-ms 3600000 --network unmetered --persisted true
