@@ -11,6 +11,8 @@ vim.g.maplocalleader = " "
 -- TODO: fix telescope live grep colon filetypes
 -- TODO: add noa writes to compile and execute commands
 -- TODO: call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true) (for markdown headers)
+-- TODO: set up lspkind and name menu items for completion: https://www.youtube.com/watch?v=_DnmphIwnjo
+-- TODO: add gh issues source for completion: https://github.com/tjdevries/config_manager/blob/master/xdg_config/nvim/after/plugin/cmp_gh_source.lua
 
 map("n", "Q", "<CMD>quitall!<CR>", {})
 map("n", "W", "<CMD>write<CR>", {})
@@ -91,7 +93,9 @@ map("v", "<S-Tab>", "<gv", {})
 map("t", "<C-w>", "<C-\\><C-n><C-w>", {})
 
 cmd([[autocmd FileType java nmap <buffer> <LocalLeader><CR> <CMD>!java %<CR>]])
-cmd([[autocmd BufNewFile *.md,*.rmd call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true)]])
+cmd(
+    [[autocmd BufNewFile *.md,*.rmd if expand('%:p') !~ '.*/cards/.*' | call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true) | endif]]
+)
 cmd(
     [[autocmd FileType markdown,rmd,tex nmap <buffer> <LocalLeader>z <CMD>call system('zth "' . expand('%:p:r') . '.pdf"')<CR>]]
 )
@@ -168,20 +172,7 @@ cmd([[autocmd FileType java set softtabstop=4]])
 cmd([[autocmd FileType python set colorcolumn=80]])
 cmd([[autocmd FileType lua set colorcolumn=120]])
 
-local fn = vim.fn
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-    PackerBootstrap = fn.system({
-        "git",
-        "clone",
-        "--depth",
-        "1",
-        "https://github.com/wbthomason/packer.nvim",
-        install_path,
-    })
-end
-
-local on_attach = function(_, bufnr)
+vim.lsp._on_attach = function(_, bufnr)
     local function buf_map(...)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
@@ -189,6 +180,7 @@ local on_attach = function(_, bufnr)
     local opts = { noremap = false, silent = true }
 
     buf_map("n", "gd", "<CMD>split | Telescope lsp_definitions<CR>", opts)
+    buf_map("n", "gtd", "<CMD>split | Telescope lsp_type_definitions<CR>", opts)
     buf_map("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", opts)
     buf_map("n", "gi", "<CMD>Telescope lsp_implementations<CR>", opts)
     buf_map("n", "gr", "<CMD>Telescope lsp_references<CR>", opts)
@@ -209,13 +201,26 @@ local on_attach = function(_, bufnr)
     vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)]])
 end
 
-local on_attach_no_fomatting = function(client, bufnr)
-    on_attach(client, bufnr)
+vim.lsp._on_attach_no_fomatting = function(client, bufnr)
+    vim.lsp._on_attach(client, bufnr)
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
 end
 
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+vim.lsp._capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+local fn = vim.fn
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+if fn.empty(fn.glob(install_path)) > 0 then
+    PackerBootstrap = fn.system({
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "https://github.com/wbthomason/packer.nvim",
+        install_path,
+    })
+end
 
 local packer = require("packer")
 packer.startup(function(use)
@@ -464,13 +469,14 @@ packer.startup(function(use)
         end,
         requires = { "nvim-lua/plenary.nvim" },
     })
+    use("mtoohey31/chafa.vim")
     use({
-        "mtoohey31/chafa.vim",
+        "https://github.com/soywod/himalaya",
         rtp = "vim",
-        cond = function()
-            return os.execute("which himalaya") == 0
-        end,
+        cmd = "Himalaya",
         config = function()
+            vim.cmd("source ~/.local/share/nvim/site/pack/packer/opt/himalaya/vim/plugin/himalaya.vim")
+
             vim.g.himalaya_mailbox_picker = "telescope"
             vim.g.himalaya_telescope_preview_enabled = true
         end,
@@ -613,38 +619,59 @@ packer.startup(function(use)
                 "gopls",
                 "hls",
                 "html",
+                "kotlin_language_server",
                 -- "ltex",
+                "metals", -- if I use this much, I should add nvim-metals
                 "pyright",
                 "r_language_server",
                 "solargraph",
+                "solidity_ls",
                 "svelte",
                 "tailwindcss",
                 "taplo",
                 "vimls",
                 "zls",
             }
-            for _, lsp in ipairs(servers) do
-                nvim_lsp[lsp].setup({
-                    on_attach = on_attach,
+
+            for _, ls in ipairs(servers) do
+                nvim_lsp[ls].setup({
+                    on_attach = vim.lsp._on_attach,
                     flags = {
                         debounce_text_changes = 150,
                     },
-                    capabilities = capabilities,
+                    capabilities = vim.lsp._capabilities,
+                })
+            end
+
+            local manually_enabled_servers = {
+                "grammarly",
+            }
+
+            for _, ls in ipairs(manually_enabled_servers) do
+                nvim_lsp[ls].setup({
+                    on_attach = vim.lsp._on_attach,
+                    flags = {
+                        debounce_text_changes = 150,
+                    },
+                    capabilities = vim.lsp._capabilities,
+                    autostart = false,
                 })
             end
 
             local servers_no_fomatting = {
+                "erlangls",
                 "jsonls",
                 "tsserver",
+                "rls",
             }
 
-            for _, lsp in ipairs(servers_no_fomatting) do
-                nvim_lsp[lsp].setup({
-                    on_attach = on_attach_no_fomatting,
+            for _, ls in ipairs(servers_no_fomatting) do
+                nvim_lsp[ls].setup({
+                    on_attach = vim.lsp._on_attach_no_fomatting,
                     flags = {
                         debounce_text_changes = 150,
                     },
-                    capabilities = capabilities,
+                    capabilities = vim.lsp._capabilities,
                 })
             end
 
@@ -659,28 +686,16 @@ packer.startup(function(use)
                     "scss",
                     "less",
                 },
-                on_attach = on_attach,
+                on_attach = vim.lsp._on_attach,
                 flags = {
                     debounce_text_changes = 150,
                 },
-                capabilities = capabilities,
+                capabilities = vim.lsp._capabilities,
             })
-
-            -- nvim_lsp.grammarly.setup({
-            --     cmd = { "node", "/home/mtoohey/repos/grammarly/extension/dist/server/index.js", "--stdio" },
-            --     root_dir = function()
-            --         return "."
-            --     end,
-            --     on_attach = on_attach,
-            --     flags = {
-            --         debounce_text_changes = 150,
-            --     },
-            --     capabilities = capabilities,
-            -- })
 
             nvim_lsp.java_language_server.setup({
                 cmd = { "java-language-server" },
-                on_attach = on_attach_no_fomatting,
+                on_attach = vim.lsp._on_attach_no_fomatting,
                 settings = {
                     java = {
                         externalDependencies = {
@@ -696,16 +711,16 @@ packer.startup(function(use)
                 flags = {
                     debounce_text_changes = 150,
                 },
-                capabilities = capabilities,
+                capabilities = vim.lsp._capabilities,
             })
 
             nvim_lsp.omnisharp.setup({
                 cmd = { "/usr/bin/omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
-                on_attach = on_attach,
+                on_attach = vim.lsp._on_attach,
                 flags = {
                     debounce_text_changes = 150,
                 },
-                capabilities = capabilities,
+                capabilities = vim.lsp._capabilities,
             })
 
             local runtime_path = vim.split(package.path, ";")
@@ -733,8 +748,8 @@ packer.startup(function(use)
                         },
                     },
                 },
-                on_attach = on_attach,
-                capabilities = capabilities,
+                on_attach = vim.lsp._on_attach,
+                capabilities = vim.lsp._capabilities,
             })
 
             nvim_lsp.texlab.setup({
@@ -746,27 +761,29 @@ packer.startup(function(use)
                         },
                     },
                 },
-                on_attach = on_attach,
+                on_attach = vim.lsp._on_attach,
                 flags = {
                     debounce_text_changes = 150,
                 },
-                capabilities = capabilities,
+                capabilities = vim.lsp._capabilities,
             })
 
-            local yamlls_settings = { yaml = { schemas = {} } }
-            yamlls_settings.yaml.schemas["/home/mtoohey/repos/yams/schema.yaml"] = "recipes/**/*.yaml"
-            yamlls_settings.yaml.schemas["https://json.schemastore.org/github-workflow.json"] =
-                "**/.github/workflows/*.yaml"
-            yamlls_settings.yaml.schemas["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] =
-                "/docker-compose*.yaml"
-
             nvim_lsp.yamlls.setup({
-                on_attach = on_attach,
+                on_attach = vim.lsp._on_attach,
                 flags = {
                     debounce_text_changes = 150,
                 },
-                settings = yamlls_settings,
-                capabilities = capabilities,
+                settings = {
+                    yaml = {
+                        schemas = {
+                            ["/home/mtoohey/repos/yams/schema.yaml"] = "recipes/**/*.yaml",
+                            ["https://json.schemastore.org/github-workflow.json"] = "**/.github/workflows/*.yaml",
+                            ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "/docker-compose*.yaml",
+                        },
+                    },
+                },
+
+                capabilities = vim.lsp._capabilities,
             })
 
             require("rust-tools").setup({
@@ -776,8 +793,8 @@ packer.startup(function(use)
                     debuggables = { use_telescope = true },
                 },
                 server = {
-                    on_attach = on_attach,
-                    flags = { debounce_text_changes = 150, capabilities = capabilities },
+                    on_attach = vim.lsp._on_attach,
+                    flags = { debounce_text_changes = 150, capabilities = vim.lsp._capabilities },
                 },
             })
 
@@ -827,6 +844,7 @@ packer.startup(function(use)
                     { name = "calc" },
                     { name = "emoji" },
                 }),
+                experimental = { ghost_text = true },
             })
         end,
         after = { "ultisnips" },
@@ -877,6 +895,7 @@ packer.startup(function(use)
             local builtins = null_ls.builtins
             local diagnostics = builtins.diagnostics
             local formatting = builtins.formatting
+
             null_ls.setup({
                 sources = {
                     require("typo_fix").setup("en_GB"),
@@ -928,8 +947,8 @@ packer.startup(function(use)
                         end,
                     }),
                 },
-                on_attach = on_attach,
-                capabilities = capabilities,
+                on_attach = vim.lsp._on_attach,
+                capabilities = vim.lsp._capabilities,
             })
         end,
         after = { "cmp-nvim-lsp" },
