@@ -207,7 +207,10 @@ vim.lsp._on_attach_no_fomatting = function(client, bufnr)
     client.resolved_capabilities.document_range_formatting = false
 end
 
-vim.lsp._capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local ok, res = pcall(require, "cmp_nvim_lsp")
+if ok then
+    vim.lsp._capabilities = res.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+end
 
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
