@@ -1,9 +1,6 @@
 [submodule ".config/qutebrowser/qutewal"]
 	path = .config/qutebrowser/qutewal
 	url = https://gitlab.com/jjzmajic/qutewal
-[submodule ".scripts/lf-exa-icons"]
-	path = .scripts/lf-exa-icons
-	url = https://github.com/mtoohey31/lf-exa-icons
 [submodule ".scripts/alacritty-color-export"]
 	path = .scripts/alacritty-color-export
 	url = https://github.com/mtoohey31/alacritty-color-export
