@@ -60,5 +60,6 @@ if command -v "apk"; then
 fi
 
 command=$(find_command "curl -sSL" "wget -qO -")
-$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.scripts/setup/post-install-user > post-install-user.sh
-su "${username:-root}" -c sh post-install-user.sh
+$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.scripts/setup/post-install-user > /post-user
+chmod 777 /post-user
+su "$username" -c "cd / && sh post-user"

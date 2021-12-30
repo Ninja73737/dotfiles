@@ -46,9 +46,9 @@ echo "downloading playbook index"
 $command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/index | while read -r playbook; do
   printf "run playbook: %s?" "$playbook"
   if ! choose; then
+    echo I be exiting
     exit
   fi
  $command "https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/$playbook" > "/tmp/$playbook"
  ansible-playbook -i localhost, "/tmp/$playbook" -c local
 done
-# run the playbooks in the proper order, prompting the user about which ones they want to run
