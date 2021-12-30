@@ -1,11 +1,15 @@
 ---
 # Misisng language servers from coc.nvim configuration: coc-dictionary, coc-flutter, coc-word
+# TODO: add solargraph, installed with: `gem install --user-install solargraph`
+# TODO: add clojure lsp, clojure-lsp-bin
+# TODO: add fsautocomplete, installed with: `dotnet tool install --global fsautocomplete` `dotnet tool install --global fantomas-tool`
+# TODO: add solidity_ls, installed with: `npm install -g solidity-language-server`
+# TODO: add kotlin-language-server, installed with: `kotlin-language-server`
 - name: Install LSPs
   hosts: all
   gather_facts: true
   collections:
     - kewlfft.aur
-  become_method: su
   vars:
     become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
   tasks:
@@ -64,6 +68,11 @@
         name: cspell
         path: ~/.npm-global
         state: latest
+    - name: Install emmet-ls
+      npm:
+        name: emmet-ls
+        path: ~/.npm-global
+        state: latest
     - name: Install hadolint (Archlinux)
       aur:
         use: paru
@@ -117,6 +126,10 @@
       register: gopls_install_result
       changed_when: false
       failed_when: gopls_install_result.rc != 0
+    - name: Install Haskell language server
+      package:
+        name: haskell-language-server
+        state: latest
       # TODO: Get this working on other hosts
     - name: Install Java Language Server
       aur:
@@ -141,21 +154,16 @@
         name: rust
         state: latest
       when: ansible_facts['os_family'] == 'Darwin'
-    - name: Install rls
-      shell: rustup component add rls
-      register: rls_install_result
-      changed_when: "'is up to date' not in rls_install_result.stderr"
-      failed_when: rls_install_result.rc != 0
-    - name: Install rust-analysis
-      shell: rustup component add rust-analysis
-      register: rust_analysis_install_result
-      changed_when: "'is up to date' not in rust_analysis_install_result.stderr"
-      failed_when: rust_analysis_install_result.rc != 0
     - name: Install rust-src
       shell: rustup component add rust-src
       register: rust_src_install_result
       changed_when: "'is up to date' not in rust_src_install_result.stderr"
       failed_when: rust_src_install_result.rc != 0
+    - name: Install rust-analyzer (Archlinux)
+      aur:
+        use: paru
+        name: rust-analyzer
+        state: latest
     - name: Install stylua
       shell: cargo install stylua
       register: stylua_install_result

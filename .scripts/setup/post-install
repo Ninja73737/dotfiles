@@ -1,0 +1,67 @@
+#!/bin/sh
+
+set -e
+
+choose() {
+  printf " [Y/n] "
+  read -r reply
+  case "$reply" in
+    ""|"y"|"Y"|"yes"|"Yes"|"YES")
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+find_command() {
+  for command in "$@"; do
+    if command -v "$(echo "$command" | awk '{ print $1 }')" > /dev/null; then
+      echo "$command"
+      return
+    fi
+  done
+  die "none of $*@ were found"
+}
+
+die() {
+  1>&2 echo "$1"
+  exit 1
+}
+
+username=""
+
+if [ "$(uname)" != "Darwin" ]; then
+  printf "create new wheel user?"
+  if choose; then
+    command=$(find_command "useradd -mG wheel" "adduser -D")
+    printf "username: "
+    read -r username
+    $command "$username"
+  else
+    printf "user for non-root commands: "
+    read -r username
+  fi
+
+  echo "installing python"
+  if command -v "apk"; then
+    apk add python3-dev
+  elif command -v "pacman"; then
+    pacman -S python
+  else
+    die "no supported package manager found"
+  fi
+fi
+
+echo "installing pip"
+python3 -m ensurepip
+
+if command -v "apk"; then
+  echo "installing ansible build deps"
+  apk install "gcc musl-dev libffi-dev"
+fi
+
+command=$(find_command "curl -sSL" "wget -qO -")
+$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.scripts/setup/post-install-user > post-install-user.sh
+su "${username:-root}" -c sh post-install-user.sh

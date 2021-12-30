@@ -1,0 +1,45 @@
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "mtoohey/dotfiles:{{ user `distro` }}-bootstrap",
+      "commit": "true",
+      "pull": "false",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--name",
+        "dotfiles",
+        "{{ .Image }}",
+        "tail",
+        "-f",
+        "/dev/null"
+      ],
+      "changes": ["CMD [ \"/usr/bin/fish\" ]"]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "user": "mtoohey",
+      "playbook_file": ".ansible/playbooks/cli.yaml",
+      "extra_arguments": [
+        "--extra-vars",
+        "ansible_host=dotfiles ansible_connection=docker ansible_become_password={{ user `password` }}"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "mtoohey/dotfiles",
+        "tags": ["{{ user `distro`}}-cli"]
+      },
+      {
+        "type": "docker-push"
+      }
+    ]
+  ]
+}

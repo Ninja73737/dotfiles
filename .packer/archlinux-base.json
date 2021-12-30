@@ -1,0 +1,40 @@
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "archlinux",
+      "commit": "true",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--name",
+        "dotfiles",
+        "{{ .Image }}",
+        "tail",
+        "-f",
+        "/dev/null"
+      ],
+      "changes": ["USER mtoohey", "WORKDIR /home/mtoohey"]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "pacman -Sy --noconfirm python sudo",
+        "useradd mtoohey -mG wheel -p $(python -c 'import crypt; import secrets; print(crypt.crypt(\"{{ user `password` }}\", secrets.token_urlsafe(32)))')",
+        "echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "mtoohey/dotfiles",
+        "tags": ["archlinux-base"]
+      }
+    ]
+  ]
+}

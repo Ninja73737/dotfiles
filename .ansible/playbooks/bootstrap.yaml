@@ -3,10 +3,10 @@
   hosts: all
   collections:
     - kewlfft.aur
-  become_method: su
   vars:
-    become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+    become_for_packages: "{{ (ansible_facts['os_family'] != 'Darwin') }}"
     g14: "{{ ansible_facts['product_name'] == 'ROG Zephyrus G14 GA401QM_GA401QM' }}"
+    # TODO: figure out how to handle cores in docker containers
     cores: "{{ ansible_facts['processor_vcpus'] | int }}"
     base_pacman_config: "[options]\nColor\nParallelDownloads = {{ cores }}"
     g14_pacman_repo_config: |
@@ -16,16 +16,26 @@
     g14_pacman_config: "{{ base_pacman_config + '\n' + g14_pacman_repo_config }}"
     pacman_config: "{{ g14_pacman_config if g14 else base_pacman_config }}"
   tasks:
-    - debug:
-        var: pacman_config
+    - name: Write pacman config
+      blockinfile:
+        path: /etc/pacman.conf
+        block: "{{ pacman_config }}"
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Enable community and edge repos
+      shell: echo "http://dl-cdn.alpinelinux.org/alpine/v$(cat /etc/alpine-release | cut -d'.' -f1,2)/community" >> /etc/apk/repositories && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Alpine'
     - name: Update Alpine system
       apk:
+        update_cache: true
         upgrade: true
       become: "{{ become_for_packages }}"
       when: ansible_facts['os_family'] == 'Alpine'
     - name: Update Archlinux system
       pacman:
         upgrade: true
+        update_cache: true
       become: "{{ become_for_packages }}"
       when: ansible_facts['os_family'] == 'Archlinux'
       # TODO: test on macos, figure out how to install homebrew if it's not present
@@ -48,21 +58,43 @@
       git:
         bare: true
         clone: true
+        depth: 1
         dest: ~/.dotfiles
-        recursive: true
         repo: https://github.com/mtoohey31/dotfiles
         update: true
-      # TODO: handle pulling, resetting, hiding untracked, etc., of dotfiles
+    - name: Reset dotfiles
+      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME reset --hard
+    - name: Clone submodules
+      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME submodule update --init --recursive
+    - name: Hide untracked files
+      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config --local status.showUntrackedFiles no
+    - name: Remove README
+      file:
+        state: absent
+        path: ~/README.md
+    - name: Assume README unchanged
+      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME update-index --assume-unchanged $HOME/README.md
+    - name: Temporarily allow all commands without password
+      blockinfile:
+        path: /etc/sudoers
+        block: "%wheel ALL=(ALL) NOPASSWD: ALL"
+      become: true
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Install base-devel for paru
+      pacman:
+        name: base-devel
+      become: true
+      when: ansible_facts['os_family'] == 'Archlinux'
     - name: Install paru
       aur:
         name: paru
         use: makepkg
         state: present
-      become: yes
       when: ansible_facts['os_family'] == 'Archlinux'
-    - name: Write pacman config
+    - name: Disable all commands without password
       blockinfile:
-        path: /etc/pacman.conf
-        block: "{{ pacman_config }}"
+        path: /etc/sudoers
+        block: "%wheel ALL=(ALL) NOPASSWD: ALL"
+        state: absent
       become: true
       when: ansible_facts['os_family'] == 'Archlinux'

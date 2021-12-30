@@ -1,7 +1,6 @@
 ---
 - name: Setup with my cli configuration
   hosts: all
-  become_method: su
   vars:
     become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
   tasks:
@@ -11,10 +10,10 @@
         state: latest
       become: "{{ become_for_packages }}"
     - name: Change shell to fish
-      become: yes
       user:
         name: "{{ ansible_facts['user_id'] }}"
         shell: /usr/bin/fish
+      become: true
     - name: Install starship
       package:
         name: starship
@@ -25,5 +24,62 @@
         name: exa
         state: latest
       become: "{{ become_for_packages }}"
-      # TODO: Install pywal and set theme only if pywal was just installed
-      # TODO: Install lf, lf-ueberzug, and run lf exa icons
+    - name: Ensure pip
+      command: python3 -m ensurepip
+    - name: Upgrade pip
+      pip:
+        name: pip
+        state: latest
+    - name: Upgrade setuptools
+      pip:
+        name: setuptools
+        state: latest
+    - name: Install pywal
+      pip:
+        name: pywal
+        state: latest
+      register: install_pywal
+    - name: Set pywal theme
+      shell: ~/.local/bin/wal --theme base16-material-palenight
+      when: install_pywal.changed
+    - name: Install neovim
+      package:
+        name: neovim
+        state: latest
+      become: "{{ become_for_packages }}"
+    # TODO: defer these too
+    # - name: Install cmake
+    #   package:
+    #     name: cmake # required for neovim luarocks compilation
+    #     state: latest
+    #   become: "{{ become_for_packages }}"
+    # - name: Install gcc # required for treesitter grammar compilation
+    #   package:
+    #     name: gcc
+    #     state: latest
+    #   become: "{{ become_for_packages }}"
+    # - name: Install g++
+    #   package:
+    #     name: g++
+    #     state: latest
+    #   become: "{{ become_for_packages }}"
+    #   when: ansible_facts['os_family'] == 'Alpine'
+    # - name: Install real wget # required so packer hererocks install doesn't break
+    #   apk:
+    #     name: wget
+    #     state: latest
+    #   become: "{{ become_for_packages }}"
+    #   when: ansible_facts['os_family'] == 'Alpine'
+    # TODO: get this working, even if it works mostly, it's prone to never finishing at all if something breaks, so I'll need to build in some failure timeout. also, add a step here for treesitter grammar compilation. also, set up some deferred entrypoint thing so that this is run when the container starts instead of pushing all the plugins inside the container
+    # - name: Install neovim packer plugins
+    #   command: nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+    - name: Install lf (Alpine)
+      apk:
+        name: lf
+        repository: http://dl-cdn.alpinelinux.org/alpine/edge/testing
+        state: latest
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Alpine'
+    - name: Populate lf-exa-icons
+      shell:
+        cmd: wget -qO - https://raw.githubusercontent.com/mtoohey31/lf-exa-icons/main/scripts/install.sh | sh

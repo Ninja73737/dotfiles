@@ -1,7 +1,6 @@
 ---
 - name: Setup with my gui configuration
   hosts: all
-  become_method: su
   vars:
     become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
   tasks:

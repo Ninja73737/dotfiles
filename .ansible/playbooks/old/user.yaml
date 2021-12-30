@@ -1,0 +1,18 @@
+---
+- name: Create user
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Create user
+      user:
+        create_home: true
+        name: mtoohey
+        uid: 1000
+        groups: wheel
+        # TODO: make this secure
+        password: "{{ password | password_hash('sha512') }}"
+    - name: Allow sudo for wheel members
+      blockinfile:
+        path: /etc/sudoers
+        block: "%wheel ALL=(ALL) ALL"
+      become: true

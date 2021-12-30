@@ -1,0 +1,41 @@
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "mtoohey/dotfiles:{{ user `distro` }}-cli",
+      "commit": "true",
+      "pull": "false",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--name",
+        "dotfiles",
+        "{{ .Image }}",
+        "tail",
+        "-f",
+        "/dev/null"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "user": "mtoohey",
+      "playbook_file": ".ansible/playbooks/lsp.yaml",
+      "extra_arguments": [
+        "--extra-vars",
+        "ansible_host=dotfiles ansible_connection=docker ansible_become_password={{ user `password` }}"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "mtoohey/dotfiles",
+        "tags": ["{{ user `distro`}}-lsp"]
+      }
+    ]
+  ]
+}

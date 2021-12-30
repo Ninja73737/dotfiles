@@ -1,0 +1,51 @@
+#!/bin/sh
+
+set -e
+
+choose() {
+  printf " [Y/n] "
+  read -r reply
+  case "$reply" in
+    ""|"y"|"Y"|"yes"|"Yes"|"YES")
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+find_command() {
+  for command in "$@"; do
+    if command -v "$(echo "$command" | awk '{ print $1 }')" > /dev/null; then
+      echo "$command"
+      return
+    fi
+  done
+  die "none of $*@ were found"
+}
+
+die() {
+  1>&2 echo "$1"
+  exit 1
+}
+
+echo "installing ansible"
+pip3 install ansible
+
+echo "downloading playbook requirements"
+command=$(find_command "curl -sSL" "wget -qO -")
+$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/requirements.yaml > /tmp/requirements.yaml
+ansible-galaxy install -r /tmp/requirements.yaml
+rm /tmp/requirements.yaml
+
+echo "downloading playbook index"
+$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/index | while read -r playbook; do
+  printf "run playbook: %s?" "$playbook"
+  if ! choose; then
+    exit
+  fi
+ $command "https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/$playbook" > "/tmp/$playbook"
+ ansible-playbook -i localhost, "/tmp/$playbook" -c local
+done
+# run the playbooks in the proper order, prompting the user about which ones they want to run

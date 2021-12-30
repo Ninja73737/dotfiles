@@ -1,0 +1,40 @@
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "alpine",
+      "commit": "true",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--name",
+        "dotfiles",
+        "{{ .Image }}",
+        "tail",
+        "-f",
+        "/dev/null"
+      ],
+      "changes": ["USER mtoohey", "WORKDIR /home/mtoohey"]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "apk add --no-cache python3 sudo",
+        "printf '{{ user `password` }}\\n{{ user `password` }}' | adduser mtoohey -G wheel",
+        "echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "mtoohey/dotfiles",
+        "tags": ["alpine-base"]
+      }
+    ]
+  ]
+}
