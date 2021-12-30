@@ -22,7 +22,7 @@
         block: "{{ pacman_config }}"
       become: "{{ become_for_packages }}"
       when: ansible_facts['os_family'] == 'Archlinux'
-    - name: Enable community and edge repos
+    - name: Enable community and edge Alpine repos
       shell: echo "http://dl-cdn.alpinelinux.org/alpine/v$(cat /etc/alpine-release | cut -d'.' -f1,2)/community" >> /etc/apk/repositories && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
       become: "{{ become_for_packages }}"
       when: ansible_facts['os_family'] == 'Alpine'
@@ -63,17 +63,19 @@
         repo: https://github.com/mtoohey31/dotfiles
         update: true
     - name: Reset dotfiles
-      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME reset --hard
+      shell: git --git-dir=$HOME/.dotfiles --work-tree=$HOME reset --hard
     - name: Clone submodules
-      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME submodule update --init --recursive
+      shell:
+        cmd: git --git-dir=$HOME/.dotfiles --work-tree=$HOME submodule update --init --recursive
+        chdir: $HOME
     - name: Hide untracked files
-      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config --local status.showUntrackedFiles no
+      shell: git --git-dir=$HOME/.dotfiles --work-tree=$HOME config --local status.showUntrackedFiles no
     - name: Remove README
       file:
         state: absent
         path: ~/README.md
     - name: Assume README unchanged
-      command: git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME update-index --assume-unchanged $HOME/README.md
+      shell: git --git-dir=$HOME/.dotfiles --work-tree=$HOME update-index --assume-unchanged $HOME/README.md
     - name: Temporarily allow all commands without password
       blockinfile:
         path: /etc/sudoers
