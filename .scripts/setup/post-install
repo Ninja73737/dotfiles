@@ -54,9 +54,6 @@ if [ "$(uname)" != "Darwin" ]; then
   fi
 fi
 
-echo "installing pip"
-python3 -m ensurepip
-
 if command -v "apk"; then
   echo "installing ansible build deps"
   apk install "gcc musl-dev libffi-dev"

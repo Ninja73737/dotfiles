@@ -30,6 +30,9 @@ die() {
   exit 1
 }
 
+echo "installing pip"
+python3 -m ensurepip
+
 echo "installing ansible"
 pip3 install ansible
 
