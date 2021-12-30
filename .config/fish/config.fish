@@ -12,7 +12,7 @@ if test -z "$DISPLAY" -a -z "$TMUX"
         end
         # else if test -n "$XDG_VTNR" -a "$XDG_VTNR" -eq 1
         #     exec startx
-    else if test -z "$WAYLAND_DISPLAY"
+    else if test -z "$WAYLAND_DISPLAY" && which sway &>/dev/null
         exec sway --unsupported-gpu
     end
 end
@@ -158,11 +158,11 @@ if status --is-interactive
     abbr g git
     alias g git
 
-    export OPENER="$HOME/.scripts/xdg-open-disown"
     export EDITOR=nvim
-    export VISUAL=nvim
+    export VISUAL="$EDITOR"
     abbr e "$EDITOR"
     alias e "$EDITOR"
+    alias nvim "nvim -w ~/.local/share/nvim/keylog"
     if which sudoedit &>/dev/null
         abbr se sudoedit
         alias se sudoedit
