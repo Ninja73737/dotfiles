@@ -901,7 +901,7 @@ packer.startup(function(use)
 
             null_ls.setup({
                 sources = {
-                    require("typo_fix").setup("en_GB"),
+                    require("typo_fix").setup("en_CA"),
                     diagnostics.cspell.with({
                         filetypes = { "markdown", "rmd" },
                         extra_args = { "--config", os.getenv("HOME") .. "/.config/nvim/cspell.yaml" },
