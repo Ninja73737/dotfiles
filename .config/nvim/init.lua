@@ -843,7 +843,6 @@ packer.startup(function(use)
                     { name = "ultisnips" },
                     { name = "buffer" },
                     { name = "path" },
-                    { name = "nuspell" },
                     { name = "calc" },
                     { name = "emoji" },
                 }),
@@ -855,13 +854,6 @@ packer.startup(function(use)
     use({ "hrsh7th/cmp-buffer", after = "nvim-cmp" })
     -- " TODO: make this work without a prefixed `./`
     use("hrsh7th/cmp-path")
-    use({
-        "mtoohey31/cmp-nuspell", -- TODO: switch this back to f3fora once the PR is merged
-        rocks = "lua-nuspell",
-        setup = function()
-            vim.g.cmp_nuspell_lang = "en_CA"
-        end,
-    })
     -- " TODO: make this work for tex math
     use("hrsh7th/cmp-calc")
     use("hrsh7th/cmp-emoji")
@@ -897,8 +889,6 @@ packer.startup(function(use)
     -- " Plug 'cbarrete/completion-vcard'
     use({
         "jose-elias-alvarez/null-ls.nvim",
-        rocks = "lua-nuspell",
-        requires = "mtoohey31/null-ls-typo-fix",
         config = function()
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
@@ -907,7 +897,6 @@ packer.startup(function(use)
 
             null_ls.setup({
                 sources = {
-                    require("typo_fix").setup("en_CA"),
                     diagnostics.cspell.with({
                         filetypes = { "markdown", "rmd" },
                         extra_args = { "--config", os.getenv("HOME") .. "/.config/nvim/cspell.yaml" },
