@@ -779,7 +779,7 @@ packer.startup(function(use)
                 settings = {
                     yaml = {
                         schemas = {
-                            ["/home/mtoohey/repos/yams/schema.yaml"] = "recipes/**/*.yaml",
+                            ["https://raw.githubusercontent.com/mtoohey31/yams/master/schema.yaml"] = "recipes/**/*.yaml",
                             ["https://json.schemastore.org/github-workflow.json"] = "**/.github/workflows/*.yaml",
                             ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "/docker-compose*.yaml",
                         },
