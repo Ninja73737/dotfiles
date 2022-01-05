@@ -855,7 +855,13 @@ packer.startup(function(use)
     use({ "hrsh7th/cmp-buffer", after = "nvim-cmp" })
     -- " TODO: make this work without a prefixed `./`
     use("hrsh7th/cmp-path")
-    use({ "f3fora/cmp-nuspell", rocks = "lua-nuspell" })
+    use({
+        "mtoohey31/cmp-nuspell", -- TODO: switch this back to f3fora once the PR is merged
+        rocks = "lua-nuspell",
+        setup = function()
+            vim.g.cmp_nuspell_lang = "en_CA"
+        end,
+    })
     -- " TODO: make this work for tex math
     use("hrsh7th/cmp-calc")
     use("hrsh7th/cmp-emoji")
