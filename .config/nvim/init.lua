@@ -190,12 +190,12 @@ vim.lsp._on_attach = function(_, bufnr)
     buf_map("n", "<Leader>f", "<CMD>lua vim.lsp.buf.formatting()<CR>", opts)
     buf_map("n", "<Leader>F", "<CMD>Telescope lsp_code_actions<CR>", opts)
     buf_map("v", "<Leader>F", "<CMD>Telescope lsp_range_code_actions<CR>", opts)
-    buf_map("n", "<Leader>N", "<CMD>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-    buf_map("n", "<Leader>n", "<CMD>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+    buf_map("n", "<Leader>N", "<CMD>lua vim.diagnostic.goto_prev()<CR>", opts)
+    buf_map("n", "<Leader>n", "<CMD>lua vim.diagnostic.goto_next()<CR>", opts)
 
     vim.opt.signcolumn = "yes"
 
-    vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]])
+    vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focusable=false })]])
     -- TODO: check if we're in a repository owned by someone else or a fork of a
     -- repository owned by someone else, and if we are, don't register this
     -- autocommand.
