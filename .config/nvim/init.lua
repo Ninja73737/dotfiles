@@ -509,6 +509,16 @@ packer.startup(function(use)
             package.path = os.getenv("HOME") .. "/.cache/wal/?.lua;" .. package.path
             require("nvim-treesitter.configs").setup({
                 ensure_installed = "all",
+                ignore_install = (function()
+                    local h = io.popen("uname")
+                    local res = h:read("*a")
+                    h:close()
+                    if res == "Darwin\n" then
+                        return { "haskell" }
+                    else
+                        return {}
+                    end
+                end)(),
                 highlight = {
                     enable = true,
                     additional_vim_regex_highlighting = false,
