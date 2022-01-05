@@ -8,6 +8,7 @@ cmd([[let mapleader = "\<BS>"]])
 vim.g.maplocalleader = " "
 
 -- TODO: https://github.com/mfussenegger/nvim-dap
+-- TODO: https://github.com/seblj/nvim-tabline
 -- TODO: fix telescope live grep colon filetypes
 -- TODO: add noa writes to compile and execute commands
 -- TODO: call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true) (for markdown headers)
