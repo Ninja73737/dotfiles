@@ -9,6 +9,7 @@
 	add = add --verbose
 	b = "!git --no-pager branch"
 	bd = branch --delete
+	bm = branch --move
 	br = "!git branch -m $(git rev-parse --abbrev-ref HEAD)"
 	bs = branch --set-upstream-to
 	bt = branch --track
@@ -48,7 +49,7 @@
 	p = push
 	pf = push --force
 	pu = "!git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
-	puf = "!git push --set-upstream --force origin $(git rev-parse --abbrev-ref HEAD)"
+	puf = "!git push --force --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
 	r = restore
 	rh = restore .
 	rs = restore --staged
@@ -56,6 +57,8 @@
 	rsh = restore --staged .
 	rsp = restore --staged --patch .
 	s = status --short
+	ssh = sshify
+	sshify = "!git remote set-url origin $(git remote get-url origin | sed -E 's/^https?:\\/\\/github.com\\//git@github.com:/g')"
 	t = stash push --include-untracked
 	tc = stash clear
 	td = stash drop
