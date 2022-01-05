@@ -59,9 +59,6 @@ $character"""
 show_always = true
 format = "[$user]($style) "
 
-[directory]
-format = "in [$path]($style) "
-
 [cmd_duration]
 format = "for [$duration]($style) "
 
@@ -72,9 +69,6 @@ format = "on [$hostname]($style) "
 success_symbol = "[>](blue)"
 error_symbol = "[>](red)"
 vicmd_symbol = "[<](green)"
-
-[git_branch]
-symbol = ""
 
 [git_commit]
 format = "at [$hash]($style) [$tag]($style)"
@@ -119,6 +113,10 @@ symbol = " "
 [dart]
 symbol = " "
 
+[directory]
+format = "in [$path]($style) "
+read_only = " "
+
 [docker_context]
 symbol = " "
 
@@ -128,8 +126,8 @@ symbol = " "
 [elm]
 symbol = " "
 
-# [git_branch]
-# symbol = " "
+[git_branch]
+symbol = " "
 
 [golang]
 symbol = " "
@@ -173,6 +171,9 @@ symbol = " "
 
 [rust]
 symbol = " "
+
+[scala]
+symbol = " "
 
 [swift]
 symbol = "ﯣ "
