@@ -94,25 +94,28 @@ disabled = false
 format = "with [$output]($style) updates "
 shell = "/bin/sh"
 command = "cat /tmp/num_updates"
-when = """if test $(uname) = "Darwin"; then
-  update_command="nohup brew update && brew outdated | wc -l | awk '{ $1 = $1; print }' > /tmp/num_updates &"
+# TODO: check for recent package manager operations
+when = '''if test $(uname) = "Darwin"; then
+  update_command="nohup /bin/sh -c \"brew update > /dev/null 2>&1 && brew outdated | wc -l | awk '{ \\\$1 = \\\$1; print }' > /tmp/num_updates\" &"
 else
   . /etc/os-release && case "$ID" in
     arch)
       command -v checkupdates > /dev/null 2>&1 || exit 1
       update_command="nohup checkupdates | wc -l > /tmp/num_updates &";;
     alpine)
-      update_command="nohup apk update && echo \\$((\\$(apk upgrade --simulate | wc -l) - 1)) > /tmp/num_updates &";;
+      update_command="nohup /bin/sh -c \"echo \\\$((\\\$(apk upgrade --simulate | wc -l) - 1)) > /tmp/num_updates\" &";;
     *)
       exit 1;;
   esac
 fi
-if ! test -e /tmp/num_updates || test "$(date -r /tmp/num_updates '+%s')" -lt $(($(date '+%s') - 14400)); then
+if ! test -e /tmp/num_updates || test -z "$(cat /tmp/num_updates)" || test "$(date -r /tmp/num_updates '+%s')" -lt $(($(date '+%s') - 14400)); then
   eval "$update_command" > /dev/null 2>&1
-# TODO: check for recent package manager operations here
 fi
-test "$(cat /tmp/num_updates)" -ge 25
-"""
+test "$(cat /tmp/num_updates)" -ge 25'''
+
+[custom.docker]
+format = "inside [ ]($style) "
+when = "test -f /.dockerenv"
 
 # Nerd Fonts Symbols (https://starship.rs/presets/#nerd-font-symbols)
 
