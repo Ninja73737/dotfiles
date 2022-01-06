@@ -1,7 +1,7 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 if test -z "$DISPLAY" -a -z "$TMUX"
-    if test -n "$SSH_CONNECTION"
+    if test -n "$SSH_CONNECTION" -o -f /.dockerenv
         if status --is-interactive
             exec tmux
         end
