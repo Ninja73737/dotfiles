@@ -4,6 +4,20 @@
   vars:
     become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
   tasks:
+    - name: Install sway
+      package:
+        name: sway
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Install qutebrowser
+      package:
+        name: qutebrowser
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Install qbpm (Archlinux)
+      package:
+        name: qbpm
+        state: latest
+      become: "{{ become_for_packages }}"
     # TODO: set up yabai and shkd on MacOS
-    # TODO: set up sway
-    # TODO: Set up alacritty, qutebrowser, qbpm, and harpoond on both
+    # TODO: Set up kitty, qbpm, and harpoond on both

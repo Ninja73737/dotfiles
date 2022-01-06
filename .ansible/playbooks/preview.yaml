@@ -1,0 +1,49 @@
+---
+- name: Setup lf file previews
+  hosts: all
+  collections:
+    - kewlfft.aur
+  vars:
+    become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+  tasks:
+    - name: Allow the current user to run `sudo pacman` without a password (Archlinux)
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ ansible_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+        validate: "visudo -cf %s"
+      become: true
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Install chafa, poppler, bat, and ffmpeg
+      package:
+        name:
+          - chafa
+          - poppler
+          - bat
+          - ffmpeg
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Install go and file-dev (Alpine)
+      package:
+        name:
+          - go
+          - file-dev
+        state: latest
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Alpine'
+    - name: Install pistol (Alpine)
+      command: env GOPATH=$HOME/.go CGO_ENABLED=1 GO111MODULE=on go install github.com/doronbehar/pistol/cmd/pistol@latest
+      when: ansible_facts['os_family'] == 'Alpine'
+    - name: Install pistol (Archlinux)
+      aur:
+        use: paru
+        name: pistol-git
+        state: latest
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Prevent the current user from running `sudo pacman` without a password (Archlinux)
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ ansible_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+        state: absent
+        validate: "visudo -cf %s"
+      become: true
+      when: ansible_facts['os_family'] == 'Archlinux'

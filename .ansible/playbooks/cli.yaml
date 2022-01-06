@@ -1,43 +1,50 @@
 ---
 - name: Setup with my cli configuration
   hosts: all
+  collections:
+    - kewlfft.aur
   vars:
     become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
   tasks:
-    - name: Install fish
+    - name: Allow the current user to run `sudo pacman` without a password (Archlinux)
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ ansible_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+        validate: "visudo -cf %s"
+      become: true
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Install fish, starship, exa, and tmux
       package:
-        name: fish
+        name:
+          - fish
+          - starship
+          - exa
+          - tmux
         state: latest
       become: "{{ become_for_packages }}"
-    - name: Change shell to fish
+    - name: Change shell to fish (Non-Alpine) # NOTE: this is disabled for Alpine becuase it doesn't work, and getting it working requires 299 MiB of packages
       user:
         name: "{{ ansible_facts['user_id'] }}"
         shell: /usr/bin/fish
       become: true
-    - name: Install starship
-      package:
-        name: starship
-        state: latest
-      become: "{{ become_for_packages }}"
-    - name: Install exa
-      package:
-        name: exa
-        state: latest
-      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] != 'Alpine'
     - name: Ensure pip
       command: python3 -m ensurepip
     - name: Upgrade pip
       pip:
         name: pip
         state: latest
+        executable: $HOME/.local/bin/pip3
     - name: Upgrade setuptools
       pip:
         name: setuptools
         state: latest
+        executable: $HOME/.local/bin/pip3
     - name: Install pywal
       pip:
         name: pywal
         state: latest
+        executable: $HOME/.local/bin/pip3
       register: install_pywal
     - name: Set pywal theme
       shell: ~/.local/bin/wal --theme base16-material-palenight
@@ -47,32 +54,29 @@
         name: neovim
         state: latest
       become: "{{ become_for_packages }}"
-    # TODO: defer these too
-    # - name: Install cmake
-    #   package:
-    #     name: cmake # required for neovim luarocks compilation
-    #     state: latest
-    #   become: "{{ become_for_packages }}"
-    # - name: Install gcc # required for treesitter grammar compilation
-    #   package:
-    #     name: gcc
-    #     state: latest
-    #   become: "{{ become_for_packages }}"
-    # - name: Install g++
-    #   package:
-    #     name: g++
-    #     state: latest
-    #   become: "{{ become_for_packages }}"
-    #   when: ansible_facts['os_family'] == 'Alpine'
-    # - name: Install real wget # required so packer hererocks install doesn't break
-    #   apk:
-    #     name: wget
-    #     state: latest
-    #   become: "{{ become_for_packages }}"
-    #   when: ansible_facts['os_family'] == 'Alpine'
-    # TODO: get this working, even if it works mostly, it's prone to never finishing at all if something breaks, so I'll need to build in some failure timeout. also, add a step here for treesitter grammar compilation. also, set up some deferred entrypoint thing so that this is run when the container starts instead of pushing all the plugins inside the container
+    - name: Install neovim python3 module
+      pip:
+        name: pip
+        state: latest
+        executable: $HOME/.local/bin/pip3
+      register: install_pywal
+    # the following three packages are required for treesitter grammar compilation
+    - name: Install gcc
+      package:
+        name: gcc
+        state: latest
+      become: "{{ become_for_packages }}"
+    - name: Install g++ and real wget (Alpine)
+      package:
+        name:
+          - g++
+          - wget
+        state: latest
+      become: "{{ become_for_packages }}"
+      when: ansible_facts['os_family'] == 'Alpine'
+    # TODO: add a step here for treesitter grammar compilation. also, set up some deferred entrypoint thing so that this is run when the container starts instead of pushing all the plugins inside the container
     # - name: Install neovim packer plugins
-    #   command: nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+    #   command: nvim --headless -c 'autocmd User PackerComplete quitall' -c 'sleep 180 | cq'
     - name: Install lf (Alpine)
       apk:
         name: lf
@@ -80,6 +84,25 @@
         state: latest
       become: "{{ become_for_packages }}"
       when: ansible_facts['os_family'] == 'Alpine'
-    - name: Populate lf-exa-icons
+    - name: Install lf (Archlinux)
+      aur:
+        use: paru
+        name: lf-bin
+        state: latest
+      when: ansible_facts['os_family'] == 'Archlinux'
+    - name: Populate lf-exa-icons (Alpine)
       shell:
         cmd: wget -qO - https://raw.githubusercontent.com/mtoohey31/lf-exa-icons/main/scripts/install.sh | sh
+      when: ansible_facts['os_family'] == 'Alpine'
+    - name: Populate lf-exa-icons (Non-Alpine)
+      shell:
+        cmd: curl -sSL https://raw.githubusercontent.com/mtoohey31/lf-exa-icons/main/scripts/install.sh | sh
+      when: ansible_facts['os_family'] != 'Alpine'
+    - name: Prevent the current user from running `sudo pacman` without a password (Archlinux)
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ ansible_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+        state: absent
+        validate: "visudo -cf %s"
+      become: true
+      when: ansible_facts['os_family'] == 'Archlinux'

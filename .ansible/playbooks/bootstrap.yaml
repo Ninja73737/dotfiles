@@ -4,7 +4,8 @@
   collections:
     - kewlfft.aur
   vars:
-    become_for_packages: "{{ (ansible_facts['os_family'] != 'Darwin') }}"
+    become_for_packages: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+    docker: "{{ ansible_facts['virtualization_type'] == 'docker' }}"
     g14: "{{ ansible_facts['product_name'] == 'ROG Zephyrus G14 GA401QM_GA401QM' }}"
     # TODO: figure out how to handle cores in docker containers
     cores: "{{ ansible_facts['processor_vcpus'] | int }}"
@@ -14,7 +15,7 @@
       SigLevel = Optional TrustAll
       Server = https://arch.asus-linux.org
     g14_pacman_config: "{{ base_pacman_config + '\n' + g14_pacman_repo_config }}"
-    pacman_config: "{{ g14_pacman_config if g14 else base_pacman_config }}"
+    pacman_config: "{{ '[options]\nColor' if docker else (g14_pacman_config if g14 else base_pacman_config) }}"
   tasks:
     - name: Write pacman config
       blockinfile:

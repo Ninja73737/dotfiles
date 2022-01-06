@@ -2,7 +2,7 @@
   "builders": [
     {
       "type": "docker",
-      "image": "mtoohey/dotfiles:{{ user `distro` }}-preview",
+      "image": "mtoohey/dotfiles:{{ user `distro` }}-cli",
       "commit": "true",
       "pull": "false",
       "run_command": [
@@ -15,14 +15,15 @@
         "tail",
         "-f",
         "/dev/null"
-      ]
+      ],
+      "changes": ["CMD [ \"/usr/bin/fish\" ]"]
     }
   ],
   "provisioners": [
     {
       "type": "ansible",
       "user": "mtoohey",
-      "playbook_file": ".ansible/playbooks/lsp.yaml",
+      "playbook_file": ".ansible/playbooks/preview.yaml",
       "extra_arguments": [
         "--extra-vars",
         "ansible_host=dotfiles ansible_connection=docker ansible_become_password={{ user `password` }}"
@@ -34,7 +35,10 @@
       {
         "type": "docker-tag",
         "repository": "mtoohey/dotfiles",
-        "tags": ["{{ user `distro`}}-lsp"]
+        "tags": ["{{ user `distro`}}-preview"]
+      },
+      {
+        "type": "docker-push"
       }
     ]
   ]

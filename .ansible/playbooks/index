@@ -1,4 +1,5 @@
 bootstrap.yaml
 cli.yaml
+previews.yaml
 lsp.yaml
 gui.yaml
