@@ -23,11 +23,6 @@ while true
 
     set -a output  (btrfs filesystem usage -H / 2> /dev/null | string match -e "Free (estimated):" | string replace -r '\s*Free \(estimated\):\s+' '' | string replace -r '\s+\(min: [\d\.]+\w+\)' '')" |"
 
-    set num_updates (cat /tmp/num_updates)
-    if test "$num_updates" -ge 25
-        set -a output  $num_updates" |"
-    end
-
     set hs_bat (headsetcontrol -cb 2> /dev/null)
     if test "$status" -eq 0
         set -a output  $hs_bat"% |"
