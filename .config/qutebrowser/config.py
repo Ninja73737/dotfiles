@@ -4,13 +4,13 @@ from sys import platform
 from subprocess import Popen
 import json
 
-term_program = "alacritty"
+term_program = "kitty"
 
 command_prefix_list = ['fish', '-c']
 if platform == 'darwin':
-    command_prefix_string = f'{term_program} -t "floatme" -o background_opacity=0.8 -e '
+    command_prefix_string = f'{term_program} --title "floatme" -o background_opacity=0.8 -e '
 elif 'SWAYSOCK' in environ:
-    command_prefix_string = f'{term_program} -t "floatme" -o background_opacity=0.8 -e '
+    command_prefix_string = f'{term_program} --title "floatme" -o background_opacity=0.8 -e '
 else:
     command_prefix_string = ''
 
@@ -72,13 +72,13 @@ config.bind(
     'c-', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomOut.js')
 config.bind(
     'c+', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
-config.bind('wp', 'hint links spawn random_bg -l {hint-url}')
+config.bind('wp', 'hint links spawn ~/.scripts/random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
 config.bind('<Ctrl-Shift-c>', 'yank selection')
 config.bind('h', 'hint all hover')
 config.bind('<Ctrl-F>', 'hint --rapid all tab-bg')
 config.bind('<Ctrl-e>', 'fake-key <Ctrl-a><Ctrl-c><Ctrl-Shift-e>')
-config.bind('<Ctrl-Shift-e>', f'spawn {term_program} -t "floatme" -o background_opacity=0.8 -e /bin/fish -c \'cat ~/.cache/wal/sequences && nvim +"nnoremap Z ggVG\\"+yZQ|normal!\\"+p:" && qbpm launch (echo "$QTWEBENGINE_DICTIONARIES_PATH" | sed "s/^.*qutebrowser-profiles\\///" | sed "\\/.*//g") ":fake-key <Ctrl-v>"\'')
+config.bind('<Ctrl-Shift-e>', f'spawn {term_program} --title "floatme" -o background_opacity=0.8 -e /bin/fish -c \'cat ~/.cache/wal/sequences && nvim +"nnoremap Z ggVG\\"+yZQ|normal!\\"+p:" && qbpm launch (echo "$QTWEBENGINE_DICTIONARIES_PATH" | sed "s/^.*qutebrowser-profiles\\///" | sed "\\/.*//g") ":fake-key <Ctrl-v>"\'')
 config.unbind('<Ctrl-v>')
 config.unbind('<Ctrl-a>')
 
