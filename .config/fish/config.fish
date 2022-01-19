@@ -134,8 +134,13 @@ if status --is-interactive
         alias paste "xclip -selection clipboard -out"
     end
 
-    abbr music 'if ! tmux has-session -t music &>/dev/null; tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ." && tmux split-window -h cava && tmux select-pane -t 0; end && tmux attach-session -t music'
-    alias music 'if ! tmux has-session -t music &>/dev/null; tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ." && tmux split-window -h cava && tmux select-pane -t 0; end && tmux attach-session -t music'
+    function music
+        if tmux has-session -t music &>/dev/null
+            tmux attach -t music
+        else
+            tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ."
+        end
+    end
 
     fish_vi_key_bindings
 

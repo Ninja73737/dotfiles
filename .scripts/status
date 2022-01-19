@@ -43,6 +43,24 @@ while true
         set -a output 墳 (pulsemixer --get-volume | awk '{ print $1 }')"% |"
     end
 
+    if test -S /tmp/mpv-socket && set state (echo '{ "command": ["get_property", "pause"] }' | socat - /tmp/mpv-socket 2> /dev/null)
+        if test (echo "$state" | jq -r '.data') = true
+            set -a output 契
+        else
+            set -a output 
+        end
+
+        set -a output (echo '{ "command": ["get_property", "media-title"] }' | socat - /tmp/mpv-socket | jq -r '.data')
+
+        set artist (echo '{ "command": ["get_property", "metadata/artist"] }' | socat - /tmp/mpv-socket | jq -r '.data')
+
+        if test "$artist" != null
+            set -a output "- $artist"
+        end
+
+        set -a output "|"
+    end
+
     set -a output (date +' %a. %b %-d  %-I:%M:%S %p')" |"
 
     echo $output
