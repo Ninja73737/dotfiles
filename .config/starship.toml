@@ -70,6 +70,10 @@ success_symbol = "[>](blue)"
 error_symbol = "[>](red)"
 vicmd_symbol = "[<](green)"
 
+[shell]
+format = "[$indicator]($style) "
+disabled = false
+
 [git_commit]
 format = "at [$hash]($style) [$tag]($style)"
 
