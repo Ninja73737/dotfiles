@@ -92,7 +92,7 @@ alias lsd "exa -al --icons --group-directories-first"
 alias lst "exa -aT -L 5 --icons --group-directories-first"
 alias lsta "exa -aT --icons --group-directories-first"
 
-export pager="less"
+export PAGER="less"
 
 if status --is-interactive
     [ -f ~/.config/tabtab/fish/__tabtab.fish ]; and . ~/.config/tabtab/fish/__tabtab.fish; or true
