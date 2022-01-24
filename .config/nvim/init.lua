@@ -7,16 +7,17 @@ map("n", "<BS>", "<NOP>", { noremap = true })
 cmd([[let mapleader = "\<BS>"]])
 vim.g.maplocalleader = " "
 
+-- TODO: write plugin that checks if a git repo is yours or a fork, and runs range formatting on only lines that have changed in git automatically
 -- TODO: https://github.com/mfussenegger/nvim-dap
 -- TODO: https://github.com/seblj/nvim-tabline
 -- TODO: fix telescope live grep colon filetypes
 -- TODO: add noa writes to compile and execute commands
--- TODO: call nvim_put(["# " .. expand("%:r")], "c", v:false, v:true) (for markdown headers)
 -- TODO: set up lspkind and name menu items for completion: https://www.youtube.com/watch?v=_DnmphIwnjo
 -- TODO: add gh issues source for completion: https://github.com/tjdevries/config_manager/blob/master/xdg_config/nvim/after/plugin/cmp_gh_source.lua
+-- TODO: go through rockerBOO/awesome-neovim, particularly the markdown section
 
 map("n", "Q", "<CMD>quitall!<CR>", {})
-map("n", "W", "<CMD>write<CR>", {})
+map("n", "W", "<CMD>write|normal zz<CR>", {})
 map("n", "Z", "<CMD>wq<CR>", {})
 
 map("n", "$", "g_", {})
@@ -355,9 +356,8 @@ packer.startup(function(use)
         end,
         after = "nvim-gps",
     })
-    -- TODO: make my own version of this, use https://vi.stackexchange.com/questions/25996/write-register-0-to-file
     use({
-        "ferrine/md-img-paste.vim",
+        "ferrine/md-img-paste.vim", -- TODO: switch to ekickx/clipboard-image.nvim
         ft = { "markdown", "rmd" },
         config = function()
             vim.g.mdip_imgdir = vim.fn.expand("%:t:r")
@@ -463,12 +463,26 @@ packer.startup(function(use)
     use({
         "nvim-telescope/telescope.nvim",
         config = function()
+            require("telescope").setup({
+                defaults = {
+                    scroll_strategy = "limit",
+                    layout_config = {
+                        horizontal = {
+                            preview_cutoff = 60,
+                        },
+                    },
+                },
+            })
+
             ---@diagnostic disable-next-line: redefined-local
             local map = vim.api.nvim_set_keymap
             map("n", "tg", "<CMD>Telescope live_grep<CR>", {})
             map("n", "tf", "<CMD>Telescope find_files<CR>", {})
             map("n", "ty", "<CMD>Telescope filetypes<CR>", {})
             map("n", "tb", "<CMD>Telescope git_branches<CR>", {})
+            map("n", "tc", "<CMD>Telescope git_commits<CR>", {})
+            map("n", "ts", "<CMD>Telescope lsp_document_symbols<CR>", {})
+            map("n", "t/", "<CMD>Telescope current_buffer_fuzzy_find<CR>", {})
         end,
         requires = { "nvim-lua/plenary.nvim" },
     })
@@ -514,11 +528,12 @@ packer.startup(function(use)
                     local res = h:read("*a")
                     h:close()
                     if res == "Darwin\n" then
-                        return { "haskell" }
+                        return { "phpdoc", "haskell" }
                     else
-                        return {}
+                        return { "phpdoc" }
                     end
                 end)(),
+                -- TODO: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
                 highlight = {
                     enable = true,
                     additional_vim_regex_highlighting = false,
@@ -565,20 +580,6 @@ packer.startup(function(use)
                 },
                 pairs = {
                     enable = true,
-                    disable = {},
-                    highlight_pair_events = {},
-                    highlight_self = false,
-                    goto_right_end = false,
-                    fallback_cmd_normal = "call matchit#Match_wrapper('',1,'n')",
-                    keymaps = {
-                        goto_partner = "<leader>%",
-                        delete_balanced = "X",
-                    },
-                    delete_balanced = {
-                        only_on_first_char = false,
-                        fallback_cmd_normal = nil,
-                        longest_partner = false,
-                    },
                 },
             })
         end,
@@ -905,11 +906,24 @@ packer.startup(function(use)
             local diagnostics = builtins.diagnostics
             local formatting = builtins.formatting
 
+            local git_ancestor = require("lspconfig.util").find_git_ancestor(vim.fn.expand("%:p"))
+            local cspell_args = { "--locale", "en-GB" }
+            if git_ancestor ~= nil then
+                local potential_names = { ".cspell.json", ".cspell.yml", ".cspell.yaml" }
+                for _, name in ipairs(potential_names) do
+                    local target = git_ancestor .. "/" .. name
+                    if vim.fn.filereadable(target) == 1 then
+                        cspell_args = { "--config", target }
+                        break
+                    end
+                end
+            end
+
             null_ls.setup({
                 sources = {
                     diagnostics.cspell.with({
                         filetypes = { "markdown", "rmd" },
-                        extra_args = { "--config", os.getenv("HOME") .. "/.config/nvim/cspell.yaml" },
+                        extra_args = cspell_args,
                     }),
                     diagnostics.hadolint,
                     diagnostics.markdownlint.with({
@@ -959,7 +973,7 @@ packer.startup(function(use)
                 capabilities = vim.lsp._capabilities,
             })
         end,
-        after = { "cmp-nvim-lsp" },
+        after = { "cmp-nvim-lsp", "lspconfig" },
     })
     -- TODO: set this up to use the root of the current git directory
     use({
@@ -971,11 +985,9 @@ packer.startup(function(use)
     })
     use({
         "folke/trouble.nvim",
-        requires = "kyazdani42/nvim-web-devicons",
         config = function()
             require("trouble").setup({
-                vim.api.nvim_set_keymap("n", "tt", "<CMD>TroubleToggle<CR>", {}),
-                vim.api.nvim_set_keymap("n", "td", "<CMD>TodoTrouble<CR>", {}),
+                vim.api.nvim_set_keymap("n", "tt", "<CMD>TodoTelescope<CR>", {}),
             })
         end,
     })
@@ -1054,6 +1066,7 @@ end)
 cmd([[autocmd BufWinEnter,WinEnter term://* startinsert]])
 cmd([[autocmd TermOpen * setlocal nonumber norelativenumber]])
 cmd(
-    [[autocmd BufRead * if !empty($LF_LEVEL) | call system('lf -remote "send $id cd ' .. expand('%:p:h') .. '" && lf -remote "send $id select ' .. expand('%') .. '"') | endif]]
+    [[autocmd BufRead * if !empty($LF_LEVEL) | call system('lf -remote "send $id cd ' .. expand('%:p:h') .. '" && lf -remote "send $id select ' .. fnameescape(expand('%:t')) .. '"') | endif]]
 )
 cmd([[autocmd BufNewFile,BufRead *.S set ft=asm]])
+cmd([[autocmd BufNewFile,BufRead *.t set ft=cram]])
