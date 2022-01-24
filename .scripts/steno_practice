@@ -1,0 +1,4 @@
+#!/bin/bash
+
+MOZ_ENABLE_WAYLAND=1 firefox "https://didoesdigital.com/typey-type/progress" & disown
+cd "$HOME/repos/plover" && tox -e launch & disown
