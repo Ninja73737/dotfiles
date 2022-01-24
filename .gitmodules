@@ -1,9 +1,6 @@
 [submodule ".config/qutebrowser/qutewal"]
 	path = .config/qutebrowser/qutewal
 	url = https://gitlab.com/jjzmajic/qutewal
-[submodule ".scripts/alacritty-color-export"]
-	path = .scripts/alacritty-color-export
-	url = https://github.com/mtoohey31/alacritty-color-export
 [submodule ".config/kitty/search"]
 	path = .config/kitty/search
 	url = https://github.com/trygveaa/kitty-kitten-search
