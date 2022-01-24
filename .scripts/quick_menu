@@ -1,4 +1,4 @@
 #!/usr/bin/fish
 
 cat ".cache/wal/sequences"
-eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer"\n"poweroff"\n"systemctl suspend"\n"supergfxctl -m integrated"\n"supergfxctl -m compute"\n"supergfxctl -m vfio"\n"supergfxctl -m hybrid"\n"supergfxctl -m nvidia" | fzf --color 16)
+eval (echo "bluetoothctl"\n"iwctl"\n"pulsemixer"\n"poweroff"\n"systemctl suspend"\n"supergfxctl -m integrated"\n"supergfxctl -m compute"\n"supergfxctl -m vfio"\n"supergfxctl -m hybrid"\n"supergfxctl -m nvidia"\n"systemctl restart iwd"\n"systemctl start wg-quick@wg0"\n"systemctl stop wg-quick@wg0" | fzf --color 16)
