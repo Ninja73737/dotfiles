@@ -22,7 +22,14 @@
           - tmux
         state: latest
       become: "{{ become_for_packages }}"
-    - name: Change shell to fish (Non-Alpine) # NOTE: this is disabled for Alpine becuase it doesn't work, and getting it working requires 299 MiB of packages
+    - name: Change shell to fish (Alpine)
+      replace:
+        path: /etc/passwd
+        regexp: "^({{ ansible_user }}.*:)/bin/ash$"
+        replace: '\1/usr/bin/fish'
+      become: true
+      when: ansible_facts['os_family'] == 'Alpine'
+    - name: Change shell to fish (Non-Alpine)
       user:
         name: "{{ ansible_facts['user_id'] }}"
         shell: /usr/bin/fish
