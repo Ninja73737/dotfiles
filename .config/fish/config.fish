@@ -43,8 +43,7 @@ end
 export PATH="$PATH:$JAVA_HOME/bin"
 export ANDROID_SDK_ROOT=$HOME/.android/Sdk
 
-# TODO: Remove this temporary export
-set -g fish_user_paths "$HOME/repos/taskmatter" $fish_user_paths
+set fish_greeting
 
 if which trash &>/dev/null
     abbr rm trash
