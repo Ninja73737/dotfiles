@@ -1,3 +1,0 @@
-#!/bin/sh
-
-xrandr --output eDP-1-1 --mode 1920x1080 --pos 3440x1080 --rotate normal --output DP-0.3 --primary --mode 3440x1440 --pos 0x1080 --rate 120.00 --rotate normal --output DP-0.2 --mode 2560x1080 --rate 60.00 --pos 880x0 --rotate normal

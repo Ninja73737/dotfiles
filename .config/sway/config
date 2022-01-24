@@ -4,7 +4,7 @@ include "$HOME/.cache/wal/colors-sway"
 
 output * bg ~/Pictures/Wallpapers/random/random.jpeg fill
 
-exec_always $HOME/.scripts/screenlayout/laptop_sway_dynamic
+exec_always $HOME/.scripts/screenlayout
 
 output "Acer Technologies XV340CK P THQAA0013P00" {
     scale 1.25
@@ -15,6 +15,12 @@ output "Acer Technologies XV340CK P THQAA0013P00" {
 output "Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E" {
     scale 1
     mode 2560x1080@60Hz
+    position 0 0
+}
+
+output "Samsung Electric Company S24B350 0x00007F58" {
+    scale 1.15
+    mode 1920x1080@60Hz
     position 0 0
 }
 
@@ -148,7 +154,7 @@ bindsym Mod4+Shift+Left exec echo '{ "command": ["playlist-prev"] }' | socat - /
 bindsym Mod4+Shift+Down exec echo '{ "command": ["add", "volume", "-2"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+Shift+Up exec echo '{ "command": ["add", "volume", "2"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+semicolon exec kitty -T floatme -o background_opacity=0.8 -e $HOME/.scripts/quick_menu
-bindsym Mod4+E exec kitty -T floatme -o background_opacity=0.8 -e $HOME/.scripts/repls
+bindsym Mod4+E exec kitty -T floatme -o background_opacity=0.8 -e fish -c $HOME/.scripts/repls
 
 bindsym Mod4+p exec ~/.local/bin/qbpm launch personal
 bindsym Mod4+g exec ~/.local/bin/qbpm launch gaming

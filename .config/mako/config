@@ -4,10 +4,6 @@ anchor=bottom-right
 border-size=0
 margin=16
 
-[app-name="Spotify"]
-default-timeout=2500
-# invisible=1
-
 [app-name="Microsoft Teams - Preview"]
 default-timeout=2500
 
