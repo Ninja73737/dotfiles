@@ -1,2 +1,2 @@
-R_PROFILE_USER = ${HOME}/.config/r/Rprofile
+R_PROFILE_USER = ${HOME}/.config/R/Rprofile
 R_LIBS_USER = ${HOME}/.R
