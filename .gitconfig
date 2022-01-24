@@ -65,6 +65,7 @@
 	tl = stash list
 	tp = stash pop
 	u = pull
+	ut = pull --autostash
 	w = worktree
 	wa = worktree add
 	wm = worktree move
