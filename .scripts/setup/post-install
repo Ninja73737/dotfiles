@@ -39,27 +39,41 @@ if [ "$(uname)" != "Darwin" ]; then
     printf "username: "
     read -r username
     $command "$username"
+    passwd "$username"
   else
     printf "user for non-root commands: "
     read -r username
+    if ! groups "$username" | grep "wheel" > /dev/null; then
+      die "provided user was not in wheel group"
+    fi
   fi
 
-  echo "installing python"
-  if command -v "apk"; then
-    apk add python3-dev
-  elif command -v "pacman"; then
-    pacman -S python
+  if ! grep '^%wheel ALL=(ALL) ALL$' /etc/sudoers > /dev/null; then
+    echo '%wheel ALL=(ALL) ALL' > /etc/sudoers
+  fi
+
+  if command -v "apk" > /dev/null; then
+    if ! apk info python3-dev sudo --installed > /dev/null; then
+      apk add python3-dev sudo
+    fi
+  elif command -v "pacman" > /dev/null; then
+    if ! pacman -Q python sudo > /dev/null 2>&1; then
+      pacman -S python sudo
+    fi
   else
     die "no supported package manager found"
   fi
 fi
 
-if command -v "apk"; then
-  echo "installing ansible build deps"
-  apk install "gcc musl-dev libffi-dev"
+if command -v "apk" > /dev/null; then
+  if ! apk info gcc musl-dev libffi-dev --installed > /dev/null; then
+    apk install "gcc musl-dev libffi-dev"
+  fi
 fi
 
 command=$(find_command "curl -sSL" "wget -qO -")
-$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.scripts/setup/post-install-user > /post-user
+# $command "https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.scripts/setup/post-install-user" > /post-user
+$command "http://192.168.122.1:8000/post-install-user" > /post-user
+
 chmod 777 /post-user
-su "$username" -c "cd / && sh post-user"
+exec su "$username" -c "cd / && sh post-user"

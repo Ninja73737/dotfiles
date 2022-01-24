@@ -30,25 +30,27 @@ die() {
   exit 1
 }
 
-echo "installing pip"
-python3 -m ensurepip
+if ! command -v pip3 > /dev/null; then
+  python3 -m ensurepip
+fi
 
-echo "installing ansible"
-pip3 install ansible
+if ! pip3 show ansible > /dev/null 2>&1; then
+  pip3 install ansible
+fi
 
-echo "downloading playbook requirements"
 command=$(find_command "curl -sSL" "wget -qO -")
 $command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/requirements.yaml > /tmp/requirements.yaml
 ansible-galaxy install -r /tmp/requirements.yaml
 rm /tmp/requirements.yaml
 
-echo "downloading playbook index"
-$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/index | while read -r playbook; do
-  printf "run playbook: %s?" "$playbook"
+playbooks=$($command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/index)
+IFS='
+'
+for playbook in $playbooks; do
+  printf "run playbook %s?" "$playbook"
   if ! choose; then
-    echo I be exiting
-    exit
+    continue
   fi
- $command "https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/$playbook" > "/tmp/$playbook"
- ansible-playbook -i localhost, "/tmp/$playbook" -c local
+  sh -c "$command https://raw.githubusercontent.com/mtoohey31/dotfiles/main/.ansible/playbooks/$playbook" > "/tmp/$playbook"
+ ansible-playbook -i localhost, "/tmp/$playbook" -c local -K
 done
