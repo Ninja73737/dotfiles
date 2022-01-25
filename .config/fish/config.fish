@@ -207,9 +207,7 @@ if status --is-interactive
         alias ssh="TERM=xterm-256color command ssh"
     end
 
-    if test -z "$SSH_CONNECTION" -a "$TERM_PROGRAM" = alacritty -a (uname) = Darwin
-        $HOME/.scripts/alacritty-color-export/script.sh >/dev/null
-    else if test -z "$SSH_CONNECTION" -a -z "$TMUX"
+    if test -z "$SSH_CONNECTION" -a -z "$TMUX"
         cat ~/.cache/wal/sequences
     end
 

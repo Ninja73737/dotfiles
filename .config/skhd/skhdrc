@@ -10,17 +10,16 @@ cmd + shift - j : yabai -m window --swap south
 cmd + shift - k : yabai -m window --swap north
 cmd + shift - l : yabai -m window --swap east
 
-cmd - return : open -na "Alacritty.app"
-cmd - 0x2C : open -na "Alacritty.app" --args -e fish -C 'lf'
+cmd - return : kitty -d ~
+cmd - 0x2C : kitty -d ~ -e fish -C 'lf'
 cmd + shift - 0x2C : open ~
 cmd - space : osascript -e 'tell application "Alfred" to search ""'
 
 cmd + shift - b : yabai -m space --balance
-cmd + shift - c : open -na "Alacritty.app" --args -o background_opacity=0.8 -t "floatme" -e fish -c 'cat ".cache/wal/sequences" && R --quiet --no-save'
-cmd + shift - y : $HOME/.scripts/restart_yabai
-cmd + shift - d : pmset sleepnow
+cmd + shift - e : kitty -T "floatme" -e fish -c 'cat "$HOME.cache/wal/sequences" && "$HOME/.scripts/repls"'
+cmd + shift - y : "$HOME/.scripts/restart_yabai"
 cmd + shift - 0x2A : yabai -m window --toggle float
-cmd + shift - o : $HOME/.scripts/switch_output
+cmd + shift - o : "$HOME/.scripts/switch_output"
 cmd + shift - p : qbpm launch personal
 cmd + shift - u : qbpm launch university
 cmd + shift - g : qbpm launch gaming
