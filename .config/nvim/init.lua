@@ -4,6 +4,9 @@ local cmd = vim.cmd
 
 map("n", "<SPACE>", "<NOP>", { noremap = true })
 map("n", "<BS>", "<NOP>", { noremap = true })
+if vim.fn.has("win32") then
+    map("n", "K", "<NOP>", { noremap = true })
+end
 cmd([[let mapleader = "\<BS>"]])
 vim.g.maplocalleader = " "
 
@@ -196,7 +199,9 @@ vim.lsp._on_attach = function(_, bufnr)
 
     vim.opt.signcolumn = "yes"
 
-    vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focusable=false })]])
+    if not vim.fn.has("win32") then
+        vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focusable=false })]])
+    end
     -- TODO: check if we're in a repository owned by someone else or a fork of a
     -- repository owned by someone else, and if we are, don't register this
     -- autocommand.
@@ -328,10 +333,16 @@ packer.startup(function(use)
     use({
         "nvim-lualine/lualine.nvim",
         config = function()
+            local theme = "pywal"
+
+            if vim.fn.has("win32") then
+                theme = "palenight"
+            end
+
             local gps = require("nvim-gps")
             require("lualine").setup({
                 options = {
-                    theme = "pywal",
+                    theme = theme,
                 },
                 sections = {
                     lualine_c = {
@@ -520,18 +531,19 @@ packer.startup(function(use)
             cmd([['TSUpdate']])
         end,
         config = function()
-            package.path = os.getenv("HOME") .. "/.cache/wal/?.lua;" .. package.path
             require("nvim-treesitter.configs").setup({
                 ensure_installed = "all",
                 ignore_install = (function()
-                    local h = io.popen("uname")
-                    local res = h:read("*a")
-                    h:close()
-                    if res == "Darwin\n" then
+                    if not vim.fn.has("win32") then
+                        local h = io.popen("uname")
+                        local res = h:read("*a")
+                        h:close()
+                        if res == "Darwin\n" then
                         return { "phpdoc", "haskell" }
-                    else
-                        return { "phpdoc" }
+                        end
                     end
+
+                    return { "phpdoc" }
                 end)(),
                 -- TODO: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
                 highlight = {
@@ -553,7 +565,15 @@ packer.startup(function(use)
                 rainbow = {
                     enable = true,
                     extended_mode = true,
-                    colors = require("colors").colorful,
+                    colors = (function ()
+                        local home = os.getenv("HOME")
+                        if home ~= nil then
+                            package.path = home .. "/.cache/wal/?.lua;" .. package.path
+                            return require("colors").colorful
+                        else
+                            return nil
+                        end
+                    end)(),
                     termcolors = { "1", "2", "3", "4", "5", "6", "7", "1", "2", "3", "4", "5", "6", "7", "1", "2" },
                 },
                 -- TODO: add contexts for different markdown comments, and maybe contribute them if someone else hasn't already?
@@ -931,6 +951,12 @@ packer.startup(function(use)
                 end
             end
 
+            local markdownlint_extra_args = {}
+            local home = os.getenv("HOME")
+            if home ~= nil then
+                markdownlint_extra_args = { "-c", home .. "/.config/nvim/markdownlint.yaml", "--stdin" }
+            end
+
             null_ls.setup({
                 sources = {
                     diagnostics.cspell.with({
@@ -940,11 +966,7 @@ packer.startup(function(use)
                     diagnostics.hadolint,
                     diagnostics.markdownlint.with({
                         filetypes = { "markdown" },
-                        extra_args = {
-                            "-c",
-                            os.getenv("HOME") .. "/.config/nvim/markdownlint.yaml",
-                            "--stdin",
-                        },
+                        extra_args = markdownlint_extra_args,
                     }),
                     diagnostics.shellcheck,
 
