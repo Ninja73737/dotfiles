@@ -836,22 +836,20 @@ packer.startup(function(use)
             cmp.setup({
                 snippet = {
                     expand = function(args)
-                        vim.fn["UltiSnips#Anon"](args.body)
+                        require("luasnip").lsp_expand(args.body)
                     end,
                 },
                 mapping = {
                     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-                    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                    ["<C-u>"] = cmp.mapping.scroll_docs(4),
                     ["<C-Space>"] = cmp.mapping.complete(),
                     ["<C-e>"] = cmp.mapping.close(),
                     ["<CR>"] = cmp.mapping.confirm({ select = false }),
-                    ["<Tab>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                    ["<S-Tab>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
                 },
                 sources = cmp.config.sources({
                     { name = "fish" },
                     { name = "nvim_lsp" },
-                    { name = "ultisnips" },
+                    { name = "luasnip" },
                     { name = "buffer" },
                     { name = "path" },
                     { name = "calc" },
@@ -860,7 +858,7 @@ packer.startup(function(use)
                 experimental = { ghost_text = true },
             })
         end,
-        after = { "ultisnips" },
+        after = { "LuaSnip" },
     })
     use({ "hrsh7th/cmp-buffer", after = "nvim-cmp" })
     -- " TODO: make this work without a prefixed `./`
@@ -868,34 +866,48 @@ packer.startup(function(use)
     -- " TODO: make this work for tex math
     use("hrsh7th/cmp-calc")
     use("hrsh7th/cmp-emoji")
-    -- " TODO: Consider the alternatives to this that are also supported by nvim-cmp
-    use("SirVer/ultisnips")
-    use("quangnguyen30192/cmp-nvim-ultisnips")
+    use({
+        "L3MON4D3/LuaSnip",
+        config = function()
+            require("luasnip.loaders.from_vscode").load()
+
+            local luasnip = require("luasnip")
+
+            local t = function(str)
+                return vim.api.nvim_replace_termcodes(str, true, true, true)
+            end
+
+            _G.tab_complete = function()
+                if luasnip.jumpable(1) then
+                    return t("<Plug>luasnip-jump-next")
+                elseif luasnip.expandable() then
+                    return t("<Plug>luasnip-expand-snippet")
+                elseif vim.o.ft == "markdown" then
+                    return t("<C-t>")
+                else
+                    return t("<C-t>")
+                end
+            end
+
+            _G.s_tab_complete = function()
+                if luasnip.jumpable(-1) then
+                    return t("<Plug>luasnip-jump-prev")
+                elseif vim.o.ft == "markdown" then
+                    return t("<C-d>")
+                else
+                    return t("<C-d>")
+                end
+            end
+
+            vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", { expr = true })
+            vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", { expr = true })
+            vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", { expr = true })
+            vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", { expr = true })
+        end,
+    })
+    use("rafamadriz/friendly-snippets")
+    use("saadparwaiz1/cmp_luasnip")
     use({ "mtoohey31/cmp-fish", ft = "fish" })
-
-    -- TODO: get tab working beautifully, including in markdown
-    -- let g:completion_enable_snippet = 'UltiSnips'
-    vim.g.UltiSnipsExpandTrigger = "<NUL>"
-    vim.g.UltiSnipsJumpForwardTrigger = "<NUL>"
-    vim.g.UltiSnipsJumpBackwardTrigger = "<NUL>"
-    -- autocmd FileType markdown let g:completion_trigger_character = ['`', "#"]
-    -- inoremap <expr> <Tab> pumvisible() ? "\<Down>" : "\<CMD>call JumpForwardsOrIndent()<CR>"
-    -- inoremap <expr> <S-Tab> pumvisible() ? "\<Up>" : "\<CMD>call JumpBackwardsOrIndent()<CR>"
-
-    -- function! JumpForwardsOrIndent()
-    --       call UltiSnips#JumpForwards()
-    --       if !g:ulti_jump_forwards_res
-    --         call feedkeys("\<C-t>")
-    --       endif
-    -- endfunction
-
-    -- function! JumpBackwardsOrIndent()
-    --       call UltiSnips#JumpBackwards()
-    --       if !g:ulti_jump_backwards_res
-    --         call feedkeys("\<C-d>")
-    --       endif
-    -- endfunction
-    use("honza/vim-snippets")
     -- " TODO: Fix this after completion changes
     -- " Plug 'cbarrete/completion-vcard'
     use({
