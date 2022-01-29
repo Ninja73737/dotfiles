@@ -185,7 +185,7 @@ vim.lsp._on_attach = function(_, bufnr)
     local opts = { noremap = false, silent = true }
 
     buf_map("n", "gd", "<CMD>split | Telescope lsp_definitions<CR>", opts)
-    buf_map("n", "gtd", "<CMD>split | Telescope lsp_type_definitions<CR>", opts)
+    buf_map("n", "gt", "<CMD>split | Telescope lsp_type_definitions<CR>", opts)
     buf_map("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", opts)
     buf_map("n", "gi", "<CMD>Telescope lsp_implementations<CR>", opts)
     buf_map("n", "gr", "<CMD>Telescope lsp_references<CR>", opts)
@@ -199,9 +199,9 @@ vim.lsp._on_attach = function(_, bufnr)
 
     vim.opt.signcolumn = "yes"
 
-    if not vim.fn.has("win32") then
-        vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focusable=false })]])
-    end
+    -- if not (vim.fn.has("win32") == 1) then
+    --     vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focusable=false })]])
+    -- end
     -- TODO: check if we're in a repository owned by someone else or a fork of a
     -- repository owned by someone else, and if we are, don't register this
     -- autocommand.
@@ -308,7 +308,7 @@ packer.startup(function(use)
     use({
         "mbbill/undotree",
         config = function()
-            if vim.fn.has("persistent_undo") then
+            if vim.fn.has("persistent_undo") == 1 then
                 vim.o.undodir = vim.fn.stdpath("data") .. "/undodir"
 
                 if not vim.fn.isdirectory(vim.o.undodir) then
@@ -329,13 +329,12 @@ packer.startup(function(use)
         end,
     })
     use("chaoren/vim-wordmotion")
-    use("vim-scripts/loremipsum")
     use({
         "nvim-lualine/lualine.nvim",
         config = function()
             local theme = "pywal"
 
-            if vim.fn.has("win32") then
+            if vim.fn.has("win32") == 1 then
                 theme = "palenight"
             end
 
@@ -373,13 +372,6 @@ packer.startup(function(use)
         config = function()
             vim.g.mdip_imgdir = vim.fn.expand("%:t:r")
             vim.g.mdip_imgdir_intext = vim.fn.escape(vim.fn.expand("%:t:r"), " ")
-        end,
-    })
-    use({
-        "mtoohey31/doctest.nvim",
-        ft = "python",
-        run = function()
-            cmd("UpdateRemotePlugins")
         end,
     })
     use("mtoohey31/truth-table.nvim")
@@ -534,12 +526,12 @@ packer.startup(function(use)
             require("nvim-treesitter.configs").setup({
                 ensure_installed = "all",
                 ignore_install = (function()
-                    if not vim.fn.has("win32") then
+                    if not vim.fn.has("win32") == 1 then
                         local h = io.popen("uname")
                         local res = h:read("*a")
                         h:close()
                         if res == "Darwin\n" then
-                        return { "phpdoc", "haskell" }
+                            return { "phpdoc", "haskell" }
                         end
                     end
 
@@ -555,7 +547,6 @@ packer.startup(function(use)
                 refactor = {
                     highlight_definitions = { enable = true },
                 },
-                -- TODO: Get this working
                 tree_docs = {
                     enable = true,
                     keymaps = {
@@ -565,7 +556,7 @@ packer.startup(function(use)
                 rainbow = {
                     enable = true,
                     extended_mode = true,
-                    colors = (function ()
+                    colors = (function()
                         local home = os.getenv("HOME")
                         if home ~= nil then
                             package.path = home .. "/.cache/wal/?.lua;" .. package.path
@@ -612,6 +603,7 @@ packer.startup(function(use)
         after = "nvim-treesitter",
     })
     use({ "theHamsta/nvim-treesitter-pairs", after = "nvim-treesitter" })
+    -- TODO: replce this with: https://github.com/danymat/neogen
     use({
         "nvim-treesitter/nvim-tree-docs",
         requires = { "Olical/aniseed" },
@@ -660,7 +652,6 @@ packer.startup(function(use)
                 "r_language_server",
                 "solargraph",
                 "solidity_ls",
-                "svelte",
                 "tailwindcss",
                 "taplo",
                 "vimls",
@@ -697,6 +688,7 @@ packer.startup(function(use)
                 "jsonls",
                 "tsserver",
                 "rls",
+                "svelte",
             }
 
             for _, ls in ipairs(servers_no_fomatting) do
@@ -939,6 +931,7 @@ packer.startup(function(use)
             local formatting = builtins.formatting
 
             local git_ancestor = require("lspconfig.util").find_git_ancestor(vim.fn.expand("%:p"))
+            -- TODO: fix config file extension overrides not showing up
             local cspell_args = { "--locale", "en-GB" }
             if git_ancestor ~= nil then
                 local potential_names = { ".cspell.json", ".cspell.yml", ".cspell.yaml" }
@@ -989,7 +982,7 @@ packer.startup(function(use)
                             "yaml",
                             "markdown",
                             "graphql",
-                            -- "svelte",
+                            "svelte",
                         },
                     }),
                     formatting.stylua.with({
