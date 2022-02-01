@@ -133,6 +133,11 @@ if status --is-interactive
         alias paste "xclip -selection clipboard -out"
     end
 
+    function gce
+        set tmp (mktemp)
+        gcc -Wall -g -o "$tmp" $argv && "$tmp"
+    end
+
     function music
         if tmux has-session -t music &>/dev/null
             tmux attach -t music
