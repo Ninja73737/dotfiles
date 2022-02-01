@@ -13,7 +13,7 @@ map(
 map(
     "n",
     "<LocalLeader>P",
-    [[<CMD>call system('pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>]],
+    [[<CMD>execute('!pandoc --metadata-file $HOME/.config/pandoc/default-metadata.yaml -f markdown "' . expand('%:p') . '" -t pdf --pdf-engine=xelatex -o "' . expand('%:p:r') . '.pdf"')<CR>]],
     {}
 )
 map("n", "<S-CR>", "<CR><CR>---<CR><CR>", { noremap = true })
