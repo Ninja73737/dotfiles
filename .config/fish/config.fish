@@ -160,6 +160,8 @@ if status --is-interactive
     # bind -s -M normal V beginning-of-line begin-selection end-of-line
     # bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
 
+    bind -s -M insert \cf 'set old_tty (stty -g); stty sane; lfcd; stty $old_tty; commandline -f repaint'
+
     set fish_cursor_default block
     set fish_cursor_insert line
     set fish_cursor_replace_one underscore

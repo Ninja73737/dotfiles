@@ -48,7 +48,7 @@ map gp cd ~/.local/share/nvim/site/pack/packer
 #     for 
 # }}
 map x !unzip "$f"
-map W &$TERM_PROGRAM -e fish -C lf > /dev/null &
+map gC &$TERM_PROGRAM -e fish -C lf > /dev/null &
 map c ${{
     set IFS " "
     set n 1
