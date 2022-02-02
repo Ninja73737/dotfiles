@@ -25,7 +25,12 @@ local fuse = function(plugin_spec)
     if type(plugin_spec) == "string" then
         plugin_spec = { plugin_spec }
     end
-    local name = fn.split(fn.split(plugin_spec[1], "/")[2], "\\.")[1]
+    local name = fn.split(fn.split(plugin_spec[1], "/")[2], "\\.")[1]:lower()
+    if name:sub(1, 5) == "nvim-" then
+        name = name:sub(6)
+    elseif name:sub(1, 4) == "vim-" then
+        name = name:sub(5)
+    end
     local config_path = fn.fnamemodify(os.getenv("MYVIMRC"), ":h") .. "/lua/config/" .. name .. ".lua"
     if fn.filereadable(config_path) == 1 then
         plugin_spec.config = string.format('require("config/%s")', name)

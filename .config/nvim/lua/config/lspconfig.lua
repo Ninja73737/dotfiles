@@ -15,7 +15,6 @@ local servers = {
     "kotlin_language_server",
     -- "ltex",
     "metals", -- if I use this much, I should add nvim-metals
-    "pyright",
     "r_language_server",
     "solargraph",
     "solidity_ls",
@@ -53,6 +52,7 @@ end
 local servers_no_fomatting = {
     "erlangls",
     "jsonls",
+    "pyright",
     "tsserver",
     "rls",
     "svelte",
