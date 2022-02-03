@@ -10,6 +10,7 @@ require("lualine").setup({
         theme = theme,
     },
     sections = {
+        lualine_b = { { "b:gitsigns_head", icon = "" } },
         lualine_c = {
             "filename",
             { gps.get_location, cond = gps.is_available },
