@@ -5,19 +5,12 @@ local servers = {
     "bashls",
     "ccls",
     "cssls",
-    "clojure_lsp",
     "dartls",
     "dockerls",
-    "fsautocomplete",
     "gopls",
     "hls",
-    "html",
     "kotlin_language_server",
-    -- "ltex",
-    "metals", -- if I use this much, I should add nvim-metals
     "r_language_server",
-    "solargraph",
-    "solidity_ls",
     "tailwindcss",
     "taplo",
     "vimls",
@@ -50,7 +43,7 @@ for _, ls in ipairs(manually_enabled_servers) do
 end
 
 local servers_no_fomatting = {
-    "erlangls",
+    "html",
     "jsonls",
     "pyright",
     "tsserver",
@@ -101,15 +94,6 @@ nvim_lsp.java_language_server.setup({
             },
         },
     },
-    flags = {
-        debounce_text_changes = 150,
-    },
-    capabilities = vim.lsp._capabilities,
-})
-
-nvim_lsp.omnisharp.setup({
-    cmd = { "/usr/bin/omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
-    on_attach = vim.lsp._on_attach,
     flags = {
         debounce_text_changes = 150,
     },
