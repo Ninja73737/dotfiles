@@ -50,7 +50,7 @@ if which trash &>/dev/null
     alias rm trash
 
     function mv --wraps mv
-        if ! test -d "$argv[-1]"
+        if test (count $argv) -ge 2 -a ! -d "$argv[-1]"
             trash "$argv[-1]" 2>/dev/null
         end
         command mv $argv
