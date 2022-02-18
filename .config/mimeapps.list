@@ -1,8 +1,8 @@
 [Default Applications]
 application/pdf=org.pwmt.zathura.desktop
 x-scheme-handler/mailspring=Mailspring.desktop
-image/png=sxiv.desktop
-image/jpeg=sxiv.desktop
+image/png=nsxiv.desktop
+image/jpeg=nsxiv.desktop
 text/html=qbpm.desktop
 x-scheme-handler/http=qbpm.desktop
 x-scheme-handler/https=qbpm.desktop

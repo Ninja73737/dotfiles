@@ -98,6 +98,8 @@ export PAGER="less"
 abbr tm taskmatter
 alias tm taskmatter
 
+alias nsxiv "nsxiv -a"
+
 abbr hi himalaya
 alias hi himalaya
 abbr ihi "nvim +'Himalaya'"
