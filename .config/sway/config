@@ -149,6 +149,7 @@ bindsym Mod4+Return exec kitty
 bindsym Mod4+slash exec kitty -e fish -C lf
 bindsym Mod4+space exec $HOME/.scripts/fuzzel_dynamic
 bindsym Mod4+Shift+space exec test -S /tmp/mpv-socket && echo '{ "command": ["cycle", "pause"] }' | socat - /tmp/mpv-socket || fish -C "music"
+bindsym Mod4+Shift+Return exec tmux kill-session -t music
 bindsym Mod4+Shift+Right exec echo '{ "command": ["playlist-next"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+Shift+Left exec echo '{ "command": ["playlist-prev"] }' | socat - /tmp/mpv-socket
 bindsym Mod4+Shift+Down exec echo '{ "command": ["add", "volume", "-2"] }' | socat - /tmp/mpv-socket
