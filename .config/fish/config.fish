@@ -93,132 +93,135 @@ alias lsta "exa -aT --icons --group-directories-first"
 
 export PAGER="less"
 
-if status --is-interactive
-    [ -f ~/.config/tabtab/fish/__tabtab.fish ]; and . ~/.config/tabtab/fish/__tabtab.fish; or true
+[ -f ~/.config/tabtab/fish/__tabtab.fish ]; and . ~/.config/tabtab/fish/__tabtab.fish; or true
 
-    abbr tm taskmatter
-    alias tm taskmatter
+abbr tm taskmatter
+alias tm taskmatter
 
-    abbr hi himalaya
-    alias hi himalaya
-    abbr ihi "nvim +'Himalaya'"
-    alias ihi "nvim +'Himalaya'"
+abbr hi himalaya
+alias hi himalaya
+abbr ihi "nvim +'Himalaya'"
+alias ihi "nvim +'Himalaya'"
 
-    abbr dc "docker compose"
-    abbr dcu "docker compose up -d --remove-orphans"
-    abbr dcd "docker compose down --remove-orphans"
-    abbr dcdu "docker compose -f docker-compose-dev.yaml up --remove-orphans"
-    abbr dcdd "docker compose -f docker-compose-dev.yaml down --remove-orphans"
+abbr dc "docker compose"
+abbr dcu "docker compose up -d --remove-orphans"
+abbr dcd "docker compose down --remove-orphans"
+abbr dcdu "docker compose -f docker-compose-dev.yaml up --remove-orphans"
+abbr dcdd "docker compose -f docker-compose-dev.yaml down --remove-orphans"
 
-    abbr pcp "rsync -r --info=progress2"
-    alias pcp "rsync -r --info=progress2"
+abbr pcp "rsync -r --info=progress2"
+alias pcp "rsync -r --info=progress2"
 
-    abbr dot "git --git-dir ~/.dotfiles --work-tree ~"
-    alias dot "git --git-dir ~/.dotfiles --work-tree ~"
+abbr dot "git --git-dir ~/.dotfiles --work-tree ~"
+alias dot "git --git-dir ~/.dotfiles --work-tree ~"
 
-    if test (uname) = Darwin
-        abbr copy pbcopy
-        alias copy pbcopy
-        abbr paste pbpaste
-        alias paste pbpaste
-    else if test -n "$WAYLAND_DISPLAY"
-        abbr copy wl-copy
-        alias copy wl-copy
-        abbr paste wl-paste
-        alias paste wl-paste
+if test (uname) = Darwin
+    abbr copy pbcopy
+    alias copy pbcopy
+    abbr paste pbpaste
+    alias paste pbpaste
+else if test -n "$WAYLAND_DISPLAY"
+    abbr copy wl-copy
+    alias copy wl-copy
+    abbr paste wl-paste
+    alias paste wl-paste
+else
+    abbr copy "xclip -selection clipboard -in"
+    alias copy "xclip -selection clipboard -in"
+    abbr paste "xclip -selection clipboard -out"
+    alias paste "xclip -selection clipboard -out"
+end
+
+function gce
+    set tmp (mktemp)
+    gcc -Wall -o "$tmp" "$argv[1]" && "$tmp" $argv[2..]
+end
+
+function gde
+    set tmp (mktemp)
+    gcc -Wall -g -o "$tmp" $argv && gdb --quiet --args "$tmp" $argv
+end
+
+function music
+    if tmux has-session -t music &>/dev/null
+        tmux attach -t music
     else
-        abbr copy "xclip -selection clipboard -in"
-        alias copy "xclip -selection clipboard -in"
-        abbr paste "xclip -selection clipboard -out"
-        alias paste "xclip -selection clipboard -out"
+        tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ."
     end
+end
 
-    function gce
-        set tmp (mktemp)
-        gcc -Wall -g -o "$tmp" $argv && "$tmp"
-    end
+fish_vi_key_bindings
 
-    function music
-        if tmux has-session -t music &>/dev/null
-            tmux attach -t music
-        else
-            tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ."
-        end
-    end
+# TODO: make pasting work in visual mode
+# TODO: make d and x keys work with this
+bind -s p 'commandline -C (math (commandline -C) + 1); fish_clipboard_paste; commandline -f backward-char repaint-mode'
+bind -s P 'fish_clipboard_paste; commandline -f repaint-mode'
+bind -s -M visual -m default y 'fish_clipboard_copy; commandline -f swap-selection-start-stop end-selection repaint-mode'
 
-    fish_vi_key_bindings
+bind -s -M visual e forward-single-char forward-word backward-char
+bind -s -M visual E forward-bigword backward-char
 
-    # TODO: make pasting work in visual mode
-    # TODO: make d and x keys work with this
-    bind -s p 'commandline -C (math (commandline -C) + 1); fish_clipboard_paste; commandline -f backward-char repaint-mode'
-    bind -s P 'fish_clipboard_paste; commandline -f repaint-mode'
-    bind -s -M visual -m default y 'fish_clipboard_copy; commandline -f swap-selection-start-stop end-selection repaint-mode'
+# bind -s -M normal V beginning-of-line begin-selection end-of-line
+# bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
 
-    bind -s -M visual e forward-single-char forward-word backward-char
-    bind -s -M visual E forward-bigword backward-char
+bind -s -M insert \cf 'set old_tty (stty -g); stty sane; lfcd; stty $old_tty; commandline -f repaint'
 
-    # bind -s -M normal V beginning-of-line begin-selection end-of-line
-    # bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
+set fish_cursor_default block
+set fish_cursor_insert line
+set fish_cursor_replace_one underscore
 
-    bind -s -M insert \cf 'set old_tty (stty -g); stty sane; lfcd; stty $old_tty; commandline -f repaint'
+abbr g git
+alias g git
 
-    set fish_cursor_default block
-    set fish_cursor_insert line
-    set fish_cursor_replace_one underscore
+export EDITOR=nvim
+export VISUAL="$EDITOR"
+abbr e "$EDITOR"
+alias e "$EDITOR"
+alias nvim "nvim -w ~/.local/share/nvim/keylog"
+if which sudoedit &>/dev/null
+    abbr se sudoedit
+    alias se sudoedit
+end
 
-    abbr g git
-    alias g git
+export PAGER='nvim +Man!'
 
-    export EDITOR=nvim
-    export VISUAL="$EDITOR"
-    abbr e "$EDITOR"
-    alias e "$EDITOR"
-    alias nvim "nvim -w ~/.local/share/nvim/keylog"
-    if which sudoedit &>/dev/null
-        abbr se sudoedit
-        alias se sudoedit
-    end
+source $HOME/.config/lf/icons
 
-    export PAGER='nvim +Man!'
+set -U fish_color_autosuggestion brblack
+set -U fish_color_cancel -r
+set -U fish_color_command brgreen
+set -U fish_color_comment brmagenta
+set -U fish_color_cwd green
+set -U fish_color_cwd_root red
+set -U fish_color_end brmagenta
+set -U fish_color_error brred
+set -U fish_color_escape brcyan
+set -U fish_color_history_current --bold
+set -U fish_color_host normal
+set -U fish_color_match --background=brblue
+set -U fish_color_normal normal
+set -U fish_color_operator cyan
+set -U fish_color_param brblue
+set -U fish_color_quote yellow
+set -U fish_color_redirection bryellow
+set -U fish_color_search_match bryellow '--background=brblack'
+set -U fish_color_selection white --bold '--background=brblack'
+set -U fish_color_status red
+set -U fish_color_user brgreen
+set -U fish_color_valid_path --underline
+set -U fish_pager_color_completion normal
+set -U fish_pager_color_description yellow
+set -U fish_pager_color_prefix white --bold --underline
+set -U fish_pager_color_progress brwhite '--background=cyan'
 
-    source $HOME/.config/lf/icons
+if test "$TERM_PROGRAM" = kitty
+    alias ssh="TERM=xterm-256color command ssh"
+end
 
-    set -U fish_color_autosuggestion brblack
-    set -U fish_color_cancel -r
-    set -U fish_color_command brgreen
-    set -U fish_color_comment brmagenta
-    set -U fish_color_cwd green
-    set -U fish_color_cwd_root red
-    set -U fish_color_end brmagenta
-    set -U fish_color_error brred
-    set -U fish_color_escape brcyan
-    set -U fish_color_history_current --bold
-    set -U fish_color_host normal
-    set -U fish_color_match --background=brblue
-    set -U fish_color_normal normal
-    set -U fish_color_operator cyan
-    set -U fish_color_param brblue
-    set -U fish_color_quote yellow
-    set -U fish_color_redirection bryellow
-    set -U fish_color_search_match bryellow '--background=brblack'
-    set -U fish_color_selection white --bold '--background=brblack'
-    set -U fish_color_status red
-    set -U fish_color_user brgreen
-    set -U fish_color_valid_path --underline
-    set -U fish_pager_color_completion normal
-    set -U fish_pager_color_description yellow
-    set -U fish_pager_color_prefix white --bold --underline
-    set -U fish_pager_color_progress brwhite '--background=cyan'
+if test -z "$SSH_CONNECTION" -a -z "$TMUX"
+    cat ~/.cache/wal/sequences
+end
 
-    if test "$TERM_PROGRAM" = kitty
-        alias ssh="TERM=xterm-256color command ssh"
-    end
-
-    if test -z "$SSH_CONNECTION" -a -z "$TMUX"
-        cat ~/.cache/wal/sequences
-    end
-
-    if which starship &>/dev/null
-        starship init fish | source
-    end
+if which starship &>/dev/null
+    starship init fish | source
 end
