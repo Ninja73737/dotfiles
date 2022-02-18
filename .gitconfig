@@ -41,12 +41,14 @@
 	m = remote --verbose
 	ma = remote add
 	mao = remote add origin
+	mau = remote add upstream
 	mp = remote prune
 	mpo = remote prune origin
 	mr = remote rename
 	mro = remote rename origin
 	ms = remote set-url
 	mso = remote set-url origin
+	msu = remote set-url upstream
 	o = clone
 	ob = clone
 	p = push
