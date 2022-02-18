@@ -42,11 +42,11 @@ map go %echo "\"$fx\"" | string join '" "' | xargs dragon-drag-and-drop -a -x
 map gc cd ~/courses
 map gr cd ~/repos
 map gf cd ~/.config
+map gv cd ~/.config/nvim/lua
 map gl cd ~/.local
 map gp cd ~/.local/share/nvim/site/pack/packer
-# map gs &{{
-#     for 
-# }}
+map g/ cd /
+map gm cd /mnt
 map x !unzip "$f"
 map gC &$TERM_PROGRAM -e fish -C lf > /dev/null &
 map c ${{
