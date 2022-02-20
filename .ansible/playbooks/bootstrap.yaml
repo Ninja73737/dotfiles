@@ -75,8 +75,8 @@
       file:
         state: absent
         path: ~/README.md
-    - name: Assume README unchanged
-      shell: git --git-dir=$HOME/.dotfiles --work-tree=$HOME update-index --assume-unchanged $HOME/README.md
+    - name: Ignore README changes
+      shell: git --git-dir=$HOME/.dotfiles --work-tree=$HOME update-index --skip-worktree $HOME/README.md
     - name: Temporarily allow all commands without password
       blockinfile:
         path: /etc/sudoers
