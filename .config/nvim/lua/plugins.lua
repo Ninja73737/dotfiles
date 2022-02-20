@@ -43,7 +43,7 @@ local fuse = function(plugin_spec)
 end
 
 fuse("wbthomason/packer.nvim")
-fuse({ "sheerun/vim-polyglot" })
+fuse("sheerun/vim-polyglot")
 fuse({ "leafOfTree/vim-svelte-plugin", ft = "svelte" })
 fuse({ "iamcco/markdown-preview.nvim", run = "call mkdp#util#install()", ft = { "markdown", "rmd" } })
 fuse("tpope/vim-sleuth")
@@ -63,22 +63,22 @@ fuse({
         return false
     end,
 })
-fuse({ "mbbill/undotree" })
-fuse({ "phaazon/hop.nvim" })
+fuse("mbbill/undotree")
+fuse("phaazon/hop.nvim")
 fuse("chaoren/vim-wordmotion")
 fuse({ "nvim-lualine/lualine.nvim", after = "nvim-gps" })
 fuse({ "ekickx/clipboard-image.nvim", ft = { "markdown", "rmd" } })
 fuse({ "reedes/vim-pencil", ft = { "markdown", "rmd", "tex" } })
-fuse({ "dkarter/bullets.vim" })
+fuse("dkarter/bullets.vim")
 fuse("mg979/vim-visual-multi")
 fuse({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
-fuse({ "mtoohey31/tgc_wal.vim" })
-fuse({ "norcalli/nvim-colorizer.lua" })
+fuse("mtoohey31/tgc_wal.vim")
+fuse("norcalli/nvim-colorizer.lua")
 fuse({ "nvim-telescope/telescope.nvim", requires = { "nvim-lua/plenary.nvim" } })
 fuse("mtoohey31/chafa.vim")
 fuse({ "soywod/himalaya", rtp = "vim", cmd = "Himalaya" })
 fuse("othree/eregex.vim")
-fuse({ "windwp/nvim-autopairs" })
+fuse("windwp/nvim-autopairs")
 fuse({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 fuse({ "nvim-treesitter/playground", after = "nvim-treesitter" })
 fuse({ "theHamsta/nvim-treesitter-pairs", after = "nvim-treesitter" })
@@ -102,7 +102,7 @@ fuse("hrsh7th/cmp-path")
 -- TODO: make this work for tex math
 fuse("hrsh7th/cmp-calc")
 fuse("hrsh7th/cmp-emoji")
-fuse({ "L3MON4D3/LuaSnip" })
+fuse("L3MON4D3/LuaSnip")
 fuse("rafamadriz/friendly-snippets")
 fuse("saadparwaiz1/cmp_luasnip")
 fuse({ "mtoohey31/cmp-fish", ft = "fish" })
@@ -111,8 +111,8 @@ fuse({ "mtoohey31/cmp-fish", ft = "fish" })
 fuse({ "jose-elias-alvarez/null-ls.nvim", after = { "cmp-nvim-lsp", "lspconfig" } })
 -- TODO: set this up to use the root of the current git directory
 fuse({ "folke/todo-comments.nvim", requires = "nvim-lua/plenary.nvim" })
-fuse({ "folke/trouble.nvim" })
-fuse({ "pwntester/octo.nvim" })
+fuse("folke/trouble.nvim")
+fuse("pwntester/octo.nvim")
 fuse({ "vuki656/package-info.nvim", requires = "MunifTanjim/nui.nvim" })
 -- TODO: set up cmp for this
 fuse({ "Saecki/crates.nvim", event = { "BufRead Cargo.toml" }, requires = "nvim-lua/plenary.nvim" })
@@ -122,7 +122,7 @@ fuse("ThePrimeagen/git-worktree.nvim")
 -- TODO: set up dap integration for this when I add it
 -- TODO: fix this
 fuse({ "simrat39/rust-tools.nvim", after = { "lspconfig" }, requires = { "nvim-lua/plenary.nvim" } })
-fuse({ "lukas-reineke/indent-blankline.nvim" })
+fuse("lukas-reineke/indent-blankline.nvim")
 -- TODO: set this up
 -- fuse({
 --     "edluffy/hologram.nvim",
