@@ -53,7 +53,8 @@ null_ls.setup({
                 "html",
                 "json",
                 "yaml",
-                "markdown",
+                -- TODO: figure out how to get this to stop when I'm editing pandoc markdown
+                -- "markdown",
                 "graphql",
                 "svelte",
             },
