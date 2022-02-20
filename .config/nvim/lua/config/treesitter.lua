@@ -17,8 +17,6 @@ require("nvim-treesitter.configs").setup({
         enable = true,
         additional_vim_regex_highlighting = false,
     },
-    indent = { enable = true },
-    fold = { enable = true },
     refactor = {
         highlight_definitions = { enable = true },
     },
