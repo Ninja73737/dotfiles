@@ -95,7 +95,7 @@ fuse({ "SmiteshP/nvim-gps", after = "nvim-treesitter" })
 fuse({ "JoosepAlviste/nvim-ts-context-commentstring", after = "nvim-treesitter" })
 fuse({ "neovim/nvim-lspconfig", as = "lspconfig", after = { "cmp-nvim-lsp" } })
 fuse("hrsh7th/cmp-nvim-lsp")
-fuse({ "hrsh7th/nvim-cmp", after = { "LuaSnip" } })
+fuse({ "hrsh7th/nvim-cmp", after = { "LuaSnip" }, requires = "onsails/lspkind-nvim" })
 fuse({ "hrsh7th/cmp-buffer", after = "nvim-cmp" })
 -- " TODO: make this work without a prefixed `./`
 fuse("hrsh7th/cmp-path")

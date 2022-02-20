@@ -11,7 +11,6 @@ local cmd = vim.cmd
 -- TODO: https://github.com/seblj/nvim-tabline
 -- TODO: fix telescope live grep colon filetypes
 -- TODO: add noa writes to compile and execute commands
--- TODO: set up lspkind and name menu items for completion: https://www.youtube.com/watch?v=_DnmphIwnjo
 -- TODO: add gh issues source for completion: https://github.com/tjdevries/config_manager/blob/master/xdg_config/nvim/after/plugin/cmp_gh_source.lua
 -- TODO: go through rockerBOO/awesome-neovim, particularly the markdown section
 
