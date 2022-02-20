@@ -43,7 +43,8 @@ local fuse = function(plugin_spec)
 end
 
 fuse("wbthomason/packer.nvim")
-fuse("sheerun/vim-polyglot")
+-- TODO: unpin this commit after sheerun/vim-polyglot/issues/779 is closed
+fuse({ "sheerun/vim-polyglot", commit = "2c5af8f89d3e61e04e761c07a1f043b0f35203c6" })
 fuse({ "leafOfTree/vim-svelte-plugin", ft = "svelte" })
 fuse({ "iamcco/markdown-preview.nvim", run = "call mkdp#util#install()", ft = { "markdown", "rmd" } })
 fuse("tpope/vim-sleuth")
