@@ -24,6 +24,7 @@ for _, ls in ipairs(servers) do
             debounce_text_changes = 150,
         },
         capabilities = vim.lsp._capabilities,
+        offset_encoding = "utf-16",
     })
 end
 
@@ -38,6 +39,7 @@ for _, ls in ipairs(manually_enabled_servers) do
             debounce_text_changes = 150,
         },
         capabilities = vim.lsp._capabilities,
+        offset_encoding = "utf-16",
         autostart = false,
     })
 end
@@ -58,6 +60,7 @@ for _, ls in ipairs(servers_no_fomatting) do
             debounce_text_changes = 150,
         },
         capabilities = vim.lsp._capabilities,
+        offset_encoding = "utf-16",
     })
 end
 
@@ -77,6 +80,7 @@ nvim_lsp.emmet_ls.setup({
         debounce_text_changes = 150,
     },
     capabilities = vim.lsp._capabilities,
+    offset_encoding = "utf-16",
 })
 
 nvim_lsp.java_language_server.setup({
@@ -98,6 +102,7 @@ nvim_lsp.java_language_server.setup({
         debounce_text_changes = 150,
     },
     capabilities = vim.lsp._capabilities,
+    offset_encoding = "utf-16",
 })
 
 local runtime_path = vim.split(package.path, ";")
@@ -125,8 +130,9 @@ nvim_lsp.sumneko_lua.setup({
             },
         },
     },
-    on_attach = vim.lsp._on_attach,
+    on_attach = vim.lsp._on_attach_no_fomatting,
     capabilities = vim.lsp._capabilities,
+    offset_encoding = "utf-16",
 })
 
 nvim_lsp.texlab.setup({
@@ -143,6 +149,7 @@ nvim_lsp.texlab.setup({
         debounce_text_changes = 150,
     },
     capabilities = vim.lsp._capabilities,
+    offset_encoding = "utf-16",
 })
 
 nvim_lsp.yamlls.setup({
@@ -161,6 +168,7 @@ nvim_lsp.yamlls.setup({
     },
 
     capabilities = vim.lsp._capabilities,
+    offset_encoding = "utf-16",
 })
 
 local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
