@@ -85,9 +85,7 @@ fuse({ "theHamsta/nvim-treesitter-pairs", after = "nvim-treesitter" })
 -- TODO: replce this with: https://github.com/danymat/neogen
 fuse({
     "nvim-treesitter/nvim-tree-docs",
-    requires = { "Olical/aniseed" },
     after = "nvim-treesitter",
-    disable = true,
 })
 fuse({ "nvim-treesitter/nvim-treesitter-refactor", after = "nvim-treesitter" })
 fuse({ "p00f/nvim-ts-rainbow", after = "nvim-treesitter" })

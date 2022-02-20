@@ -25,7 +25,9 @@ require("nvim-treesitter.configs").setup({
     tree_docs = {
         enable = true,
         keymaps = {
+            doc_all_in_range = "<NOP>",
             doc_node_at_cursor = "td",
+            edit_doc_at_cursor = "<NOP>",
         },
     },
     rainbow = {
