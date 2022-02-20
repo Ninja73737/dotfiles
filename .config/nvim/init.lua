@@ -4,8 +4,6 @@ require("options")
 require("autocmd")
 require("commands")
 
-local cmd = vim.cmd
-
 -- TODO: write plugin that checks if a git repo is yours or a fork, and runs range formatting on only lines that have changed in git automatically
 -- TODO: https://github.com/mfussenegger/nvim-dap
 -- TODO: https://github.com/seblj/nvim-tabline
