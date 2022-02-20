@@ -182,8 +182,8 @@ bindsym --locked XF86AudioLowerVolume exec /bin/sh -c "pulsemixer --change-volum
 # bindsym --locked Mod4+Shift+Right exec playerctl --player=spotify next
 # bindsym --locked Mod4+Shift+space exec playerctl --player=spotify play-pause
 
-bindsym --locked XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl0/brightness)'+15,'(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"
-bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl0/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl0/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl0/brightness)/(cat /sys/class/backlight/amdgpu_bl0/max_brightness)')') > /tmp/wobpipe"
+bindsym --locked XF86MonBrightnessUp exec fish -c "echo (math 'min('(cat /sys/class/backlight/amdgpu_bl*/brightness)'+15,'(cat /sys/class/backlight/amdgpu_bl*/max_brightness)')') > /sys/class/backlight/amdgpu_bl*/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl*/brightness)/(cat /sys/class/backlight/amdgpu_bl*/max_brightness)')') > /tmp/wobpipe"
+bindsym --locked XF86MonBrightnessDown exec fish -c "echo (math 'max('(cat /sys/class/backlight/amdgpu_bl*/brightness)'-15,0)') > /sys/class/backlight/amdgpu_bl*/brightness"; fish -c "echo (math 'round('100\*(cat /sys/class/backlight/amdgpu_bl*/brightness)/(cat /sys/class/backlight/amdgpu_bl*/max_brightness)')') > /tmp/wobpipe"
 
 bindsym --locked XF86KbdBrightnessUp exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end"
 bindsym --locked XF86KbdBrightnessDown exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end"
