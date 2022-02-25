@@ -1,0 +1,3 @@
+source "%val{config}/mappings.kak"
+source "%val{config}/options.kak"
+source "%val{config}/plugins.kak"
