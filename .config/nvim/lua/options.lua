@@ -27,3 +27,4 @@ vim.o.showmode = false
 vim.o.fillchars = "fold: ,vert:│,eob: ,msgsep:‾"
 vim.o.compatible = false
 vim.o.termguicolors = true
+vim.o.laststatus = 3

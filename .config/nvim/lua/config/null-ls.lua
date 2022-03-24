@@ -40,6 +40,10 @@ null_ls.setup({
         formatting.fish_indent,
         formatting.google_java_format.with({ extra_args = { "--aosp" } }),
         formatting.markdownlint.with({ filetypes = { "markdown" } }),
+        -- formatting.prettier.with({
+        --     -- TODO: get svelte working with prettierd
+        --     filetypes = { "svelte" },
+        -- }),
         formatting.prettierd.with({
             filetypes = {
                 "javascript",
@@ -56,7 +60,6 @@ null_ls.setup({
                 -- TODO: figure out how to get this to stop when I'm editing pandoc markdown
                 -- "markdown",
                 "graphql",
-                "svelte",
             },
         }),
         formatting.stylua.with({

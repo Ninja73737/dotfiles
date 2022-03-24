@@ -10,7 +10,9 @@ local servers = {
     "gopls",
     "hls",
     "kotlin_language_server",
+    "pyright",
     "r_language_server",
+    "svelte",
     "tailwindcss",
     "taplo",
     "vimls",
@@ -47,10 +49,7 @@ end
 local servers_no_fomatting = {
     "html",
     "jsonls",
-    "pyright",
     "tsserver",
-    "rls",
-    "svelte",
 }
 
 for _, ls in ipairs(servers_no_fomatting) do

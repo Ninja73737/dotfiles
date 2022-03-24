@@ -11,6 +11,7 @@ require("commands")
 -- TODO: add noa writes to compile and execute commands
 -- TODO: add gh issues source for completion: https://github.com/tjdevries/config_manager/blob/master/xdg_config/nvim/after/plugin/cmp_gh_source.lua
 -- TODO: go through rockerBOO/awesome-neovim, particularly the markdown section
+-- TODO: display lsp diagnostics in statusline too
 
 vim.lsp._on_attach = function(_, bufnr)
     local function buf_map(...)
