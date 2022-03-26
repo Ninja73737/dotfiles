@@ -17,7 +17,7 @@
 	c = commit
 	ca = commit --amend
 	cap = "!git commit --amend && git push"
-	cm = commit --message
+	cm = "!f() { git commit --message \"$*\"; }; f"
 	can = commit --amend --no-edit
 	canp = "!git commit --amend --no-edit && git push"
 	d = diff
