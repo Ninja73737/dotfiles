@@ -1,3 +1,5 @@
+Deprecated in favour of [mtoohey31/infra](https://github.com/mtoohey31/infra).
+
 # dotfiles
 
 My cross-platform (Linux, MacOS, and Windows) dotfiles.
